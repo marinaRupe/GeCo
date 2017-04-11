@@ -14,17 +14,37 @@
             <ul class='nav navbar-nav'>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/home']">
-                        <span class='glyphicon glyphicon-home'></span> Home
+                        <span class='glyphicon glyphicon-home'></span> Početna stranica
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/recombinator']">
+                        <span class='glyphicon glyphicon-sort'></span> Rekombinator
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/lectures']">
+                        <span class='glyphicon glyphicon-education'></span> Teorija
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/exam']">
+                        <span class='glyphicon glyphicon-pencil'></span> Test
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/help']">
+                        <span class='glyphicon glyphicon-info-sign'></span> Upute
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
+                        <span class='glyphicon glyphicon-education'></span> //Counter
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
+                        <span class='glyphicon glyphicon-th-list'></span> //Fetch data
                     </a>
                 </li>
             </ul>
