@@ -1,0 +1,18 @@
+﻿.parent {
+    display: inline-block;
+    background-color: cornsilk;
+    width: 40%;
+    margin: 20px;
+}
+
+.characteristic {
+    margin-left: 10%;
+}
+
+.char-select {
+    width: 80%;
+}
+
+.description {
+    margin: 10%;
+}

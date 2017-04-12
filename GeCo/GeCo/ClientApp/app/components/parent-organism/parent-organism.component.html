@@ -1,5 +1,14 @@
-﻿<div style="display: inline-block; background-color: cornsilk; width: 40%; margin: 20px;">
+﻿<div class="parent">
     <h2>PARENT</h2>
-    <h3>Genotip: {{genotype}}</h3>
-    <h3>Fenotip: {{fenotype}}</h3>
+    <div class="characteristic">
+        <h4>Podesi svojstvo: </h4>
+        <select [(ngModel)]="trait" class="form-control char-select">
+            <option *ngFor="let t of traits" [ngValue]="t">{{t.fenotype}}</option>
+        </select>
+    </div>
+    <div class="description">
+        <h3>Genotip: {{trait.genotype}}</h3>
+        <h3>Fenotip: {{trait.fenotype}}</h3>
+        <h3>Tip: {{trait.type}}</h3>
+    </div>
 </div>

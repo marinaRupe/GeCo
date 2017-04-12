@@ -2,8 +2,35 @@
 <h4>Dobrodošli u rekombinator! Odaberite organizam i svojstvo koje želite promatrati.
     Zatim podesite svojstva roditelja pri čemu će se generirati sve kombinacije djece.</h4>
 <br />
-<h3>...ubaciti padajući izbornik...</h3>
+<div class="select">
+    <h4>Odaberi organizam:</h4>
+    <select [(ngModel)]="organism" class="form-control">
+        <option *ngFor="let o of organisms" [ngValue]="o">{{o}}</option>
+    </select>
+</div>
+<div class="select">
+    <h4>Odaberi tip križanja:</h4>
+    <span *ngFor="let c of crossType; let idx = index">
+        <input type="radio" name="radiogroup"
+                [checked]="idx === 0"
+                [value]="idx+1"
+                (change)="onSelectionChange(c)">{{c}}
+    </span>
+</div>
+<div class="select">
+    <h4>Odaberi svojstvo:</h4>
+    <select [(ngModel)]="characteristic" class="form-control">
+        <option *ngFor="let c of characteristics" [ngValue]="c">{{c}}</option>
+    </select>
+</div>
+<div class="select">
+    <h4>Odaberi vrstu nasljeđivanja:</h4>
+    <select [(ngModel)]="inheritanceType" class="form-control">
+        <option *ngFor="let i of inheritanceTypes" [ngValue]="i">{{i}}</option>
+    </select>
+</div>
 <br />
-<parent-organism></parent-organism>
-<parent-organism></parent-organism>
-<offspring></offspring>
+<parent-organism #parent1></parent-organism>
+<parent-organism #parent2></parent-organism>
+<hr />
+<offspring parent1Genotype={{parent1.trait.genotype}} parent2Genotype={{parent2.trait.genotype}}></offspring>

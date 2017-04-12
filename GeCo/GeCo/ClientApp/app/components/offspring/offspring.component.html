@@ -1,6 +1,5 @@
 ﻿<div>
-    <div style="display: inline-block; background-color: cornsilk; width: 40%; margin: 20px;"
-         *ngFor="let data of offspringData">
+    <span *ngFor="let data of offspringData">
         <child-organism genotype={{data.genotype}} fenotype={{data.fenotype}}></child-organism>
-    </div>
+    </span>
 </div>
