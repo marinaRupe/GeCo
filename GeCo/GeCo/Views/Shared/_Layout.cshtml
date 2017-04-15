@@ -1,15 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@ViewData["Title"] - GeCo</title>
         <base href="/" />
         <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
+        <link rel="shortcut icon" type="image/png" href="~/dist/Images/gecko_green_192.png">
     </head>
-    <body>
+    <body style="background-color: #bdedaa;">
         @RenderBody()
 
         @RenderSection("scripts", required: false)
     </body>
 </html>
+@*<a href="~/Views/Shared/Error.cshtml">~/Views/Shared/Error.cshtml</a>*@
