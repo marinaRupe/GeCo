@@ -1,5 +1,5 @@
 ﻿<div>
     <span *ngFor="let data of offspringData">
-        <child-organism genotype={{data.genotype}} fenotype={{data.fenotype}}></child-organism>
+        <child-organism [trait]="data"></child-organism>
     </span>
 </div>

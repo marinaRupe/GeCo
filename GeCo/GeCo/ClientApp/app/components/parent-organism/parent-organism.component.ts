@@ -1,4 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
+import { ITrait } from '../recombinator/recombinator.component';
 
 @Component({
     selector: 'parent-organism',
@@ -6,10 +7,6 @@
     styles: [require('./parent-organism.component.css')]
 })
 export class ParentOrganismComponent {
-    trait: {} = {fenotype: "", genotype: "", type: ""};
-    traits: [{}] = [
-        { fenotype: "crvena", genotype: "AA", type: "Homozigot" },
-        { fenotype: "roza", genotype: "Aa", type: "Heterozigot" },
-        { fenotype: "bijela", genotype: "aa", type: "Homozigot" }
-    ];
+    @Input() traits: ITrait[] = [];
+    trait: ITrait = { fenotype: "", genotype: "", type: "" };
 }

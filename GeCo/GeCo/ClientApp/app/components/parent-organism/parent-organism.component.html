@@ -1,6 +1,6 @@
 ﻿<div class="panel panel-primary">
     <div class="panel-heading">
-        <h3>PARENT</h3>
+        <h3>RODITELJ</h3>
     </div>
     <div class="panel-body">
         <div class="row">
@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <select [(ngModel)]="trait" class="form-control char-select">
-                    <option *ngFor="let t of traits" [ngValue]="t">{{t.fenotype}}</option>
+                    <option *ngFor="let t of traits" [ngValue]="t">{{ t.fenotype + ' (' +t.type.toLowerCase() + ')' }}</option>
                 </select>
             </div>
         </div>

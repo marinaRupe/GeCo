@@ -1,4 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
+import { ITrait } from '../recombinator/recombinator.component';
 
 @Component({
     selector: 'child-organism',
@@ -6,6 +7,5 @@
     styles: [require('./child-organism.component.css')]
 })
 export class ChildOrganismComponent {
-    @Input() genotype: string;
-    @Input() fenotype: string;
+    @Input() trait: ITrait;
 }
