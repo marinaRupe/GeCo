@@ -15,17 +15,17 @@
                 </select>
             </div>
         </div>
-        <div class="row">
+        <div *ngIf="trait.genotype" class="row">
             <div class="col-sm-12">
                 <h4>Genotip: {{trait.genotype}}</h4>
             </div>
         </div>
-        <div class="row">
+        <div *ngIf="trait.fenotype" class="row">
             <div class="col-sm-12">
                 <h4>Fenotip: {{trait.fenotype}}</h4>
             </div>
         </div>
-        <div class="row">
+        <div *ngIf="trait.type" class="row">
             <div class="col-sm-12">
                 <h4>Tip: {{trait.type}}</h4>
             </div>

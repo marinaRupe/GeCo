@@ -1,5 +1,4 @@
-﻿import { Component, ViewChild } from '@angular/core';
-import { Http } from '@angular/http';
+﻿import { Component, ViewChild, OnInit } from '@angular/core';
 import { ParentOrganismComponent } from "../parent-organism/parent-organism.component";
 import { ITrait } from '../../shared/types';
 import { GeneticDataService } from '../../genetic-data.service';
@@ -10,7 +9,7 @@ import { GeneticDataService } from '../../genetic-data.service';
     styles: [require('./recombinator.component.css')],
     providers: [GeneticDataService]
 })
-export class RecombinatorComponent {
+export class RecombinatorComponent implements OnInit {
     @ViewChild('parent1') private parent1: ParentOrganismComponent;
     @ViewChild('parent2') private parent2: ParentOrganismComponent;
     organisms: string[];
@@ -23,13 +22,15 @@ export class RecombinatorComponent {
     data: {};
     traits: ITrait[];
 
-    constructor(private geneticDataService: GeneticDataService) {
+    constructor(private geneticDataService: GeneticDataService) {}
+
+    ngOnInit(): void {
         this.data = this.geneticDataService.getData();
         this.organisms = this.geneticDataService.getOrganisms();
-        this.inheritanceTypes = this.geneticDataService.getInheritanceTypes(); 
+        this.inheritanceTypes = this.geneticDataService.getInheritanceTypes();
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit() : void {
         // After the view is initialized
         this.organism = this.organisms[0] || '';
         let organismData = this.data[this.organism];

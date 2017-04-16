@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-sm-6">
         <h4>Odaberi organizam:</h4>
-        <select [(ngModel)]="organism" (ngModelChange)="onSelectOrganismChange($event)" id="selectOrganism" class="form-control">
+        <select [(ngModel)]="organism" (ngModelChange)="onSelectOrganismChange($event)" class="form-control">
             <option *ngFor="let o of organisms" [ngValue]="o">{{o}}</option>
         </select>
     </div>
@@ -27,13 +27,13 @@
 <div class="row">
     <div class="col-sm-6">
         <h4>Odaberi svojstvo:</h4>
-        <select [(ngModel)]="characteristic" (ngModelChange)="onSelectCharacteristicChange($event)" id="selectCharacteristic" class="form-control">
+        <select [(ngModel)]="characteristic" (ngModelChange)="onSelectCharacteristicChange($event)" class="form-control">
             <option *ngFor="let c of data[organism]" [ngValue]="c.characteristic">{{c.characteristic }}</option>
         </select>
     </div>
     <div class="col-sm-6">
         <h4>Odaberi vrstu nasljeđivanja:</h4>
-        <select [(ngModel)]="inheritanceType" (ngModelChange)="onSelectInheritanceTypeChange($event)" id="selectInheritanceType" class="form-control">
+        <select [(ngModel)]="inheritanceType" (ngModelChange)="onSelectInheritanceTypeChange($event)" class="form-control">
             <option *ngFor="let i of inheritanceTypes" [ngValue]="i">{{i}}</option>
         </select>
     </div>
@@ -48,5 +48,9 @@
 </div>
 
 <div class="row">
-    <offspring parent1Genotype={{parent1.trait.genotype}} parent2Genotype={{parent2.trait.genotype}} [traits]="traits"></offspring>
+    <offspring *ngIf="parent1.trait.genotype && parent2.trait.genotype"
+               parent1Genotype={{parent1.trait.genotype}}
+               parent2Genotype={{parent2.trait.genotype}}
+               [traits]="traits">
+    </offspring>
 </div>

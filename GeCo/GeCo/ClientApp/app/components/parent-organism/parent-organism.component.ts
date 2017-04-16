@@ -1,4 +1,4 @@
-﻿import { Component, Input } from '@angular/core';
+﻿import { Component, Input, OnChanges } from '@angular/core';
 import { ITrait } from "../../shared/types";
 
 @Component({
@@ -6,7 +6,11 @@ import { ITrait } from "../../shared/types";
     template: require('./parent-organism.component.html'),
     styles: [require('./parent-organism.component.css')]
 })
-export class ParentOrganismComponent {
+export class ParentOrganismComponent implements OnChanges {
     @Input() traits: ITrait[] = [];
     trait: ITrait = { fenotype: "", genotype: "", type: "" };
+
+    ngOnChanges(changes: any): void {
+        this.trait = { fenotype: "", genotype: "", type: "" };
+    }
 }
