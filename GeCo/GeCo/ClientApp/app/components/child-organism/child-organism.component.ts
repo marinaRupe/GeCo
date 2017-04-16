@@ -1,5 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
-import { ITrait } from '../recombinator/recombinator.component';
+import { ITrait } from "../../shared/types";
 
 @Component({
     selector: 'child-organism',

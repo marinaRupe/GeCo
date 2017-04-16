@@ -1,12 +1,15 @@
 ﻿import { Component, ViewChild } from '@angular/core';
-import { ParentOrganismComponent } from "../parent-organism/parent-organism.component";
 import { Http } from '@angular/http';
+import { ParentOrganismComponent } from "../parent-organism/parent-organism.component";
+import { ITrait } from '../../shared/types';
+import { GeneticDataService } from '../../genetic-data.service';
 
-@Component(({
+@Component({
     selector: 'recombinator',
     template: require('./recombinator.component.html'),
-    styles: [require('./recombinator.component.css')]
-}))
+    styles: [require('./recombinator.component.css')],
+    providers: [GeneticDataService]
+})
 export class RecombinatorComponent {
     @ViewChild('parent1') private parent1: ParentOrganismComponent;
     @ViewChild('parent2') private parent2: ParentOrganismComponent;
@@ -20,81 +23,15 @@ export class RecombinatorComponent {
     data: {};
     traits: ITrait[];
 
-    constructor(http: Http) {
-        let newData = {
-            čovjek: [
-                {
-                    characteristic: 'oblik kose',
-                    traits: [
-                        { fenotype: "crvena", genotype: "AA", type: "Homozigot" },
-                        { fenotype: "roza", genotype: "Aa", type: "Heterozigot" },
-                        { fenotype: "bijela", genotype: "aa", type: "Homozigot" }
-                    ],
-                    inheritanceType: 'nepotpuno dominantno/recesivno'
-                },
-                {
-                    characteristic: 'ušne resice',
-                    traits: [
-                        { fenotype: "slobodna", genotype: "AA", type: "Homozigot" },
-                        { fenotype: "slobodna", genotype: "Aa", type: "Heterozigot" },
-                        { fenotype: "srasla", genotype: "aa", type: "Homozigot" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                },
-                {
-                    characteristic: 'krvna grupa',
-                    traits: [
-                        { fenotype: "crvena", genotype: "AA", type: "Homozigot" },
-                        { fenotype: "roza", genotype: "Aa", type: "Heterozigot" },
-                        { fenotype: "bijela", genotype: "aa", type: "Homozigot" }
-                    ],
-                    inheritanceType: 'kodominantno'
-                }
-            ],
-            mahuna: [
-                {
-                    characteristic: 'oblik sjemenke',
-                    traits: [
-                        { fenotype: "okrugli", genotype: "AA", type: "Homozigot" },
-                        { fenotype: "okrugli", genotype: "Aa", type: "Heterozigot" },
-                        { fenotype: "smežurani", genotype: "aa", type: "Homozigot" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                },
-                {
-                    characteristic: 'boja cvjeta',
-                    traits: [
-                        { fenotype: "ljubičasta", genotype: "AA", type: "Homozigot" },
-                        { fenotype: "ljubičasta", genotype: "Aa", type: "Heterozigot" },
-                        { fenotype: "bijela", genotype: "aa", type: "Homozigot" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                },
-                {
-                    characteristic: 'boja sjemenke',
-                    traits: [
-                        { fenotype: "žuta", genotype: "AA", type: "Homozigot" },
-                        { fenotype: "žuta", genotype: "Aa", type: "Heterozigot" },
-                        { fenotype: "zelena", genotype: "aa", type: "Homozigot" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                }
-            ]
-        }
-        this.data = newData;
-        this.organisms = ['čovjek', 'mahuna'];
-        this.organism = this.organisms[0] || '';
-
-        this.inheritanceTypes = [
-            'dominantno/recesivno',
-            'nepotpuno dominantno/recesivno',
-            'kodominantno',
-            'vezani geni'
-        ];
+    constructor(private geneticDataService: GeneticDataService) {
+        this.data = this.geneticDataService.getData();
+        this.organisms = this.geneticDataService.getOrganisms();
+        this.inheritanceTypes = this.geneticDataService.getInheritanceTypes(); 
     }
 
     ngAfterViewInit() {
         // After the view is initialized
+        this.organism = this.organisms[0] || '';
         let organismData = this.data[this.organism];
         this.characteristic = organismData[0].characteristic;
         this.inheritanceType = organismData[0].inheritanceType;
@@ -135,12 +72,5 @@ export class RecombinatorComponent {
     }
 }
 
-interface IData {
-    
-}
 
-export interface ITrait {
-    fenotype: string;
-    genotype: string;
-    type: string;
-}
+
