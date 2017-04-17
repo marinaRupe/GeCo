@@ -20,7 +20,7 @@ export class InheritanceService {
                 return traits[i].fenotype;
             }    
         }
-        return '';
+        return 'TODO';
     }
 
     getType(genotype: string) {

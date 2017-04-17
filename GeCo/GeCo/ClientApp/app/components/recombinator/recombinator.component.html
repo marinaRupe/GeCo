@@ -13,7 +13,7 @@
     </div>
     <div class="col-sm-6">
         <h4>Odaberi tip križanja:</h4>
-        <span *ngFor="let c of crossType; let idx = index">
+        <span *ngFor="let c of crossTypes; let idx = index">
             <input style="width:2em; height:2em;"
                    type="radio"
                    name="radiogroup"
@@ -28,29 +28,29 @@
     <div class="col-sm-6">
         <h4>Odaberi svojstvo:</h4>
         <select [(ngModel)]="characteristic" (ngModelChange)="onSelectCharacteristicChange($event)" class="form-control">
-            <option *ngFor="let c of data[organism]" [ngValue]="c.characteristic">{{c.characteristic }}</option>
+            <option *ngFor="let c of characteristics" [ngValue]="c">{{ c }}</option>
         </select>
     </div>
     <div class="col-sm-6">
         <h4>Odaberi vrstu nasljeđivanja:</h4>
         <select [(ngModel)]="inheritanceType" (ngModelChange)="onSelectInheritanceTypeChange($event)" class="form-control">
-            <option *ngFor="let i of inheritanceTypes" [ngValue]="i">{{i}}</option>
+            <option *ngFor="let i of inheritanceTypes" [ngValue]="i">{{ i }}</option>
         </select>
     </div>
 </div>
 <div class="row top-buffer">
     <div class="col-sm-6">
-        <parent-organism #parent1 [traits]="traits"></parent-organism>
+        <parent-organism #parent1 [traits1]="traits1" [traits2]="traits2"></parent-organism>
     </div>
     <div class="col-sm-6">
-        <parent-organism #parent2 [traits]="traits"></parent-organism>
+        <parent-organism #parent2 [traits1]="traits1" [traits2]="traits2"></parent-organism>
     </div>
 </div>
 
 <div class="row">
-    <offspring *ngIf="parent1.trait.genotype && parent2.trait.genotype"
-               parent1Genotype={{parent1.trait.genotype}}
-               parent2Genotype={{parent2.trait.genotype}}
-               [traits]="traits">
+    <offspring *ngIf="parent1.trait1.genotype && parent2.trait1.genotype"
+               parent1Genotype={{parent1.trait1.genotype}}
+               parent2Genotype={{parent2.trait1.genotype}}
+               [traits]="traits1">
     </offspring>
 </div>

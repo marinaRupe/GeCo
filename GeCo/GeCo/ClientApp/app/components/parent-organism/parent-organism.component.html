@@ -10,24 +10,55 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <select [(ngModel)]="trait" class="form-control char-select">
-                    <option *ngFor="let t of traits" [ngValue]="t">{{ t.fenotype + ' (' +t.type.toLowerCase() + ')' }}</option>
+                <select [(ngModel)]="trait1" class="form-control char-select">
+                    <option *ngFor="let t of traits1" [ngValue]="t">{{ t.fenotype + ' (' +t.type.toLowerCase() + ')' }}</option>
                 </select>
             </div>
         </div>
-        <div *ngIf="trait.genotype" class="row">
+        <div *ngIf="trait1.genotype" class="row">
             <div class="col-sm-12">
-                <h4>Genotip: {{trait.genotype}}</h4>
+                <h4>Genotip: {{trait1.genotype}}</h4>
             </div>
         </div>
-        <div *ngIf="trait.fenotype" class="row">
+        <div *ngIf="trait1.fenotype" class="row">
             <div class="col-sm-12">
-                <h4>Fenotip: {{trait.fenotype}}</h4>
+                <h4>Fenotip: {{trait1.fenotype}}</h4>
             </div>
         </div>
-        <div *ngIf="trait.type" class="row">
+        <div *ngIf="trait1.type" class="row">
             <div class="col-sm-12">
-                <h4>Tip: {{trait.type}}</h4>
+                <h4>Tip: {{trait1.type}}</h4>
+            </div>
+        </div>
+    </div>
+    
+
+    <div *ngIf="traits2.length > 0" class="panel-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Podesi svojstvo 2: </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <select [(ngModel)]="trait2" class="form-control char-select">
+                    <option *ngFor="let t of traits2" [ngValue]="t">{{ t.fenotype + ' (' +t.type.toLowerCase() + ')' }}</option>
+                </select>
+            </div>
+        </div>
+        <div *ngIf="trait2.genotype" class="row">
+            <div class="col-sm-12">
+                <h4>Genotip: {{trait2.genotype}}</h4>
+            </div>
+        </div>
+        <div *ngIf="trait2.fenotype" class="row">
+            <div class="col-sm-12">
+                <h4>Fenotip: {{trait2.fenotype}}</h4>
+            </div>
+        </div>
+        <div *ngIf="trait2.type" class="row">
+            <div class="col-sm-12">
+                <h4>Tip: {{trait2.type}}</h4>
             </div>
         </div>
     </div>

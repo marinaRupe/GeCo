@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnChanges } from '@angular/core';
+﻿import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { ITrait } from "../../shared/types";
 
 @Component({
@@ -6,11 +6,21 @@ import { ITrait } from "../../shared/types";
     template: require('./parent-organism.component.html'),
     styles: [require('./parent-organism.component.css')]
 })
-export class ParentOrganismComponent implements OnChanges {
-    @Input() traits: ITrait[] = [];
-    trait: ITrait = { fenotype: "", genotype: "", type: "" };
+export class ParentOrganismComponent implements OnInit, OnChanges {
+    @Input() traits1: ITrait[];
+    @Input() traits2: ITrait[];
+    trait1: ITrait;
+    trait2: ITrait;
+
+    ngOnInit(): void {
+        this.traits1 = [];
+        this.traits2 = [];
+        this.trait1 = { fenotype: "", genotype: "", type: "" };
+        this.trait2 = { fenotype: "", genotype: "", type: "" };
+    }
 
     ngOnChanges(changes: any): void {
-        this.trait = { fenotype: "", genotype: "", type: "" };
+        this.trait1 = { fenotype: "", genotype: "", type: "" };
+        this.trait2 = { fenotype: "", genotype: "", type: "" };
     }
 }
