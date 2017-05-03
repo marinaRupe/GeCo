@@ -1,5 +1,5 @@
 ﻿import { ChildOrganismComponent } from '../child-organism/child-organism.component';
-import { Component, Input, ContentChildren, QueryList } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ITrait } from '../../shared/types';
 import { InheritanceService } from "../../inheritance.service";
 
@@ -9,16 +9,18 @@ import { InheritanceService } from "../../inheritance.service";
     providers: [InheritanceService]
 })
 export class OffspringComponent {
-    @Input() parent1Genotype: string = '';
-    @Input() parent2Genotype: string = '';
-    @Input() traits: ITrait[] = [];
-    private offspringData = [];
+    @Input() parent1Genotype: string;
+    @Input() parent2Genotype: string;
+    @Input() traits1: ITrait[] = [];
+    @Input() traits2: ITrait[] = [];
+    private offspringData : ITrait[] = [];
     private characteristic: string = '';
 
     constructor(private inheritanceService: InheritanceService) {}
     
     ngOnChanges(changes: any) {
-        if (this.parent1Genotype !== '' && this.parent2Genotype !== '') {
+        console.log(this.parent1Genotype);
+        if (this.parent1Genotype && this.parent2Genotype) {
             this.generateOffspringData();    
         }
     }
@@ -30,7 +32,7 @@ export class OffspringComponent {
         for (let i = 0; i < genotypes.length; i++) {
             this.offspringData.push({
                 genotype: genotypes[i],
-                fenotype: this.getFenotype(genotypes[i]),
+                phenotype: this.getFenotype(genotypes[i]),
                 type: this.getType(genotypes[i])
             });
         }
@@ -41,7 +43,7 @@ export class OffspringComponent {
     }
 
     getFenotype(genotype: string) : string {
-        return this.inheritanceService.getFenotype(this.traits, genotype);
+        return this.inheritanceService.getFenotype(this.traits1, genotype);
     }
 
     getType(genotype: string) : string {

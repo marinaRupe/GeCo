@@ -1,5 +1,5 @@
 ﻿export interface ITrait {
-    fenotype: string;
+    phenotype: string;
     genotype: string;
     type: string;
 }

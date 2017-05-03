@@ -38,7 +38,6 @@ export class RecombinatorComponent implements OnInit {
     }
 
     ngAfterViewInit() : void {
-        // After the view is initialized
         let organismData = this.data[this.organism];
         this.characteristic = this.characteristics[0] || '';
         this.inheritanceType = organismData[0].inheritanceType || '';
@@ -180,8 +179,11 @@ export class RecombinatorComponent implements OnInit {
         }
     }
 
+    /**
+     * Get list of avaliable characteristics for monohybrid cross and selected organism.
+     */
     private getMonohybridCharacteristics() {
-        let organismData = this.data[this.organism];
+        const organismData = this.data[this.organism];
         let characteristics = [];
         for (let i = 0; i < organismData.length; i++) {
             characteristics.push(organismData[i].characteristic);
@@ -189,13 +191,16 @@ export class RecombinatorComponent implements OnInit {
         return characteristics;
     }
 
+    /**
+     * Get list of avaliable characteristics for dihybrid cross and selected organism.
+     */
     private getDihybridCharacteristics() {
-        let organismData = this.data[this.organism];
+        const organismData = this.data[this.organism];
         let characteristics = [];
         for (let i = 0; i < organismData.length; i++) {
             for (let j = i + 1; j < organismData.length; j++) {
-                let char1 = organismData[i].characteristic;
-                let char2 = organismData[j].characteristic;
+                const char1 = organismData[i].characteristic;
+                const char2 = organismData[j].characteristic;
                 characteristics.push(`${char1} + ${char2}`);
             }
         }

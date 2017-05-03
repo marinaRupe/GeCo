@@ -17,7 +17,7 @@ export class InheritanceService {
         let reversedGenotype = genotype[1] + genotype[0];
         for (let i = 0; i < traits.length; i++) {
             if (genotype === traits[i].genotype || reversedGenotype === traits[i].genotype) {
-                return traits[i].fenotype;
+                return traits[i].phenotype;
             }    
         }
         return 'TODO';
