@@ -1,2 +1,17 @@
 ﻿<h1>Test</h1>
 <h3>Testirajte svoje znanje!</h3>
+<br/>
+
+<button *ngIf="!testStarted" (click)="start()" class="btn btn-default">Počni</button>
+<div *ngIf="testStarted">
+    <h4 *ngFor="let q of questions; let i=index">
+        {{i + 1}}. {{ q.question }}
+        <div *ngFor="let a of q.answers; let j=index">
+            <input type="radio" name={{i}} id="question-1-answers-A" value={{a}} />
+            <label for="question-1-answers-A">{{a}}</label>
+        </div>
+        
+    </h4>
+    <button (click)="stop()" class="btn btn-danger">Prekini ispit</button>
+    <button (click)="grade()" class="btn btn-success">Ocijeni</button>
+</div>
