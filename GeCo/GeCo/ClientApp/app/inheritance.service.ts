@@ -5,15 +5,28 @@ import { ITrait } from "./shared/types";
 export class InheritanceService {
     generateGenotypes(genotype1: string, genotype2: string) {
         let genotypes = [];
-        for (let i = 0; i < genotype1.length; i++) {
-            for (let j = 0; j < genotype2.length; j++) {
-                genotypes.push(genotype1[i] + genotype2[j]);
+        const isDihybrid = genotype1.length === 4;
+
+        for (let i = 0; i < 2; i++) {
+            for (let j = 0; j < 2; j++) {
+                let genotypeMono = genotype1[i] + genotype2[j];
+                if (isDihybrid) {
+                    for (let k = 2; k < 4; k++) {
+                        for (let l = 2; l < 4; l++) {
+                            let genotypeDih = genotype1[k] + genotype2[l];
+                            genotypes.push(genotypeMono + genotypeDih);
+                        }
+                    }   
+                } else {
+                    genotypes.push(genotypeMono);
+                }
             }
         }
+        console.log(genotypes);
         return genotypes;
     }
 
-    getFenotype(traits: ITrait[], genotype: string) { 
+    getPhenotype(traits: ITrait[], genotype: string) { 
         let reversedGenotype = genotype[1] + genotype[0];
         for (let i = 0; i < traits.length; i++) {
             if (genotype === traits[i].genotype || reversedGenotype === traits[i].genotype) {

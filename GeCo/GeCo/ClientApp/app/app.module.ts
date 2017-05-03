@@ -5,8 +5,6 @@ import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { RecombinatorComponent } from './components/recombinator/recombinator.component';
 import { LecturesComponent } from './components/lectures/lectures.component';
 import { ExamComponent } from './components/exam/exam.component';
@@ -20,8 +18,6 @@ import { ChildOrganismComponent } from './components/child-organism/child-organi
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
         HomeComponent,
         RecombinatorComponent,
         LecturesComponent,
@@ -41,8 +37,6 @@ import { ChildOrganismComponent } from './components/child-organism/child-organi
             { path: 'lectures', component: LecturesComponent },
             { path: 'exam', component: ExamComponent },
             { path: 'help', component: HelpComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

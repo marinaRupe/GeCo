@@ -67,7 +67,7 @@ export class RecombinatorComponent implements OnInit {
 
     // TODO: change this
     onSelectInheritanceTypeChange(event) {
-        let organismData = this.data[this.organism];
+        const organismData = this.data[this.organism];
         let found = false;
         for (let i = 0; i < organismData.length; i++) {
             if (organismData[i].inheritanceType === this.inheritanceType) {
@@ -98,7 +98,7 @@ export class RecombinatorComponent implements OnInit {
         }
     }
 
-    private changeTraits(isCharacteristicSet: boolean = false) {
+    private changeTraits(isCharacteristicSet: boolean = false) : void {
         if (isCharacteristicSet) {
             if (this.numberOfCharact === 1) {
                 this.traits1 = this.getTraitsByCharacteristic(this.characteristic);
@@ -108,8 +108,8 @@ export class RecombinatorComponent implements OnInit {
                 this.traits1 = this.getTraitsByCharacteristic(this.characteristic.split(' + ')[0]);
                 this.traits2 = this.getTraitsByCharacteristic(this.characteristic.split(' + ')[1]);
             }
-        }else {
-            let organismData = this.data[this.organism];
+        } else {
+            const organismData = this.data[this.organism];
             if (this.numberOfCharact === 1) {
                 this.traits1 = organismData[0].traits || [];
                 this.traits2 = [];
@@ -140,11 +140,9 @@ export class RecombinatorComponent implements OnInit {
                 char1 = this.characteristics[0].split(' + ')[0];
                 char2 = this.characteristics[0].split(' + ')[1];
             }
-            let inh1 = this.getInheritanceTypeByCharacteristic(char1);
-            let inh2 = this.getInheritanceTypeByCharacteristic(char2);
-            let inheritanceType = `${inh1} + ${inh2}`;
-
-            console.log(inheritanceType);
+            const inh1 = this.getInheritanceTypeByCharacteristic(char1);
+            const inh2 = this.getInheritanceTypeByCharacteristic(char2);
+            const inheritanceType = `${inh1} + ${inh2}`;
 
             return inheritanceType;
         }

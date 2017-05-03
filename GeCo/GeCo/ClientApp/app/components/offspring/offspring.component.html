@@ -1,4 +1,13 @@
 ﻿<div>
+    <div class="panel panel-info" style="width: 40%; margin: auto; display: table; text-align: center;">
+        <div class="panel-heading">
+            <h4>OMJERI</h4>
+        </div>
+        <h4 *ngFor="let stat of stats">
+            {{ stat }}
+        </h4>
+    </div>
+    <br/>
     <span *ngFor="let data of offspringData">
         <child-organism [trait]="data"></child-organism>
     </span>

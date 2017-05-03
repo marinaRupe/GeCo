@@ -48,9 +48,12 @@
 </div>
 
 <div class="row">
-    <offspring *ngIf="parent1.trait1.genotype && parent2.trait1.genotype"
+    <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
+                    || (numberOfCharact === 2 && parent1.trait1.genotype && parent2.trait1.genotype && parent1.trait2.genotype && parent2.trait2.genotype)"
                parent1Genotype={{parent1.trait1.genotype}}
                parent2Genotype={{parent2.trait1.genotype}}
+               parent1Genotype2={{parent1.trait2.genotype}}
+               parent2Genotype2={{parent2.trait2.genotype}}
                [traits1]="traits1"
                [traits2]="traits2">
     </offspring>
