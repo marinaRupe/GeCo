@@ -1,17 +1,44 @@
 ﻿<h1>Test</h1>
-<h3>Testirajte svoje znanje!</h3>
-<br/>
 
-<button *ngIf="!testStarted" (click)="start()" class="btn btn-default">Počni</button>
-<div *ngIf="testStarted">
-    <h4 *ngFor="let q of questions; let i=index">
-        {{i + 1}}. {{ q.question }}
+<div *ngIf="!testStarted && !showResults">
+    <h3>Testirajte svoje znanje!</h3>
+    <br />
+    <button (click)="start()" class="btn btn-default">Počni</button>
+</div>
+
+<div *ngIf="testStarted && !showResults">
+    <div *ngFor="let q of questions; let i=index">
+        <h4>{{i + 1}}. {{ q.question }}</h4>
         <div *ngFor="let a of q.answers; let j=index">
-            <input type="radio" name={{i}} id="question-1-answers-A" value={{a}} />
-            <label for="question-1-answers-A">{{a}}</label>
+            <input type="radio" 
+                   [name]="i"
+                   [checked]="idx === 0" 
+                   [value]="a"
+                   (change)="onAnswerSelect(i, a)" />
+            <span>{{a}}</span>
         </div>
         
-    </h4>
+    </div>
     <button (click)="stop()" class="btn btn-danger">Prekini ispit</button>
     <button (click)="grade()" class="btn btn-success">Ocijeni</button>
+</div>
+
+<div *ngIf="showResults">
+    <h2>Rezultati</h2>
+    <div *ngFor="let q of questions; let i=index">
+        <h4>{{i + 1}}. {{ q.question }}</h4>
+        <h4>Tvoj odgovor: {{q.studentAnswer}}</h4>
+        <h4>Točan odgovor: {{q.correctAnswer}}</h4>
+        <h4>
+            Rezultat:
+            <span *ngIf="q.studentAnswer === q.correctAnswer" class='glyphicon glyphicon-ok'></span>
+            <span *ngIf="q.studentAnswer !== q.correctAnswer" class='glyphicon glyphicon-remove'></span>
+        </h4>
+        <br/>
+    </div>
+    <h2>Ukupan rezultat: {{correctAnswers}}/{{numberOfQuestions}} ({{(correctAnswers/numberOfQuestions)*100}}%)</h2>
+    <br/>
+    <button (click)="stop()" class="btn btn-danger">Završi</button>
+    <button (click)="start()" class="btn btn-default">Započni novi test</button>
+    <br/>
 </div>
