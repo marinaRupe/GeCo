@@ -3,3 +3,10 @@
     genotype: string;
     type: string;
 }
+
+export interface IExamQuestion {
+    question: string;
+    answers: string[];
+    correctAnswer: string;
+    studentAnswer: string;
+}

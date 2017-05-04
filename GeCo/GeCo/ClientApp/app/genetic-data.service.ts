@@ -10,18 +10,18 @@ export class GeneticDataService {
                 {
                     characteristic: 'oblik kose',
                     traits: [
-                        { phenotype: "ravna", genotype: "AA", type: "Homozigot" },
-                        { phenotype: "valovita", genotype: "Aa", type: "Heterozigot" },
-                        { phenotype: "kovrčava", genotype: "aa", type: "Homozigot" }
+                        { phenotype: "ravna", genotype: "AA", type: "homozigot" },
+                        { phenotype: "valovita", genotype: "Aa", type: "heterozigot" },
+                        { phenotype: "kovrčava", genotype: "aa", type: "homozigot" }
                     ],
                     inheritanceType: 'nepotpuno dominantno/recesivno'
                 },
                 {
-                    characteristic: 'ušne resice',
+                    characteristic: 'ušna resica',
                     traits: [
-                        { phenotype: "slobodna", genotype: "AA", type: "Homozigot" },
-                        { phenotype: "slobodna", genotype: "Aa", type: "Heterozigot" },
-                        { phenotype: "srasla", genotype: "aa", type: "Homozigot" }
+                        { phenotype: "slobodna", genotype: "AA", type: "homozigot" },
+                        { phenotype: "slobodna", genotype: "Aa", type: "heterozigot" },
+                        { phenotype: "srasla", genotype: "aa", type: "homozigot" }
                     ],
                     inheritanceType: 'dominantno/recesivno'
                 },
@@ -39,27 +39,27 @@ export class GeneticDataService {
                 {
                     characteristic: 'oblik sjemenke',
                     traits: [
-                        { phenotype: "okrugli", genotype: "AA", type: "Homozigot" },
-                        { phenotype: "okrugli", genotype: "Aa", type: "Heterozigot" },
-                        { phenotype: "smežurani", genotype: "aa", type: "Homozigot" }
+                        { phenotype: "okrugli", genotype: "AA", type: "homozigot" },
+                        { phenotype: "okrugli", genotype: "Aa", type: "heterozigot" },
+                        { phenotype: "smežurani", genotype: "aa", type: "homozigot" }
                     ],
                     inheritanceType: 'dominantno/recesivno'
                 },
                 {
                     characteristic: 'boja cvjeta',
                     traits: [
-                        { phenotype: "ljubičasta", genotype: "AA", type: "Homozigot" },
-                        { phenotype: "ljubičasta", genotype: "Aa", type: "Heterozigot" },
-                        { phenotype: "bijela", genotype: "aa", type: "Homozigot" }
+                        { phenotype: "ljubičasta", genotype: "AA", type: "homozigot" },
+                        { phenotype: "ljubičasta", genotype: "Aa", type: "heterozigot" },
+                        { phenotype: "bijela", genotype: "aa", type: "homozigot" }
                     ],
                     inheritanceType: 'dominantno/recesivno'
                 },
                 {
                     characteristic: 'boja sjemenke',
                     traits: [
-                        { phenotype: "žuta", genotype: "AA", type: "Homozigot" },
-                        { phenotype: "žuta", genotype: "Aa", type: "Heterozigot" },
-                        { phenotype: "zelena", genotype: "aa", type: "Homozigot" }
+                        { phenotype: "žuta", genotype: "AA", type: "homozigot" },
+                        { phenotype: "žuta", genotype: "Aa", type: "heterozigot" },
+                        { phenotype: "zelena", genotype: "aa", type: "homozigot" }
                     ],
                     inheritanceType: 'dominantno/recesivno'
                 }

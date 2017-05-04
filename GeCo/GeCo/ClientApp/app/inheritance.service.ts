@@ -37,8 +37,8 @@ export class InheritanceService {
     }
 
     getType(genotype: string) {
-        const HOMOZYGOTE = 'Homozigot';
-        const HETEROZYGOTE = 'Heterozigot';
+        const HOMOZYGOTE = 'homozigot';
+        const HETEROZYGOTE = 'heterozigot';
 
         if (genotype.length === 2) {
             if (genotype[0] === genotype[1]) return HOMOZYGOTE;
