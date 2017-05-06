@@ -20,15 +20,15 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
             this.traits2 = [];
         }
         if (this.canChange) {
-            this.trait1 = { phenotype: "", genotype: "", type: "" };
-            this.trait2 = { phenotype: "", genotype: "", type: "" };
+            this.trait1 = {} as any;
+            this.trait2 = {} as any;
         }
     }
 
     ngOnChanges(changes: any): void {
         if (this.canChange) {
-            this.trait1 = { phenotype: "", genotype: "", type: "" };
-            this.trait2 = { phenotype: "", genotype: "", type: "" };
+            this.trait1 = {} as any;
+            this.trait2 = {} as any;
         }
     }
 }

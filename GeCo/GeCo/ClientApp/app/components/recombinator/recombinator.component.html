@@ -91,7 +91,7 @@
     </div>
     <div class="row">
         <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
-                          childGenotype={{child.trait1.genotype}} childGenotype2={{child.trait1.genotype}}
+                          childGenotype={{child.trait1.genotype}} childGenotype2={{child.trait2.genotype}}
                           characteristic={{characteristic}}
                           [traits1]="traits1" [traits2]="traits2">
         </possible-parents>

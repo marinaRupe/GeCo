@@ -3,7 +3,7 @@ import { ParentOrganismComponent } from "../parent-organism/parent-organism.comp
 import { PossibleParentsComponent } from "../possible-parents/possible-parents.component";
 import { ChildOrganismComponent } from "../child-organism/child-organism.component";
 import { OffspringComponent } from "../offspring/offspring.component";
-import { ITrait, RecombinationStartOrganism } from '../../shared/types';
+import { ITrait } from '../../shared/types';
 import { GeneticDataService } from '../../genetic-data.service';
 
 @Component({
