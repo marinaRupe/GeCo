@@ -10,3 +10,8 @@ export interface IExamQuestion {
     correctAnswer: string;
     studentAnswer: string;
 }
+
+export enum RecombinationStartOrganism {
+    Child = 0,
+    Parents = 1
+}

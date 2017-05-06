@@ -15,8 +15,9 @@ export class OffspringComponent {
     @Input() parent2Genotype2: string;
     @Input() traits1: ITrait[] = [];
     @Input() traits2: ITrait[] = [];
-    private offspringData : ITrait[] = [];
-    private characteristic: string = '';
+    @Input() organism: string = '';
+    @Input() characteristic: string = '';
+    private offspringData: ITrait[] = [];
     private stats: string[] = Array(2);
 
     constructor(private inheritanceService: InheritanceService) {}
@@ -35,7 +36,7 @@ export class OffspringComponent {
 
         for (let i = 0; i < genotypes.length; i++) {
             const genotype = genotypes[i];
-            const phenotype = this.getPhenotype(genotypes[i]);
+            const phenotype = this.getPhenotype(genotypes[i], this.organism, this.characteristic);
             this.offspringData.push({
                 genotype: genotype,
                 phenotype: phenotype,
@@ -74,7 +75,7 @@ export class OffspringComponent {
         return this.inheritanceService.generateGenotypes(genotype1, genotype2);
     }
 
-    getPhenotype(genotype: string) : string {
+    getPhenotype(genotype: string, organism: string, characteristic: string) : string {
         return this.inheritanceService.getPhenotype(this.traits1, genotype);
     }
 

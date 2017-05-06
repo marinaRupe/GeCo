@@ -30,7 +30,7 @@
 <h2>Rezultati</h2>
 
     <div *ngFor="let q of questions; let i=index">
-        <div class="panel panel-success" [ngClass]="{'panel-danger': q.studentAnswer !== q.correctAnswer}">
+        <div class="panel" [ngClass]="{'panel-danger': q.studentAnswer !== q.correctAnswer, 'panel-success': q.studentAnswer === q.correctAnswer}">
             <div class="panel-heading">
                 <h4>{{i + 1}}. {{ q.question }}</h4>
             </div>

@@ -1,5 +1,5 @@
 ﻿<div>
-    <div class="panel panel-info" style="width: 40%; margin: auto; display: table; text-align: center;">
+    <div class="panel panel-danger" style="width: 40%; margin: auto; display: table; text-align: center;">
         <div class="panel-heading">
             <h4>OMJERI</h4>
         </div>
@@ -9,6 +9,6 @@
     </div>
     <br/>
     <span *ngFor="let data of offspringData">
-        <child-organism [trait]="data"></child-organism>
+        <child-organism class="col-sm-6" characteristic={{characteristic}} [trait1]="data" [trait2]="data" [traits1]="traits1" [traits2]="traits2" [canChange]="false"></child-organism>
     </span>
 </div>

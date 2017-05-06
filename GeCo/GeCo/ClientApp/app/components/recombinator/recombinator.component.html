@@ -1,7 +1,8 @@
 ﻿<h1>Rekombinator</h1>
 <h4>
     Dobrodošli u rekombinator! Odaberite organizam i svojstvo koje želite promatrati.
-    Zatim podesite svojstva roditelja pri čemu će se generirati sve kombinacije djece.
+    Zatim odaberite želite li generirati djecu iz zadanih roditelja ili zadanom djetetu pronaći moguće roditelje.
+    Potom podesite svojstva roditelja odnosno djeteta pri čemu će se generirati sve kombinacije djece, odnosno roditelja.
 </h4>
 <br />
 <div class="row">
@@ -38,23 +39,61 @@
         </select>
     </div>
 </div>
-<div class="row top-buffer">
-    <div class="col-sm-6">
-        <parent-organism #parent1 [traits1]="traits1" [traits2]="traits2"></parent-organism>
+
+<div>
+    <span class="h4"> Pronađi: </span>
+    <span>
+        <input style="width:2em; height:2em;"
+               type="radio"
+               name="startRadioGroup"
+               [checked]="true"
+               [value]="true"
+               (change)="onStartingOrganismChange(true)"/>
+        <label style="font-size:150%;">roditeljima djecu</label>
+    </span>
+    <span>
+        <input style="width:2em; height:2em;"
+               type="radio"
+               name="startRadioGroup"
+               [value]="false"
+               (change)="onStartingOrganismChange(false)" />
+        <label style="font-size:150%;">djetetu roditelje</label>
+    </span>
+</div>
+
+<div *ngIf="startingFromParents">
+    <div class="row top-buffer">
+        <div class="col-sm-6">
+            <parent-organism #parent1 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true"></parent-organism>
+        </div>
+        <div class="col-sm-6">
+            <parent-organism #parent2 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true"></parent-organism>
+        </div>
     </div>
-    <div class="col-sm-6">
-        <parent-organism #parent2 [traits1]="traits1" [traits2]="traits2"></parent-organism>
+
+    <div class="row">
+        <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
+                    || (numberOfCharact === 2 && parent1.trait1.genotype && parent2.trait1.genotype && parent1.trait2.genotype && parent2.trait2.genotype)"
+                   parent1Genotype={{parent1.trait1.genotype}} parent2Genotype={{parent2.trait1.genotype}}
+                   parent1Genotype2={{parent1.trait2.genotype}} parent2Genotype2={{parent2.trait2.genotype}}
+                   organism="{{organism}}"
+                   characteristic={{characteristic}}
+                   [traits1]="traits1" [traits2]="traits2">
+        </offspring>
     </div>
 </div>
 
-<div class="row">
-    <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
-                    || (numberOfCharact === 2 && parent1.trait1.genotype && parent2.trait1.genotype && parent1.trait2.genotype && parent2.trait2.genotype)"
-               parent1Genotype={{parent1.trait1.genotype}}
-               parent2Genotype={{parent2.trait1.genotype}}
-               parent1Genotype2={{parent1.trait2.genotype}}
-               parent2Genotype2={{parent2.trait2.genotype}}
-               [traits1]="traits1"
-               [traits2]="traits2">
-    </offspring>
+<div *ngIf="!startingFromParents">
+    <div class="row top-buffer">
+        <div class="child col-sm-offset-3">
+            <child-organism #child characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true"></child-organism>
+        </div>
+    </div>
+    <div class="row">
+        <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
+                          childGenotype={{child.trait1.genotype}} childGenotype2={{child.trait1.genotype}}
+                          characteristic={{characteristic}}
+                          [traits1]="traits1" [traits2]="traits2">
+        </possible-parents>
+    </div>
 </div>
