@@ -15,6 +15,11 @@ export interface IParents {
     percentage: number;
 }
 
+export interface IChild {
+    child: IOrganism;
+    percentage: number;
+}
+
 export interface IExamQuestion {
     question: string;
     answers: string[];
