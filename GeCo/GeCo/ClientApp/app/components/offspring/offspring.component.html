@@ -4,11 +4,11 @@
             <h4>OMJERI</h4>
         </div>
         <h4 *ngFor="let stat of stats">
-            {{ stat }}
+            {{ stat.proportions }} {{ stat.values }}
         </h4>
     </div>
     <br/>
-    <span *ngFor="let data of offspringData">
-        <child-organism class="col-sm-6" characteristic={{characteristic}} [trait1]="data" [trait2]="data" [traits1]="traits1" [traits2]="traits2" [canChange]="false"></child-organism>
+    <span *ngFor="let c of children">
+        <child-organism class="col-sm-6" characteristic={{characteristic}} [trait1]="c.child.trait1" [trait2]="c.child.trait2" [traits1]="traits1" [traits2]="traits2" [canChange]="false"></child-organism>
     </span>
 </div>

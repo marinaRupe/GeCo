@@ -86,7 +86,17 @@ export class InheritanceService {
         return 0.2; //TODO: generirati djecu i vratiti udio childGenotype u genotipovima djece
     }
 
-    monohybridCross(traits: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
+    generateChildren(characteristic: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism) : IChild[] {
+        let children: IChild[];
+        if (traits2.length === 0) {
+            children = this.monohybridCross(characteristic, traits1, parent1, parent2);
+        } else {
+            children = this.dihybridCross(characteristic, traits1, traits2, parent1, parent2);
+        }
+        return children;
+    }
+
+    monohybridCross(characteristic: string, traits: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
 
         let children: IChild[] = [];
         let childrenGenotypes = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
@@ -105,13 +115,13 @@ export class InheritanceService {
                         },
                     percentage : childrenCounter[genoType] / childrenGenotypes.length
                 }
-                children.push(childData)
+            children.push(childData);
         }
 
         return children;
     }
 
-    dihybridCross(traits: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
+    dihybridCross(characteristic: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
 
         let children: IChild[] = [];
         let childrenGenotypes1 = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
@@ -133,8 +143,8 @@ export class InheritanceService {
             for (let genoType2 in childrenCounter2) {
                 childData = {
                     child: {
-                        trait1: { phenotype: this.getPhenotype(traits, genoType1), genotype: genoType1, type: this.getType(genoType1) },
-                        trait2: { phenotype: this.getPhenotype(traits, genoType2), genotype: genoType2, type: this.getType(genoType2) }
+                        trait1: { phenotype: this.getPhenotype(traits1, genoType1), genotype: genoType1, type: this.getType(genoType1) },
+                        trait2: { phenotype: this.getPhenotype(traits2, genoType2), genotype: genoType2, type: this.getType(genoType2) }
                     },
 
                     percentage: childrenCounter1[genoType1] * childrenCounter2[genoType2] / (childrenGenotypes1.length * childrenGenotypes2.length)
@@ -158,7 +168,7 @@ export class InheritanceService {
                         let childAlel3 = genoType2.substring(0, 1);
                         let childAlel4 = genoType2.substring(1, 2);
                         //izvuc iz svojstva
-                        let cm = 0.36
+                        let cm = 0.36;
                         let x = 0-5 - cm/4;
                         let y = cm/4;
 
@@ -166,13 +176,13 @@ export class InheritanceService {
                         if (parent1.trait1.type === 'HETEROZYGOTE' && parent1.trait2.type === 'HETEROZYGOTE' && parent2.trait1.type === 'HETEROZYGOTE' && parent2.trait2.type === 'HETEROZYGOTE') {
 
                             if (childAlel1 === parent1Alel1 && childAlel3 === parent1Alel3 || childAlel1 === parent1Alel2 && childAlel3 === parent1Alel4) {
-                                childData.percentage = childData.percentage * x
+                                childData.percentage = childData.percentage * x;
                             }
                             else {
                                 childData.percentage = childData.percentage * y;
                             }
                             if (childAlel2 === parent2Alel1 && childAlel4 === parent2Alel3 || childAlel2 === parent2Alel2 && childAlel4 === parent2Alel4) {
-                                childData.percentage = childData.percentage * x
+                                childData.percentage = childData.percentage * x;
                             }
                             else {
                                 childData.percentage = childData.percentage * y;
@@ -183,7 +193,7 @@ export class InheritanceService {
                         else if (parent1.trait1.type === 'HETEROZYGOTE' && parent1.trait2.type === 'HETEROZYGOTE' && !(parent2.trait1.type === 'HETEROZYGOTE' && parent2.trait2.type === 'HETEROZYGOTE')) {
 
                             if (childAlel1 === parent1Alel1 && childAlel3 === parent1Alel3 || childAlel1 === parent1Alel2 && childAlel3 === parent1Alel4) {
-                                childData.percentage = childData.percentage * x
+                                childData.percentage = childData.percentage * x;
                             }
                             else {
                                 childData.percentage = childData.percentage * y;
@@ -194,7 +204,7 @@ export class InheritanceService {
                         else if (!(parent1.trait1.type === 'HETEROZYGOTE' && parent1.trait2.type === 'HETEROZYGOTE') && (parent2.trait1.type === 'HETEROZYGOTE' && parent2.trait2.type === 'HETEROZYGOTE')) {
 
                             if (childAlel2 === parent2Alel1 && childAlel4 === parent2Alel3 || childAlel2 === parent2Alel2 && childAlel4 === parent2Alel4) {
-                                childData.percentage = childData.percentage * x
+                                childData.percentage = childData.percentage * x;
                             }
                             else {
                                 childData.percentage = childData.percentage * y;
@@ -203,8 +213,8 @@ export class InheritanceService {
                         }
                     }
                 }
-                
-                children.push(childData)
+
+                children.push(childData);
             }
             
         }
