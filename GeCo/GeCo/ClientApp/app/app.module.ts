@@ -11,6 +11,7 @@ import { ExamComponent } from './components/exam/exam.component';
 import { HelpComponent } from './components/help/help.component';
 import { ParentOrganismComponent } from './components/parent-organism/parent-organism.component';
 import { OffspringComponent } from './components/offspring/offspring.component';
+import { PossibleParentsComponent } from "./components/possible-parents/possible-parents.component";
 import { ChildOrganismComponent } from './components/child-organism/child-organism.component';
 import { GeneticDataService } from './genetic-data.service'
 import { InheritanceService } from './inheritance.service'
@@ -27,6 +28,7 @@ import { InheritanceService } from './inheritance.service'
         ExamComponent,
         HelpComponent,
         ParentOrganismComponent,
+        PossibleParentsComponent,
         OffspringComponent,
         ChildOrganismComponent
     ],

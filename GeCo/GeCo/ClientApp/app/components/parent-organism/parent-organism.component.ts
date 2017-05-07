@@ -9,18 +9,26 @@ import { ITrait } from "../../shared/types";
 export class ParentOrganismComponent implements OnInit, OnChanges {
     @Input() traits1: ITrait[];
     @Input() traits2: ITrait[];
-    trait1: ITrait;
-    trait2: ITrait;
+    @Input() trait1: ITrait;
+    @Input() trait2: ITrait;
+    @Input() characteristic: string;
+    @Input() canChange: boolean;
 
     ngOnInit(): void {
-        this.traits1 = [];
-        this.traits2 = [];
-        this.trait1 = { phenotype: "", genotype: "", type: "" };
-        this.trait2 = { phenotype: "", genotype: "", type: "" };
+        if (this.traits1 === undefined && this.traits2 === undefined) {
+            this.traits1 = [];
+            this.traits2 = [];
+        }
+        if (this.canChange) {
+            this.trait1 = {} as any;
+            this.trait2 = {} as any;
+        }
     }
 
     ngOnChanges(changes: any): void {
-        this.trait1 = { phenotype: "", genotype: "", type: "" };
-        this.trait2 = { phenotype: "", genotype: "", type: "" };
+        if (this.canChange) {
+            this.trait1 = {} as any;
+            this.trait2 = {} as any;
+        }
     }
 }

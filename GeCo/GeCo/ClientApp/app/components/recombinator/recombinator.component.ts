@@ -1,5 +1,8 @@
 ﻿import { Component, ViewChild, OnInit } from '@angular/core';
 import { ParentOrganismComponent } from "../parent-organism/parent-organism.component";
+import { PossibleParentsComponent } from "../possible-parents/possible-parents.component";
+import { ChildOrganismComponent } from "../child-organism/child-organism.component";
+import { OffspringComponent } from "../offspring/offspring.component";
 import { ITrait } from '../../shared/types';
 import { GeneticDataService } from '../../genetic-data.service';
 
@@ -12,6 +15,8 @@ import { GeneticDataService } from '../../genetic-data.service';
 export class RecombinatorComponent implements OnInit {
     @ViewChild('parent1') private parent1: ParentOrganismComponent;
     @ViewChild('parent2') private parent2: ParentOrganismComponent;
+    @ViewChild('child') private child: ChildOrganismComponent;
+    startingFromParents: boolean;
     organisms: string[];
     organism: string;
     characteristic: string;
@@ -28,6 +33,7 @@ export class RecombinatorComponent implements OnInit {
     constructor(private geneticDataService: GeneticDataService) {}
 
     ngOnInit(): void {
+        this.startingFromParents = true;
         this.data = this.geneticDataService.getData();
         this.organisms = this.geneticDataService.getOrganisms();
         this.inheritanceTypes = this.geneticDataService.getInheritanceTypes();
@@ -51,6 +57,10 @@ export class RecombinatorComponent implements OnInit {
         this.inheritanceTypes = this.changeInheritanceTypes();
         this.inheritanceType = this.changeInheritanceType();
         this.changeTraits();
+    }
+
+    onStartingOrganismChange(startingFromParents: boolean) : void {
+        this.startingFromParents = startingFromParents;
     }
 
     onSelectOrganismChange(event) {
