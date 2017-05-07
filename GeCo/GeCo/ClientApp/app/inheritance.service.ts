@@ -58,22 +58,25 @@ export class InheritanceService {
                         for (let l = 0; l < traits2.length; l++) {
                             const parent1Trait2 = traits2[i];
                             const parent2Trait2 = traits2[j];
+                            const parent1 = { trait1: parent1Trait1, trait2: parent1Trait2 };
+                            const parent2 = { trait1: parent2Trait1, trait2: parent2Trait2 };
 
                             parentData = {
-                                parent1: { trait1: parent1Trait1, trait2: parent1Trait2 },
-                                parent2: { trait1: parent2Trait1, trait2: parent2Trait2 },
-                                percentage: this.getChildPercentage(childGenotype, childGenotype2, parent1Trait1.genotype, parent2Trait1.genotype,
-                                                                     parent1Trait2.genotype, parent2Trait2.genotype)
+                                parent1,
+                                parent2,
+                                percentage: this.getChildPercentage(characteristic1, characteristic2, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
                             };
                             possibleParents.push(parentData);
                         }
                     }
                 }
                 else {
+                    const parent1 = { trait1: parent1Trait1, trait2: {} as ITrait };
+                    const parent2 = { trait1: parent2Trait1, trait2: {} as ITrait };
                     parentData = {
-                        parent1: { trait1: parent1Trait1, trait2: {} as any },
-                        parent2: { trait1: parent2Trait1, trait2: {} as any },
-                        percentage: this.getChildPercentage(childGenotype, parent1Trait1.genotype, parent2Trait1.genotype)
+                        parent1,
+                        parent2,
+                        percentage: this.getChildPercentage(characteristic1, characteristic2, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
                     };
                     possibleParents.push(parentData);
                 }
@@ -82,22 +85,37 @@ export class InheritanceService {
         return possibleParents;
     }
 
-    getChildPercentage(childGenotype: string, parent1Trait1Genotype: string, parent2Trait1Genotype: string, child2Genotype: string = "", parent1Trait2Genotype: string = "", parent2Trait2Genotype: string = "") {
-        return 0.2; //TODO: generirati djecu i vratiti udio childGenotype u genotipovima djece
+    getChildPercentage(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], childGenotype: string, childGenotype2: string, parent1:IOrganism, parent2:IOrganism) {
+        let children: IChild[] = this.generateChildren(characteristic1, characteristic2, traits1, traits2, parent1, parent2);
+        const isDihybrid = traits2.length > 0;
+
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
+            if (isDihybrid) {
+                if (child.child.trait1.genotype === childGenotype && child.child.trait2.genotype === childGenotype2) {
+                    return child.percentage;
+                }
+            } else {
+                if (child.child.trait1.genotype === childGenotype) {
+                    return child.percentage;
+                }
+            }
+        }
+        return 0; //TODO: generirati djecu i vratiti udio childGenotype u genotipovima djece
     }
 
-    generateChildren(characteristic: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism) : IChild[] {
+    generateChildren(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism) : IChild[] {
         let children: IChild[];
-        if (traits2.length === 0) {
-            children = this.monohybridCross(characteristic, traits1, parent1, parent2);
+        const isDihybrid = traits2.length > 0;
+        if (!isDihybrid) {
+            children = this.monohybridCross(characteristic1, traits1, parent1, parent2);
         } else {
-            children = this.dihybridCross(characteristic, traits1, traits2, parent1, parent2);
+            children = this.dihybridCross(characteristic1, characteristic2, traits1, traits2, parent1, parent2);
         }
         return children;
     }
 
     monohybridCross(characteristic: string, traits: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
-
         let children: IChild[] = [];
         let childrenGenotypes = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
         let traitData: ITrait;
@@ -121,8 +139,7 @@ export class InheritanceService {
         return children;
     }
 
-    dihybridCross(characteristic: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
-
+    dihybridCross(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
         let children: IChild[] = [];
         let childrenGenotypes1 = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
         let childrenGenotypes2 = this.generateGenotypes(parent1.trait2.genotype, parent2.trait2.genotype);

@@ -28,7 +28,16 @@ export class OffspringComponent {
     }
 
     generateChildren(): IChild[] {
-        return this.inheritanceService.generateChildren(this.characteristic, this.traits1, this.traits2, this.parent1, this.parent2);
+        const isDihybrid = this.traits2.length > 0;
+        let char1, char2;
+        if (isDihybrid) {
+            char1 = this.characteristic.split("+")[0].trim();
+            char2 = this.characteristic.split("+")[0].trim();
+        } else {
+            char1 = this.characteristic;
+            char2 = "";
+        }
+        return this.inheritanceService.generateChildren(char1, char2, this.traits1, this.traits2, this.parent1, this.parent2);
     }
 
     setStatistics(): void {
