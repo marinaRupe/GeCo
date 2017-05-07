@@ -31,8 +31,8 @@ public class TextSourceController : Controller
     [HttpGet("Get/{id}")]
     public IActionResult Get(int id)
     {
-        TextSource _textSource = _textSourceRepository
-            .GetSingle(s => s.Id == id);
+        IEnumerable <TextSource> _textSource = _textSourceRepository
+            .FindBy(s => s.Id == id);
 
         if (_textSource != null)
         {
@@ -45,22 +45,22 @@ public class TextSourceController : Controller
         }
     }
 
-    [HttpDelete("Remove/{Id}")]
-    public IActionResult Delete(int id)
-    {
-        TextSource _textSource = _textSourceRepository.GetSingle(id);
+    //[HttpDelete("Remove/{Id}")]
+    //public IActionResult Delete(int id)
+    //{
+    //    TextSource _textSource = _textSourceRepository.GetSingle(id);
 
-        if (_textSource == null)
-        {
-            return new NotFoundResult();
-        }
-        else
-        {
-            _textSourceRepository.Delete(_textSource);
+    //    if (_textSource == null)
+    //    {
+    //        return new NotFoundResult();
+    //    }
+    //    else
+    //    {
+    //        _textSourceRepository.Delete(_textSource);
 
-            _textSourceRepository.Commit();
+    //        _textSourceRepository.Commit();
 
-            return new NoContentResult();
-        }
-    }
+    //        return new NoContentResult();
+    //    }
+    //}
 }
