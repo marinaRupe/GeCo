@@ -1,0 +1,28 @@
+{
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+  "version": "1.0.0-*",
+  "dependencies": {
+    "Microsoft.EntityFrameworkCore": "1.1.1",
+    "Microsoft.EntityFrameworkCore.Design": "1.0.0-preview2-final",
+    //"microsoft.entityframeworkcore": "1.0.3",
+    "Microsoft.EntityFrameworkCore.Relational": "1.1.1",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1",
+    "NETStandard.Library": "1.6.1",
+    //"microsoft.entityframeworkcore.relational": "1.0.3",
+    "System.Interactive.Async": "3.0.0",
+    "System.ComponentModel.Annotations": "4.3.0",
+    "System.Collections": "4.3.0",
+    "Microsoft.EntityFrameworkCore.Tools": {
+      "version": "1.0.0-preview2-final"
+    }
+  },
+  "frameworks": {
+    "netcoreapp1.0": {}
+  },
+
+  "tools": {
+    "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.0.0-preview2-final"
+  }
+}
