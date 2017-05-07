@@ -32,7 +32,7 @@ export class OffspringComponent {
         let char1, char2;
         if (isDihybrid) {
             char1 = this.characteristic.split("+")[0].trim();
-            char2 = this.characteristic.split("+")[0].trim();
+            char2 = this.characteristic.split("+")[1].trim();
         } else {
             char1 = this.characteristic;
             char2 = "";
