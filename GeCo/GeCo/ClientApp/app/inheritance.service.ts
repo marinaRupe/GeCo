@@ -1,59 +1,46 @@
 ﻿import { Injectable } from '@angular/core';
-import { ITrait, IParents, IOrganism, IChild } from "./shared/types";
+import { ITrait, IParents, IOrganism, IChild, IGenotype } from "./shared/types";
 
 @Injectable()
 export class InheritanceService {
-    generateGenotypes(genotype1: string, genotype2: string) {
-        let genotypes = [];
-        const isDihybrid = genotype1.length === 4;
-
-        for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < 2; j++) {
-                let genotypeMono = genotype1[i] + genotype2[j];
-                if (isDihybrid) {
-                    for (let k = 2; k < 4; k++) {
-                        for (let l = 2; l < 4; l++) {
-                            let genotypeDih = genotype1[k] + genotype2[l];
-                            genotypes.push(genotypeMono + genotypeDih);
-                        }
-                    }   
-                } else {
-                    genotypes.push(genotypeMono);
-                }
-            }
-        }
+    generateGenotypes(genotype1: IGenotype, genotype2: IGenotype) : IGenotype[] {
+        let genotypes : IGenotype[] = [];
+        genotypes.push({ allele1: genotype1.allele1, allele2: genotype2.allele1 });
+        genotypes.push({ allele1: genotype1.allele1, allele2: genotype2.allele2 });
+        genotypes.push({ allele1: genotype1.allele2, allele2: genotype2.allele1 });
+        genotypes.push({ allele1: genotype1.allele2, allele2: genotype2.allele2 });
         return genotypes;
     }
 
-    getPhenotype(traits: ITrait[], genotype: string) { 
-        const reversedGenotype = genotype[1] + genotype[0];
+    getPhenotype(traits: ITrait[], genotype: IGenotype) { 
+        const reversedGenotype : IGenotype = { allele1: genotype.allele2, allele2: genotype.allele1 };
         for (let i = 0; i < traits.length; i++) {
-            if (genotype === traits[i].genotype || reversedGenotype === traits[i].genotype) {
+            if (this.compareGenotypes(genotype, traits[i].genotype) || this.compareGenotypes(reversedGenotype, traits[i].genotype)) {
                 return traits[i].phenotype;
             }    
         }
         return 'TODO';
     }
 
-    getType(genotype: string) {
+    getType(genotype: IGenotype) {
         const HOMOZYGOTE = 'homozigot';
         const HETEROZYGOTE = 'heterozigot';
 
-        if (genotype.length === 2) {
-            if (genotype[0] === genotype[1]) return HOMOZYGOTE;
-            else return HETEROZYGOTE;
-        }
+        if (genotype.allele1 === genotype.allele2) return HOMOZYGOTE;
+        else return HETEROZYGOTE;
     }
 
-    getParentsForChild(characteristic1: string, traits1: ITrait[], characteristic2: string, traits2: ITrait[], childGenotype: string, childGenotype2: string) : IParents[] {
+    getParentsForChild(characteristic1: string, traits1: ITrait[], characteristic2: string, traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype) : IParents[] {
         let possibleParents: IParents[] = [];
+        const isDihybrid = traits2.length > 0;
+
         for (let i = 0; i < traits1.length; i++) {
             for (let j = 0; j < traits1.length; j++) {
                 const parent1Trait1 = traits1[i];
                 const parent2Trait1 = traits1[j];
                 let parentData: IParents;
 
-                if (childGenotype2 && traits2.length > 0) {
+                if (isDihybrid) {
                     for (let k = 0; k < traits2.length; k++) {
                         for (let l = 0; l < traits2.length; l++) {
                             const parent1Trait2 = traits2[i];
@@ -85,19 +72,20 @@ export class InheritanceService {
         return possibleParents;
     }
 
-    getChildPercentage(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], childGenotype: string, childGenotype2: string, parent1:IOrganism, parent2:IOrganism) {
+    getChildPercentage(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype, parent1:IOrganism, parent2:IOrganism) {
         let children: IChild[] = this.generateChildren(characteristic1, characteristic2, traits1, traits2, parent1, parent2);
         const isDihybrid = traits2.length > 0;
 
         for (let i = 0; i < children.length; i++) {
-            let child = children[i];
+            const c = children[i];
+            const child = c.child;
             if (isDihybrid) {
-                if (child.child.trait1.genotype === childGenotype && child.child.trait2.genotype === childGenotype2) {
-                    return child.percentage;
+                if (this.compareGenotypes(child.trait1.genotype, childGenotype) && this.compareGenotypes(child.trait2.genotype, childGenotype2)) {
+                    return c.percentage;
                 }
             } else {
-                if (child.child.trait1.genotype === childGenotype) {
-                    return child.percentage;
+                if (this.compareGenotypes(child.trait1.genotype, childGenotype)) {
+                    return c.percentage;
                 }
             }
         }
@@ -122,17 +110,23 @@ export class InheritanceService {
         let childData: IChild;
         let childrenCounter = {};
 
-        for (let genoType of childrenGenotypes) {
-            childrenCounter[genoType] = (childrenCounter[genoType] || 0) + 1;
+        for (let genotype of childrenGenotypes) {
+            const gen: string = genotype.allele1 + genotype.allele2;
+            childrenCounter[gen] = {
+                count: (childrenCounter[gen] ? childrenCounter[gen].count : 0) + 1,
+                genotype
+            }
         }
-        for (let genoType in childrenCounter) {
+        for (let genotype in childrenCounter) {
+            let gen = childrenCounter[genotype];
                 childData = {
                     child: {
-                        trait1: { phenotype: this.getPhenotype(traits, genoType),genotype: genoType, type: this.getType(genoType) },
+                        trait1: { phenotype: this.getPhenotype(traits, gen.genotype), genotype: gen.genotype, type: this.getType(gen.genotype) },
                         trait2: {} as any
                         },
-                    percentage : childrenCounter[genoType] / childrenGenotypes.length
-                }
+                    percentage : gen.count / childrenGenotypes.length
+            }
+            console.log(gen);
             children.push(childData);
         }
 
@@ -149,22 +143,34 @@ export class InheritanceService {
         let childrenCounter2 = {};
         let vezani = false;
 
-        for (let genoType1 of childrenGenotypes1) {
-            childrenCounter1[genoType1] = (childrenCounter1[genoType1] || 0) + 1;
+        for (let genotype1 of childrenGenotypes1) {
+            let genotype: string = genotype1.allele1 + genotype1.allele2;
+            childrenCounter1[genotype] = {
+                count: (childrenCounter1[genotype] ? childrenCounter1[genotype].count : 0) + 1,
+                genotype: genotype1
+            }
         }
         
-        for (let genoType2 of childrenGenotypes2) {
-            childrenCounter2[genoType2] = (childrenCounter2[genoType2] || 0) + 1;
+        for (let genotype2 of childrenGenotypes2) {
+            let genotype: string = genotype2.allele1 + genotype2.allele2;
+            childrenCounter2[genotype] = {
+                count: (childrenCounter2[genotype] ? childrenCounter2[genotype].count : 0) + 1,
+                genotype: genotype2
+            }
         }
-        for (let genoType1 in childrenCounter1) {
-            for (let genoType2 in childrenCounter2) {
+        for (let genotype1 in childrenCounter1) {
+            for (let genotype2 in childrenCounter2) {
+                const gen1: IGenotype = childrenCounter1[genotype1].genotype;
+                const gen2: IGenotype = childrenCounter2[genotype2].genotype;
+                const gen1Count: number = childrenCounter1[genotype1].count;
+                const gen2Count: number = childrenCounter2[genotype2].count;
                 childData = {
                     child: {
-                        trait1: { phenotype: this.getPhenotype(traits1, genoType1), genotype: genoType1, type: this.getType(genoType1) },
-                        trait2: { phenotype: this.getPhenotype(traits2, genoType2), genotype: genoType2, type: this.getType(genoType2) }
+                        trait1: { phenotype: this.getPhenotype(traits1, gen1), genotype: gen1, type: this.getType(gen1) },
+                        trait2: { phenotype: this.getPhenotype(traits2, gen2), genotype: gen2, type: this.getType(gen2) }
                     },
 
-                    percentage: childrenCounter1[genoType1] * childrenCounter2[genoType2] / (childrenGenotypes1.length * childrenGenotypes2.length)
+                    percentage: gen1Count * gen2Count / (childrenGenotypes1.length * childrenGenotypes2.length)
                 }
                 if (vezani) {
                     //bar jedan roditelj mora biti heterozigot u oba svojstva inace crossing over nema efekta
@@ -172,18 +178,18 @@ export class InheritanceService {
 
 
                         //ovo isto treba getati alela a ne raditi substring
-                        let parent1Alel1 = parent1.trait1.genotype.substring(0, 1);
-                        let parent1Alel2 = parent1.trait1.genotype.substring(1, 2);
-                        let parent1Alel3 = parent1.trait2.genotype.substring(0, 1);
-                        let parent1Alel4 = parent1.trait2.genotype.substring(1, 2);
-                        let parent2Alel1 = parent2.trait1.genotype.substring(0, 1);
-                        let parent2Alel2 = parent2.trait1.genotype.substring(1, 2);
-                        let parent2Alel3 = parent2.trait2.genotype.substring(0, 1);
-                        let parent2Alel4 = parent2.trait2.genotype.substring(1, 2);
-                        let childAlel1 = genoType1.substring(0, 1);
-                        let childAlel2 = genoType1.substring(1, 2);
-                        let childAlel3 = genoType2.substring(0, 1);
-                        let childAlel4 = genoType2.substring(1, 2);
+                        let parent1Alel1 = parent1.trait1.genotype.allele1;
+                        let parent1Alel2 = parent1.trait1.genotype.allele2;
+                        let parent1Alel3 = parent1.trait2.genotype.allele1;
+                        let parent1Alel4 = parent1.trait2.genotype.allele2;
+                        let parent2Alel1 = parent2.trait1.genotype.allele1;
+                        let parent2Alel2 = parent2.trait1.genotype.allele2;
+                        let parent2Alel3 = parent2.trait2.genotype.allele1;
+                        let parent2Alel4 = parent2.trait2.genotype.allele2;
+                        let childAlel1 = genotype1.substring(0, 1);
+                        let childAlel2 = genotype1.substring(1, 2);
+                        let childAlel3 = genotype2.substring(0, 1);
+                        let childAlel4 = genotype2.substring(1, 2);
                         //izvuc iz svojstva
                         let cm = 0.36;
                         let x = 0-5 - cm/4;
@@ -237,5 +243,9 @@ export class InheritanceService {
         }
         
         return children;
+    }
+
+    compareGenotypes(genotype1: IGenotype, genotype2: IGenotype) {
+        return genotype1.allele1 === genotype2.allele1 && genotype1.allele2 === genotype2.allele2;
     }
 }

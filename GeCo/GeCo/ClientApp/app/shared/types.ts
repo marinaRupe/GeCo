@@ -1,6 +1,6 @@
 ﻿export interface ITrait {
     phenotype: string;
-    genotype: string;
+    genotype: IGenotype;
     type: string;
 }
 
@@ -25,4 +25,15 @@ export interface IExamQuestion {
     answers: string[];
     correctAnswer: string;
     studentAnswer: string;
+}
+
+export interface ILinkedGenes {
+    gene1Name: string;
+    gene2Name: string;
+    cM: number;
+}
+
+export interface IGenotype {
+    allele1: string;
+    allele2: string;
 }

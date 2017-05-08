@@ -1,6 +1,10 @@
 ﻿<div class="panel" [ngClass]="{'panel-primary': canChange, 'panel-info': !canChange}">
     <div class="panel-heading">
-        <h3>RODITELJ</h3>
+        <h3>
+            RODITELJ
+            <span *ngIf="sex === 'female'">&#9792;</span>
+            <span *ngIf="sex === 'male'">&#9794;</span>
+        </h3>
     </div>
     <div class="panel-body">
         
@@ -13,7 +17,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <select [(ngModel)]="trait1" class="form-control char-select">
-                        <option *ngFor="let t of traits1" [ngValue]="t">{{ t.phenotype + ' (' + t.type.toLowerCase() + ')' }}</option>
+                        <option *ngFor="let t of traits1" [ngValue]="t">{{ t.phenotype + ' (' + t.type + ')' }}</option>
                     </select>
                 </div>
             </div>
@@ -36,7 +40,7 @@
         <div *ngIf="traits2.length === 0">
             <div *ngIf="trait1.genotype" class="row">
                 <div class="col-sm-12">
-                    <h4>Genotip: {{trait1.genotype}}</h4>
+                    <h4>Genotip: {{trait1.genotype.allele1 + trait1.genotype.allele2}}</h4>
                 </div>
             </div>
             <div *ngIf="trait1.phenotype" class="row">
@@ -54,7 +58,7 @@
         <div *ngIf="traits2.length > 0">
             <div *ngIf="trait2.genotype" class="row">
                 <div class="col-sm-12">
-                    <h4>Genotip: {{trait1.genotype + trait2.genotype}}</h4>
+                    <h4>Genotip: {{trait1.genotype.allele1 + trait1.genotype.allele2 + trait2.genotype.allele1 + trait2.genotype.allele2}}</h4>
                 </div>
             </div>
             <div *ngIf="trait2.phenotype" class="row">

@@ -13,6 +13,7 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
     @Input() trait2: ITrait;
     @Input() characteristic: string;
     @Input() canChange: boolean;
+    @Input() sex: string;
 
     ngOnInit(): void {
         if (this.traits1 === undefined && this.traits2 === undefined) {

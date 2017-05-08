@@ -1,11 +1,11 @@
 ﻿<div>
     <div *ngFor="let data of possibleParentsData">
         <div>
-            <parent-organism class="col-sm-5" style="float:left" characteristic={{characteristic}} [trait1]="data.parent1.trait1" [trait2]="data.parent1.trait2" [traits1]="traits1" [traits2]="traits2" [canChange]="false"></parent-organism>
+            <parent-organism class="col-sm-5" style="float:left" characteristic={{characteristic}} [trait1]="data.parent1.trait1" [trait2]="data.parent1.trait2" [traits1]="traits1" [traits2]="traits2" [canChange]="false" [sex]="'female'"></parent-organism>
             <div style="float: left; position: relative; top: 100px; left: 5px;">
                 <h1>+</h1>
             </div>
-            <parent-organism class="col-sm-5" style="float:left" characteristic={{characteristic}} [trait1]="data.parent2.trait1" [trait2]="data.parent2.trait2" [traits1]="traits1" [traits2]="traits2" [canChange]="false"></parent-organism>
+            <parent-organism class="col-sm-5" style="float:left" characteristic={{characteristic}} [trait1]="data.parent2.trait1" [trait2]="data.parent2.trait2" [traits1]="traits1" [traits2]="traits2" [canChange]="false" [sex]="'male'"></parent-organism>
             <div class="col-sm-10" style="text-align: center; margin-bottom: 15px">
                 <h4>
                     Udio djece za zadanim genotipom: <b>{{data.percentage * 100}}%</b>

@@ -1,5 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
-import { ITrait, IParents } from '../../shared/types';
+import { ITrait, IParents, IGenotype } from '../../shared/types';
 import { InheritanceService } from "../../inheritance.service";
 import { ParentOrganismComponent } from '../parent-organism/parent-organism.component';
 
@@ -10,8 +10,8 @@ import { ParentOrganismComponent } from '../parent-organism/parent-organism.comp
     providers: [InheritanceService]
 })
 export class PossibleParentsComponent {
-    @Input() childGenotype: string;
-    @Input() childGenotype2: string;
+    @Input() childGenotype: IGenotype;
+    @Input() childGenotype2: IGenotype;
     @Input() traits1: ITrait[] = [];
     @Input() traits2: ITrait[] = [];
     @Input() characteristic: string;
@@ -38,9 +38,5 @@ export class PossibleParentsComponent {
             .getParentsForChild(char1, this.traits1, char2, this.traits2, this.childGenotype, this.childGenotype2);
         possibleParentsData.sort((a, b) => (b.percentage - a.percentage));
         this.possibleParentsData = possibleParentsData;
-    }
-
-    getChildPercentage(childGenotype: string, parent1Trait1Genotype: string, parent2Trait1Genotype: string, parent1Trait2Genotype: string="", parent2Trait2Genotype: string="") {
-        return 0.2;
     }
 }
