@@ -66,6 +66,7 @@
         <div class="col-sm-6">
             <parent-organism #parent1
                              characteristic={{characteristic}}
+                             [inheritance]="inheritance"
                              [traits1]="traits1"
                              [traits2]="traits2"
                              [canChange]="true" [sex]="'female'">
@@ -73,7 +74,15 @@
             </parent-organism>
         </div>
         <div class="col-sm-6">
-            <parent-organism #parent2 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true" [sex]="'male'"></parent-organism>
+            <parent-organism #parent2
+                             characteristic={{characteristic}}
+                             [inheritance]="inheritance"
+                             [traits1]="traits1"
+                             [traits2]="traits2"
+                             [canChange]="true"
+                             [sex]="'male'">
+                
+            </parent-organism>
         </div>
     </div>
 

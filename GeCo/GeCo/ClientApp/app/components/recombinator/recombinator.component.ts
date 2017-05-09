@@ -21,6 +21,7 @@ export class RecombinatorComponent implements OnInit {
     organism: string;
     characteristic: string;
     characteristics: string[];
+    inheritance;
     inheritanceTypes: string[];
     inheritanceTypesList : string[]; // list of all possible inheritance types
     inheritanceType: string = '';
@@ -46,7 +47,7 @@ export class RecombinatorComponent implements OnInit {
     ngAfterViewInit() : void {
         let organismData = this.data[this.organism];
         this.characteristic = this.characteristics[0] || '';
-        this.inheritanceType = organismData[0].inheritanceType || '';
+        this.inheritanceType = this.changeInheritanceType();
         this.changeTraits();
     }
 
@@ -145,14 +146,17 @@ export class RecombinatorComponent implements OnInit {
         }
     }
 
-    private changeInheritanceType(isCharacteristicSet : boolean = false) {
+    private changeInheritanceType(isCharacteristicSet: boolean = false) {
+        let inheritanceType: string;
         if (this.numberOfCharact === 1) {
             if (isCharacteristicSet) {
-                return this.getInheritanceTypeByCharacteristic(this.characteristic);
+                inheritanceType = this.getInheritanceTypeByCharacteristic(this.characteristic);
             }
             else {
-                return this.data[this.organism][0].inheritanceType || '';
+                inheritanceType = this.data[this.organism][0].inheritanceType || '';
             }
+            this.inheritance = { type1: inheritanceType, type2: "" };
+            return inheritanceType;
         }
         else if (this.numberOfCharact === 2) {
             let char1, char2;
@@ -166,6 +170,7 @@ export class RecombinatorComponent implements OnInit {
             }
             const inh1 = this.getInheritanceTypeByCharacteristic(char1);
             const inh2 = this.getInheritanceTypeByCharacteristic(char2);
+            this.inheritance = { type1: inh1, type2: inh2 };
             let inheritanceType;
             if (inh1 === "vezani geni" || inh2 === "vezani geni") {
                 inheritanceType = "vezani geni";
@@ -241,16 +246,7 @@ export class RecombinatorComponent implements OnInit {
         for (let i = 0; i < linkedGenes.length; i++) {
             characteristics.push(`${linkedGenes[i].gene1Name} + ${linkedGenes[i].gene2Name}`);
         }
-
         return characteristics;
-    }
-
-    private filterTraitsBySex(sex: string, traits: ITrait[]): ITrait[] {
-        if (this.inheritanceType === "spolni kromosomi") {
-            return this.geneticDataService.filterTraitsBySex(sex, traits);
-        } else {
-            return traits;
-        }
     }
 }
 
