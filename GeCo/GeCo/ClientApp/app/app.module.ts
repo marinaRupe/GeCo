@@ -7,6 +7,8 @@ import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 import { RecombinatorComponent } from './components/recombinator/recombinator.component';
 import { LecturesComponent } from './components/lectures/lectures.component';
+import { Lecture1Component } from './components/lectures/lecture-1.component';
+import { Lecture2Component } from './components/lectures/lecture-2.component';
 import { ExamComponent } from './components/exam/exam.component';
 import { HelpComponent } from './components/help/help.component';
 import { ParentOrganismComponent } from './components/parent-organism/parent-organism.component';
@@ -25,6 +27,8 @@ import { InheritanceService } from './inheritance.service'
         HomeComponent,
         RecombinatorComponent,
         LecturesComponent,
+        Lecture1Component,
+        Lecture2Component,
         ExamComponent,
         HelpComponent,
         ParentOrganismComponent,
@@ -39,6 +43,8 @@ import { InheritanceService } from './inheritance.service'
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'recombinator', component: RecombinatorComponent },
+            { path: 'lectures/dominantno-recesivno', component: Lecture1Component },
+            { path: 'lectures/nepotpuno-kodominantno', component: Lecture2Component },
             { path: 'lectures', component: LecturesComponent },
             { path: 'exam', component: ExamComponent },
             { path: 'help', component: HelpComponent },
