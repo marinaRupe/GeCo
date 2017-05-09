@@ -12,6 +12,7 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
     @Input() trait1: ITrait;
     @Input() trait2: ITrait;
     @Input() characteristic: string;
+    @Input() inheritance;
     @Input() canChange: boolean;
     @Input() sex: string;
 
@@ -33,23 +34,19 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
         }
     }
 
-    private filterTraitsBySex() {
-        let traits1 = [];
-        for (let i = 0; i < this.traits1.length; i++) {
-            const trait = this.traits1[i];
-            if ((this.sex === "male" && trait.genotype.allele2 === "Y") || (this.sex === "female" && trait.genotype.allele2 !== "Y")) {
-                traits1.push(trait);
+    private filterTraitsBySex(sex, traits, traitsNumber) {
+        if (traits === undefined || this.inheritance === undefined) return [];
+        if (this.inheritance["type" + traitsNumber.toString()] === "spolni kromosomi") {
+            let traitsTemp: ITrait[] = [];
+            for (let i = 0; i < traits.length; i++) {
+                if ((sex === "male" && traits[i].genotype.allele2 === "Y") ||
+                    (sex === "female" && traits[i].genotype.allele2 !== "Y")) {
+                    traitsTemp.push(traits[i]);
+                }
             }
+            return traitsTemp;
+        } else {
+            return traits;
         }
-        this.traits1 = traits1;
-
-        let traits2 = [];
-        for (let i = 0; i < this.traits2.length; i++) {
-            const trait = this.traits2[i];
-            if ((this.sex === "male" && trait.genotype.allele2 === "Y") || (this.sex === "female" && trait.genotype.allele2 !== "Y")) {
-                traits2.push(trait);
-            }
-        }
-        this.traits2 = traits2;
     }
 }
