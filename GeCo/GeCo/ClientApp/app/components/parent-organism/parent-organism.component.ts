@@ -31,6 +31,25 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
             this.trait1 = {} as any;
             this.trait2 = {} as any;
         }
-        console.log(this.trait1.imageUrl);
+    }
+
+    private filterTraitsBySex() {
+        let traits1 = [];
+        for (let i = 0; i < this.traits1.length; i++) {
+            const trait = this.traits1[i];
+            if ((this.sex === "male" && trait.genotype.allele2 === "Y") || (this.sex === "female" && trait.genotype.allele2 !== "Y")) {
+                traits1.push(trait);
+            }
+        }
+        this.traits1 = traits1;
+
+        let traits2 = [];
+        for (let i = 0; i < this.traits2.length; i++) {
+            const trait = this.traits2[i];
+            if ((this.sex === "male" && trait.genotype.allele2 === "Y") || (this.sex === "female" && trait.genotype.allele2 !== "Y")) {
+                traits2.push(trait);
+            }
+        }
+        this.traits2 = traits2;
     }
 }

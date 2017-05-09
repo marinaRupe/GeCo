@@ -64,7 +64,13 @@
 <div *ngIf="startingFromParents">
     <div class="row top-buffer">
         <div class="col-sm-6">
-            <parent-organism #parent1 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true" [sex]="'female'"></parent-organism>
+            <parent-organism #parent1
+                             characteristic={{characteristic}}
+                             [traits1]="traits1"
+                             [traits2]="traits2"
+                             [canChange]="true" [sex]="'female'">
+                
+            </parent-organism>
         </div>
         <div class="col-sm-6">
             <parent-organism #parent2 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true" [sex]="'male'"></parent-organism>

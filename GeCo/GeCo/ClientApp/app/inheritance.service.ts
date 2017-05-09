@@ -1,8 +1,11 @@
 ﻿import { Injectable } from '@angular/core';
 import { ITrait, IParents, IOrganism, IChild, IGenotype } from "./shared/types";
+import { GeneticDataService } from "./genetic-data.service"
 
 @Injectable()
 export class InheritanceService {
+    constructor(private geneticDataService: GeneticDataService) { }
+
     generateGenotypes(genotype1: IGenotype, genotype2: IGenotype) : IGenotype[] {
         let genotypes : IGenotype[] = [];
         genotypes.push({ allele1: genotype1.allele1, allele2: genotype2.allele1 });
@@ -252,7 +255,11 @@ export class InheritanceService {
         return children;
     }
 
-    compareGenotypes(genotype1: IGenotype, genotype2: IGenotype) {
+    private compareGenotypes(genotype1: IGenotype, genotype2: IGenotype) {
         return genotype1.allele1 === genotype2.allele1 && genotype1.allele2 === genotype2.allele2;
+    }
+
+    private filterTraitsBySex(sex: string, traits: ITrait[]) {
+        return this.geneticDataService.filterTraitsBySex(sex, traits);
     }
 }

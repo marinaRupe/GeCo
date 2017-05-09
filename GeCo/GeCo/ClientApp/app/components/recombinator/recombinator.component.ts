@@ -244,6 +244,14 @@ export class RecombinatorComponent implements OnInit {
 
         return characteristics;
     }
+
+    private filterTraitsBySex(sex: string, traits: ITrait[]): ITrait[] {
+        if (this.inheritanceType === "spolni kromosomi") {
+            return this.geneticDataService.filterTraitsBySex(sex, traits);
+        } else {
+            return traits;
+        }
+    }
 }
 
 

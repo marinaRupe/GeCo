@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { ILinkedGenes } from "./shared/types"
+import { ILinkedGenes, ITrait } from "./shared/types"
 
 @Injectable()
 export class GeneticDataService {
@@ -11,30 +11,74 @@ export class GeneticDataService {
                 {
                     characteristic: 'oblik kose',
                     traits: [
-                        { phenotype: "ravna", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "valovita", genotype: { allele1: "A", allele2: "a" }, type: "heterozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "kovrčava", genotype: { allele1: "a", allele2: "a" }, type: "homozigot", imageUrl: "gecko2.png" }
+                        { phenotype: "ravna", genotype: { allele1: "K", allele2: "K" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "valovita", genotype: { allele1: "K", allele2: "k" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "kovrčava", genotype: { allele1: "k", allele2: "k" }, type: "homozigot", imageUrl: "gecko2.png" }
                     ],
                     inheritanceType: 'nepotpuno dominantno/recesivno'
                 },
                 {
                     characteristic: 'ušna resica',
                     traits: [
-                        { phenotype: "slobodna", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "slobodna", genotype: { allele1: "A", allele2: "a" }, type: "heterozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "srasla", genotype: { allele1: "a", allele2: "a" }, type: "homozigot", imageUrl: "gecko2.png" }
+                        { phenotype: "slobodna", genotype: { allele1: "U", allele2: "U" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "slobodna", genotype: { allele1: "U", allele2: "u" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "srasla", genotype: { allele1: "u", allele2: "u" }, type: "homozigot", imageUrl: "gecko2.png" }
                     ],
                     inheritanceType: 'dominantno/recesivno'
                 },
                 {
                     characteristic: 'krvna grupa',
                     traits: [
-                        { phenotype: "crvena", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "roza", genotype: { allele1: "A", allele2: "a" }, type: "heterozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "bijela", genotype: { allele1: "a", allele2: "a" }, type: "homozigot", imageUrl: "gecko2.png" }
+                        { phenotype: "A", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "A", genotype: { allele1: "A", allele2: "0" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "B", genotype: { allele1: "B", allele2: "B" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "B", genotype: { allele1: "B", allele2: "0" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "AB", genotype: { allele1: "A", allele2: "B" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "0", genotype: { allele1: "0", allele2: "0" }, type: "homozigot", imageUrl: "gecko2.png" }
                     ],
                     inheritanceType: 'kodominantno'
                 },
+                {
+                    characteristic: 'daltonizam',
+                    traits: [
+                        { phenotype: "zdrava", genotype: { allele1: "D", allele2: "D" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "zdrava", genotype: { allele1: "D", allele2: "d" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "zdrav", genotype: { allele1: "D", allele2: "Y" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "bolestan", genotype: { allele1: "d", allele2: "Y" }, type: "heterozigot", imageUrl: "gecko2.png" }
+                    ],
+                    inheritanceType: 'spolni kromosomi'
+                }
+            ],
+            mahuna: [
+                {
+                    characteristic: 'oblik sjemenke',
+                    traits: [
+                        { phenotype: "okrugli", genotype: { allele1: "OS", allele2: "OS" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "okrugli", genotype: { allele1: "OS", allele2: "os" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "smežurani", genotype: { allele1: "os", allele2: "os" }, type: "homozigot", imageUrl: "gecko2.png" }
+                    ],
+                    inheritanceType: 'dominantno/recesivno'
+                },
+                {
+                    characteristic: 'boja cvjeta',
+                    traits: [
+                        { phenotype: "ljubičasta", genotype: { allele1: "B", allele2: "B" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "ljubičasta", genotype: { allele1: "B", allele2: "b" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "bijela", genotype: { allele1: "b", allele2: "b" }, type: "homozigot", imageUrl: "gecko2.png" }
+                    ],
+                    inheritanceType: 'dominantno/recesivno'
+                },
+                {
+                    characteristic: 'boja sjemenke',
+                    traits: [
+                        { phenotype: "žuta", genotype: { allele1: "BS", allele2: "BS" }, type: "homozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "žuta", genotype: { allele1: "BS", allele2: "bs" }, type: "heterozigot", imageUrl: "gecko2.png" },
+                        { phenotype: "zelena", genotype: { allele1: "bs", allele2: "bs" }, type: "homozigot", imageUrl: "gecko2.png" }
+                    ],
+                    inheritanceType: 'dominantno/recesivno'
+                }
+            ],
+            "vinska mušica": [
                 {
                     characteristic: 'vg1',
                     traits: [
@@ -71,35 +115,6 @@ export class GeneticDataService {
                     ],
                     inheritanceType: 'vezani geni'
                 }
-            ],
-            mahuna: [
-                {
-                    characteristic: 'oblik sjemenke',
-                    traits: [
-                        { phenotype: "okrugli", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "okrugli", genotype: { allele1: "A", allele2: "a" }, type: "heterozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "smežurani", genotype: { allele1: "a", allele2: "a" }, type: "homozigot", imageUrl: "gecko2.png" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                },
-                {
-                    characteristic: 'boja cvjeta',
-                    traits: [
-                        { phenotype: "ljubičasta", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "ljubičasta", genotype: { allele1: "A", allele2: "a" }, type: "heterozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "bijela", genotype: { allele1: "a", allele2: "a" }, type: "homozigot", imageUrl: "gecko2.png" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                },
-                {
-                    characteristic: 'boja sjemenke',
-                    traits: [
-                        { phenotype: "žuta", genotype: { allele1: "A", allele2: "A" }, type: "homozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "žuta", genotype: { allele1: "A", allele2: "a" }, type: "heterozigot", imageUrl: "gecko2.png" },
-                        { phenotype: "zelena", genotype: { allele1: "a", allele2: "a" }, type: "homozigot", imageUrl: "gecko2.png" }
-                    ],
-                    inheritanceType: 'dominantno/recesivno'
-                }
             ]
         }
         return data;
@@ -108,7 +123,7 @@ export class GeneticDataService {
     getLinkedGenes(organism: string) {
         let linkedGenes : ILinkedGenes[] = [];
         //TODO: get linkedGenes for given organism
-        if (organism === "čovjek") {
+        if (organism === "vinska mušica") {
             linkedGenes = [
                 { gene1Name: "vg1", gene2Name: "vg2", cM: 0.36 },
                 { gene1Name: "vg3", gene2Name: "vg4", cM: 0.4 }
@@ -119,7 +134,7 @@ export class GeneticDataService {
 
     getOrganisms() {
         //hardcoded - get with GET request
-        return ['čovjek', 'mahuna'];
+        return ['čovjek', 'mahuna', 'vinska mušica'];
     }
 
     getInheritanceTypes() {
@@ -128,7 +143,18 @@ export class GeneticDataService {
             'dominantno/recesivno',
             'nepotpuno dominantno/recesivno',
             'kodominantno',
+            'spolni kromosomi',
             'vezani geni'
         ];
+    }
+
+    filterTraitsBySex(sex: string, traits: ITrait[]) {
+        let traitsTemp : ITrait[] = [];
+        for (let i = 0; i < traits.length; i++) {
+            if ((sex === "male" && traits[i].genotype.allele2 === "Y") || (sex === "female" && traits[i].genotype.allele2 !== "Y")) {
+                traitsTemp.push(traits[i]);
+            }
+        }
+        return traitsTemp;
     }
 }
