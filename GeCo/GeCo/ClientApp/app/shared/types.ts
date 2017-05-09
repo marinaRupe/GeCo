@@ -2,6 +2,7 @@
     phenotype: string;
     genotype: IGenotype;
     type: string;
+    imageUrl: string;
 }
 
 export interface IOrganism {

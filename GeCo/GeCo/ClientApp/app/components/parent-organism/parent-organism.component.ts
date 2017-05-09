@@ -31,5 +31,6 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
             this.trait1 = {} as any;
             this.trait2 = {} as any;
         }
+        console.log(this.trait1.imageUrl);
     }
 }

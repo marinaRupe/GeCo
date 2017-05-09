@@ -19,7 +19,7 @@ export class InheritanceService {
                 return traits[i].phenotype;
             }    
         }
-        return 'TODO';
+        return 'ERROR';
     }
 
     getType(genotype: IGenotype) {
@@ -28,6 +28,10 @@ export class InheritanceService {
 
         if (genotype.allele1 === genotype.allele2) return HOMOZYGOTE;
         else return HETEROZYGOTE;
+    }
+
+    getImageUrl(characteristic: string, phenotype: string) {
+        return "gecko2.png"; //TODO: get imageURL
     }
 
     getParentsForChild(characteristic1: string, traits1: ITrait[], characteristic2: string, traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype) : IParents[] {
@@ -118,15 +122,15 @@ export class InheritanceService {
             }
         }
         for (let genotype in childrenCounter) {
-            let gen = childrenCounter[genotype];
+            const gen = childrenCounter[genotype];
+            const phenotype = this.getPhenotype(traits, gen.genotype);
                 childData = {
                     child: {
-                        trait1: { phenotype: this.getPhenotype(traits, gen.genotype), genotype: gen.genotype, type: this.getType(gen.genotype) },
+                        trait1: { phenotype, genotype: gen.genotype, type: this.getType(gen.genotype), imageUrl: this.getImageUrl(characteristic, phenotype) },
                         trait2: {} as any
                         },
                     percentage : gen.count / childrenGenotypes.length
             }
-            console.log(gen);
             children.push(childData);
         }
 
@@ -164,10 +168,13 @@ export class InheritanceService {
                 const gen2: IGenotype = childrenCounter2[genotype2].genotype;
                 const gen1Count: number = childrenCounter1[genotype1].count;
                 const gen2Count: number = childrenCounter2[genotype2].count;
+                const phenotype1: string = this.getPhenotype(traits1, gen1);
+                const phenotype2: string = this.getPhenotype(traits2, gen2);
+
                 childData = {
                     child: {
-                        trait1: { phenotype: this.getPhenotype(traits1, gen1), genotype: gen1, type: this.getType(gen1) },
-                        trait2: { phenotype: this.getPhenotype(traits2, gen2), genotype: gen2, type: this.getType(gen2) }
+                        trait1: { phenotype: phenotype1, genotype: gen1, type: this.getType(gen1), imageUrl: this.getImageUrl(characteristic1, phenotype1) },
+                        trait2: { phenotype: phenotype2, genotype: gen2, type: this.getType(gen2), imageUrl: this.getImageUrl(characteristic2, phenotype2) }
                     },
 
                     percentage: gen1Count * gen2Count / (childrenGenotypes1.length * childrenGenotypes2.length)
