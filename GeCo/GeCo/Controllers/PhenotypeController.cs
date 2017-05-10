@@ -43,4 +43,41 @@ public class PhenotypeController : Controller
             return NotFound();
         }
     }
+
+    //[HttpGet("TraitName={traitName}&GenotypeName={genotypeName}")]
+    //public IActionResult GetByTraitAndGenotype(string traitName, string genotypeName)
+    //{
+    //    if (string.IsNullOrEmpty(traitName) && string.IsNullOrEmpty(genotypeName))
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    IEnumerable<Phenotype> _phenotype = _phenotypeRepository
+    //        .FindBy(s => s.Trait.Name == traitName);
+
+    //    if (_phenotype != null)
+    //    {
+    //        return new OkObjectResult(_phenotype);
+    //    }
+    //    else
+    //    {
+    //        return NotFound();
+    //    }
+    //}
+
+    [HttpGet("Name={name}")]
+    public IActionResult Get(string name)
+    {
+        IEnumerable<Phenotype> _phenotype = _phenotypeRepository
+            .FindBy(s => s.Name == name);
+
+        if (_phenotype != null)
+        {
+            return new OkObjectResult(_phenotype);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
 }

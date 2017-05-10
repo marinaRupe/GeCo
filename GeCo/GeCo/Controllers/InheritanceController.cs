@@ -43,4 +43,20 @@ public class InheritanceController : Controller
             return NotFound();
         }
     }
+
+    [HttpGet("Name={name}")]
+    public IActionResult Get(string name)
+    {
+        IEnumerable<Inheritance> _inheritance = _inheritanceRepository
+            .FindBy(s => s.Name == name);
+
+        if (_inheritance != null)
+        {
+            return new OkObjectResult(_inheritance);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
 }

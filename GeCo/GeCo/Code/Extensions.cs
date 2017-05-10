@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GeCo.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace GeCo.Code
 {
