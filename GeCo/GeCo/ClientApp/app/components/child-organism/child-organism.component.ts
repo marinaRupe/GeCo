@@ -1,5 +1,5 @@
 ﻿import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { ITrait } from "../../shared/types";
+import { ITrait, ICharacteristic } from "../../shared/types";
 
 @Component({
     selector: 'child-organism',

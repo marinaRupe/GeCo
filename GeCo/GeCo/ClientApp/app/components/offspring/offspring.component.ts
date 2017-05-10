@@ -1,6 +1,6 @@
 ﻿import { ChildOrganismComponent } from '../child-organism/child-organism.component';
 import { Component, Input } from '@angular/core';
-import { ITrait } from '../../shared/types';
+import { ITrait, IChild, IOrganism, IInheritance, ICharacteristic } from '../../shared/types';
 import { InheritanceService } from "../../inheritance.service";
 
 @Component({
@@ -9,77 +9,74 @@ import { InheritanceService } from "../../inheritance.service";
     providers: [InheritanceService]
 })
 export class OffspringComponent {
-    @Input() parent1Genotype: string;
-    @Input() parent2Genotype: string;
-    @Input() parent1Genotype2: string;
-    @Input() parent2Genotype2: string;
+    @Input() parent1: IOrganism;
+    @Input() parent2: IOrganism;
     @Input() traits1: ITrait[] = [];
     @Input() traits2: ITrait[] = [];
-    @Input() organism: string = '';
-    @Input() characteristic: string = '';
-    private offspringData: ITrait[] = [];
-    private stats: string[] = Array(2);
+    @Input() characteristic: ICharacteristic;
+    @Input() inheritanceType : IInheritance;
+    private children : IChild[] = [];
+    private stats: IStat[] = Array(2);
 
     constructor(private inheritanceService: InheritanceService) {}
     
     ngOnChanges(changes: any) {
-        if (this.parent1Genotype && this.parent2Genotype) {
-            this.generateOffspringData();
+        if (this.parent1.trait1.genotype && this.parent2.trait1.genotype) {
+            this.children = this.generateChildren();
+            this.setStatistics();
         }
     }
 
-    generateOffspringData() : void {
-        this.offspringData = [];
-        const genotypes: string[] = this.generateGenotypes();
+    generateChildren(): IChild[] {
+        return this.inheritanceService.generateChildren(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.parent1, this.parent2);
+    }
+
+    setStatistics(): void {
         let genotypeStats = {};
         let phenotypeStats = {};
+        const areLinkedGenes = this.inheritanceType.type1 === "vezani geni" && this.inheritanceType.type2 === "vezani geni";
+        let childrenCount = areLinkedGenes ? this.children.length * 100 : this.children.length;
+        let isDihybrid = this.traits2.length > 0;
 
-        for (let i = 0; i < genotypes.length; i++) {
-            const genotype = genotypes[i];
-            const phenotype = this.getPhenotype(genotypes[i], this.organism, this.characteristic);
-            this.offspringData.push({
-                genotype: genotype,
-                phenotype: phenotype,
-                type: this.getType(genotypes[i])
-            });
+        for (let i = 0; i < this.children.length; i++) {
+            let c: IChild = this.children[i];
+            let child: IOrganism = c.child;
+            if (isDihybrid) {
+                let char1 : string = this.characteristic.first;
+                let char2 : string = this.characteristic.second;
+                let genotype : string = child.trait1.genotype.allele1 + child.trait1.genotype.allele2
+                    + child.trait2.genotype.allele1 + child.trait2.genotype.allele2;
+                let phenotype : string = `${char1}-${child.trait1.phenotype} + ${char2}-${child.trait2.phenotype}`;
 
-            genotypeStats[genotype] = (genotypeStats[genotype] || 0) + 1;
-            phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + 1;
+                genotypeStats[genotype] = c.percentage * childrenCount;
+                phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + 1;
+            } else {
+                let genotype : string = child.trait1.genotype.allele1 + child.trait1.genotype.allele2;
+                let phenotype : string = this.characteristic.first + "-" + child.trait1.phenotype;
+
+                genotypeStats[genotype] = c.percentage * childrenCount;
+                phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + 1;
+            }
         }
-        this.setStatistics(genotypeStats, phenotypeStats);
-    }
-
-    setStatistics(genotypeStats : {}, phenotypeStats : {}) : void {
-        let temp = this.stats[0] = this.stats[1] = "";
+        this.stats[0] = { proportions : "", values: "" };
+        this.stats[1] = { proportions: "", values: "" };
         for (let key in genotypeStats) {
-            this.stats[0] += genotypeStats[key] + ":";
-            temp += key + ":";
+            this.stats[0].proportions += Math.round(genotypeStats[key]) + ":";
+            this.stats[0].values += key + ":";
         }
-        this.stats[0] = this.stats[0].substring(0, this.stats[0].length - 1) + " " + temp.substring(0, temp.length - 1);
+        this.stats[0].proportions = this.stats[0].proportions.substring(0, this.stats[0].proportions.length - 1);
+        this.stats[0].values = this.stats[0].values.substring(0, this.stats[0].values.length - 1);
 
-        temp = "";
         for (let key in phenotypeStats) {
-            this.stats[1] += phenotypeStats[key] + ":";
-            temp += key + ":";
+            this.stats[1].proportions += phenotypeStats[key] + ":";
+            this.stats[1].values += key + " : ";
         }
-        this.stats[1] = this.stats[1].substring(0, this.stats[1].length - 1) + " " + temp.substring(0, temp.length - 1);
+        this.stats[1].proportions = this.stats[1].proportions.substring(0, this.stats[1].proportions.length - 1);
+        this.stats[1].values = this.stats[1].values.substring(0, this.stats[1].values.length - 3);
     }
+}
 
-    generateGenotypes(): string[] {
-        let genotype1 = this.parent1Genotype;
-        let genotype2 = this.parent2Genotype;
-        if (this.parent1Genotype2 && this.parent2Genotype2) {
-            genotype1 += this.parent1Genotype2;
-            genotype2 += this.parent2Genotype2;
-        }
-        return this.inheritanceService.generateGenotypes(genotype1, genotype2);
-    }
-
-    getPhenotype(genotype: string, organism: string, characteristic: string) : string {
-        return this.inheritanceService.getPhenotype(this.traits1, genotype);
-    }
-
-    getType(genotype: string) : string {
-        return this.inheritanceService.getType(genotype);
-    }
+interface IStat {
+    proportions: string;
+    values: string;
 }

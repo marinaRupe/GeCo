@@ -1,0 +1,144 @@
+﻿<div class="col-md-11">
+    <h2>Dominantno-recesivno nasljeđivanje</h2>
+
+    <h4 style="text-align: justify;
+    text-justify: inter-word;">
+        <br />
+        <p>&nbsp;</p>
+
+        <p>
+
+            Klasičan dominantno-recesivan tip nasljeđivanja je najjednostavniji od ponuđenih, ali ključan za razumijevanje ostalih.
+
+        </p>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            Prije nego krenemo s razjašnjavanjem, prvo se moramo upoznati s nekoliko pojmova:
+
+        </p>
+
+        <ul>
+
+            <li>GEN &ndash; jedinica nasljeđivanja (utječe na jedno ili više svojstva organizma)</li>
+
+            <li>ALELI &ndash; varijacije, odnosno alternativni oblici gena</li>
+
+            <li>GENOTIP &ndash; po definiciji svi geni nekog organizmi, no u kontekstu razmatranja jednog svojstva je par alela koje taj organizam ima (svaki organizam ima par alela koji određuje svojstvo)</li>
+
+            <li>FENOTIP &ndash; pojednostavljeno: kako organizam izgleda</li>
+
+        </ul>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            Ako vam je nešto od toga nejasno, nakon primjera će vam se slegnuti.
+
+        </p>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            Neki gen organizma biljke graška određuje svojstvo <em>boja cvijeta</em>. Neka su aleli tog gena <strong>A</strong> i <strong>a</strong>, pri čemu je <strong>A</strong> alel koji određuje <em>ljubičastu</em> boju, dok alel <strong>a</strong> određuje <em>bijelu</em> boju cvijeta. Budući da organizam ima par alela, moguće kombinacije su: <strong>AA</strong>, <strong>Aa</strong>, <strong>aA</strong>, <strong>aa</strong>. Te kombinacije su mogući genotipovi.
+
+        </p>
+
+        <p>
+
+            Organizmi kojima su oba alela jednaka (u ovom primjeru ako je <strong>AA</strong> ili <strong>aa</strong>) zovu se HOMOZIGOTI, dok su oni s različitim alelima HETEROZIGOTI (<strong>Aa</strong> ili <strong>aA</strong>). Zbog jednostavnosti mi ćemo pretpostaviti da je na&scaron;a specifična biljka gra&scaron;ka homozigot za svojstvo boje cvijeta i to onaj <strong>AA</strong>. Fenotip tog organizma će onda biti da mu je boja cvijeta ljubičasta.
+
+        </p>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            Dobro je pitanje kakav će biti fenotip u slučaju heterozigota. Tu ulazi u priču pojam dominacije.
+
+        </p>
+
+        <p>
+
+            Kod klasičnog dominantno-recesivnog nasljeđivanja postoje samo dva moguća alela od čega je jedan dominantan, a drugi recesivan. U genotipu heterozigota dominantan alel <em>nadjačava</em> recesivnog, tj. svojstvo će biti određeno alelom koji je dominantan.
+
+        </p>
+
+        <p>
+
+            Vraćajući se na naš prethodni primjer, alel <strong>A</strong> je dominantan, a alel <strong>a</strong> recesivan (u praksi se često dominantne alele označava velikim i recesivne malim slovom, no nije pravilo). U tom slučaju bi oba heterozigota imala fenotip da je boja cvijeta ljubičasta.
+
+        </p>
+
+        <p>
+
+            Gledajući dalje primjer, cvjetovi su jedino bijele boje u slučaju homozigota <strong>aa</strong>.
+
+        </p>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            Nadam se da su vam se slegnuli svi ovi pojmovi nakon primjera, jer su neizbježni za daljnje pričanje o nasljeđivanju.
+
+        </p>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            Odite u <a [routerLink]="['/recombinator']"><em>rekombinator</em></a>, odaberite svojstvo koje spada pod dominantno-recesivan tip nasljeđivanja (npr. boja cvijeta graška), postavite jednog roditelja kao dominantnog homozigota (<strong>AA</strong>), a drugog kao recesivnog homozigota (<strong>aa</strong>). Što ste dobili kao djecu? Zašto?
+
+</p>
+
+        <p>
+
+            Od svakog roditelja dijete dobije po jedan alel koji će potom tvoriti genotip tog djeteta. Prvi roditelj nam je ponudio alele <strong>A </strong>i <strong>A</strong>, dok drugi <strong>a</strong> i <strong>a</strong>. Kako se mora uzeti jedan alel od prvog i jedan od drugog roditelja, genotip djeteta će uvijek biti <strong>Aa</strong>. Time će sva djeca biti ljubičasta.
+
+        </p>
+
+        <p>
+
+            Drugim riječima, križanjem dva homozigota gdje je barem jedan dominantan, uvijek ćemo dobiti potomstvo kojem je fenotip određen dominantnim alelom. Pitanje se postavlja kako onda recesivna svojstva nisu izumrla. Promotrimo sljedeći primjer.
+
+        </p>
+
+        <p>
+
+            Odite ponovno u <a [routerLink]="['/recombinator']"><em>rekombinator</em></a> s istim postavkama te postavite oba roditelja kao heterozigote (<strong>Aa</strong>).
+
+        </p>
+
+        <p>
+
+            Primjećujemo da iako oba roditelja imaju ljubičaste cvjetove, postoji &scaron;ansa da dobiju potomka s bijelim cvjetovima. Kolika je točno ta šansa se lako izračuna. Moramo dobiti od oba roditelja alel <strong>a</strong>. Šanse za to su &#189; (50%) za svakog od roditelja, stoga je ukupna vjerojatnost da će se od dva heterozigota dobiti recesivno dijete &#189; x &#189; = &#188; = 25%.
+
+        </p>
+
+        <p>&nbsp;</p>
+
+        <p>
+
+            U svim primjerima kroz koje smo dosad pro&scaron;li smo pratili jedno svojstvo. Testna križanja u kojima pratimo jedno svojstvo zovu se MONOHIBRIDNA.
+
+        </p>
+
+        <p>
+
+            Aplikacija također podržava paralelno praćenje dva svojstva, odnosno DIHIBRIDNA križanja. Isprobajte neko dihibridno križanje na biljci graška s heterozigotnim roditeljima da vidite koliko brzo se stvari mogu zakomplicirati s porastom broja svojstava koje pratimo.
+
+        </p>
+        <p>&nbsp;</p>
+
+        <a [routerLink]="['/lectures']">
+            <button class="btn btn-default">
+                <span class='glyphicon glyphicon-menu-left'></span> Natrag na uvodnu lekciju
+            </button>
+        </a>
+    </h4>
+</div>

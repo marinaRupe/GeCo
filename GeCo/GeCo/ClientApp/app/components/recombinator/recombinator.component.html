@@ -20,7 +20,7 @@
                    name="radiogroup"
                    [checked]="idx === 0"
                    [value]="idx+1"
-                   (change)="onInputRadioChange(c)">
+                   (change)="onNumberOfCharacteristicsChange(c)">
             <label style="font-size:150%;">{{c}}</label>
         </span>
     </div>
@@ -28,14 +28,14 @@
 <div class="row">
     <div class="col-sm-6">
         <h4>Odaberi svojstvo:</h4>
-        <select [(ngModel)]="characteristic" (ngModelChange)="onSelectCharacteristicChange($event)" class="form-control">
-            <option *ngFor="let c of characteristics" [ngValue]="c">{{ c }}</option>
+        <select [(ngModel)]="characteristicSelected" (ngModelChange)="onSelectCharacteristicChange($event)" class="form-control">
+            <option *ngFor="let c of characteristicsOptions" [ngValue]="c">{{ c }}</option>
         </select>
     </div>
     <div class="col-sm-6">
         <h4>Odaberi vrstu nasljeđivanja:</h4>
-        <select [(ngModel)]="inheritanceType" (ngModelChange)="onSelectInheritanceTypeChange($event)" class="form-control">
-            <option *ngFor="let i of inheritanceTypes" [ngValue]="i">{{ i }}</option>
+        <select [(ngModel)]="inheritanceTypeSelected" (ngModelChange)="onSelectInheritanceTypeChange($event)" class="form-control">
+            <option *ngFor="let i of inheritanceTypesOptions" [ngValue]="i">{{ i }}</option>
         </select>
     </div>
 </div>
@@ -64,20 +64,34 @@
 <div *ngIf="startingFromParents">
     <div class="row top-buffer">
         <div class="col-sm-6">
-            <parent-organism #parent1 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true"></parent-organism>
+            <parent-organism #parent1
+                             [characteristic]="characteristic"
+                             [inheritanceType]="inheritanceType"
+                             [traits1]="traits1" [traits2]="traits2"
+                             [canChange]="true"
+                             [sex]="'female'">
+                
+            </parent-organism>
         </div>
         <div class="col-sm-6">
-            <parent-organism #parent2 characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true"></parent-organism>
+            <parent-organism #parent2
+                             [characteristic]="characteristic"
+                             [inheritanceType]="inheritanceType"
+                             [traits1]="traits1" [traits2]="traits2"
+                             [canChange]="true"
+                             [sex]="'male'">
+                
+            </parent-organism>
         </div>
     </div>
 
     <div class="row">
         <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
                     || (numberOfCharact === 2 && parent1.trait1.genotype && parent2.trait1.genotype && parent1.trait2.genotype && parent2.trait2.genotype)"
-                   parent1Genotype={{parent1.trait1.genotype}} parent2Genotype={{parent2.trait1.genotype}}
-                   parent1Genotype2={{parent1.trait2.genotype}} parent2Genotype2={{parent2.trait2.genotype}}
-                   organism="{{organism}}"
-                   characteristic={{characteristic}}
+                   [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
+                   [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
+                   [characteristic]="characteristic"
+                   [inheritanceType]="inheritanceType"
                    [traits1]="traits1" [traits2]="traits2">
         </offspring>
     </div>
@@ -86,13 +100,18 @@
 <div *ngIf="!startingFromParents">
     <div class="row top-buffer">
         <div class="child col-sm-offset-3">
-            <child-organism #child characteristic={{characteristic}} [traits1]="traits1" [traits2]="traits2" [canChange]="true"></child-organism>
+            <child-organism #child
+                            [characteristic]="characteristic"
+                            [traits1]="traits1" [traits2]="traits2"
+                            [canChange]="true">
+                
+            </child-organism>
         </div>
     </div>
     <div class="row">
         <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
-                          childGenotype={{child.trait1.genotype}} childGenotype2={{child.trait2.genotype}}
-                          characteristic={{characteristic}}
+                          [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
+                          [characteristic]="characteristic" [inheritanceType] ="inheritanceType"
                           [traits1]="traits1" [traits2]="traits2">
         </possible-parents>
     </div>

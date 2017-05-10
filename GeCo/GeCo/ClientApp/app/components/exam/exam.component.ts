@@ -21,19 +21,22 @@ export class ExamComponent {
     ngOnInit() {
         this.testStarted = false;
         this.showResults = false;
+        this.questions = [];
         this.correctAnswers = 0;
         this.numberOfQuestions = 10;
     }
 
     start() {
         this.showResults = false;
-        this.testStarted = true;
-        this.generateExam();
+        this.questions = [];
+        let examGenerated = this.generateExam();
+        examGenerated.then(() => {this.testStarted = true});
     }
 
     stop() {
         this.showResults = false;
         this.testStarted = false;
+        this.questions = [];
     }
 
     grade() {
@@ -50,6 +53,14 @@ export class ExamComponent {
     }
 
     generateExam() {
-        this.questions = this.examService.generateExam(this.numberOfQuestions);
+        let _this = this;
+        return new Promise(function(resolve, reject) {
+            _this.questions = _this.examService.generateExam(_this.numberOfQuestions);
+            if (_this.questions.length > 0) {
+                resolve();
+            } else {
+                reject();
+            }
+        });
     }
 }
