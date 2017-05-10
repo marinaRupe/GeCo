@@ -16,6 +16,6 @@ namespace GeCo.Model.Entities
         public int SecondAlleleId { get; set; }
         public Allele SecondAllele { get; set; }
 
-        public Phenotype Phenotype { get; set; }
+        public virtual Phenotype Phenotype { get; set; }
     }
 }

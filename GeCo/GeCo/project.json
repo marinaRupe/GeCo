@@ -23,7 +23,7 @@
     "Microsoft.EntityFrameworkCore": "1.1.1",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1",
     "Microsoft.Extensions.Logging": "1.1.1",
-    "Microsoft.VisualStudio.Web.CodeGeneration.Core": "1.1.0",
+    //"Microsoft.VisualStudio.Web.CodeGeneration.Core": "1.1.0",
     "Microsoft.AspNetCore.Mvc.Core": "1.1.2",
     "Microsoft.EntityFrameworkCore.Design": "1.1.0"
   },

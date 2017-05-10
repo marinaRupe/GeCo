@@ -119,7 +119,7 @@ namespace GeCo
                     defaults: new { controller = "Home", action = "Index" });
             });
 
-            DbInitializer.Initialize(geCoDbContext);
+           // DbInitializer.Initialize(geCoDbContext);
         }
     }
 }

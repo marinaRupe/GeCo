@@ -43,4 +43,25 @@ public class AlleleController : Controller
             return NotFound();
         }
     }
+
+    [HttpGet("Symbol={symbol}")]
+    public IActionResult Get(string symbol)
+    {
+        if (string.IsNullOrEmpty(symbol))
+        {
+            return NotFound();
+        }
+
+        IEnumerable<Allele> _allele = _alleleRepository
+            .FindBy(s => s.Symbol == symbol);
+
+        if (_allele != null)
+        {
+            return new OkObjectResult(_allele);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
 }

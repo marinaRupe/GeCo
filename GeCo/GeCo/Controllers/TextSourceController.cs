@@ -31,12 +31,11 @@ public class TextSourceController : Controller
     [HttpGet("Get/{id}")]
     public IActionResult Get(int id)
     {
-        IEnumerable <TextSource> _textSource = _textSourceRepository
+        IEnumerable<TextSource> _textSource = _textSourceRepository
             .FindBy(s => s.Id == id);
 
         if (_textSource != null)
         {
-            //ScheduleViewModel _scheduleVM = Mapper.Map<Schedule, ScheduleViewModel>(_schedule);
             return new OkObjectResult(_textSource);
         }
         else
@@ -45,6 +44,26 @@ public class TextSourceController : Controller
         }
     }
 
+    [HttpGet("Name={name}")]
+    public IActionResult Get(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            return NotFound();
+        }
+
+        IEnumerable<TextSource> _textSource = _textSourceRepository
+            .FindBy(s => s.Name == name);
+
+        if (_textSource != null)
+        {
+            return new OkObjectResult(_textSource);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
     //[HttpDelete("Remove/{Id}")]
     //public IActionResult Delete(int id)
     //{
