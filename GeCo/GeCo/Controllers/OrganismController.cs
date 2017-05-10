@@ -70,7 +70,7 @@ public class OrganismController : Controller
                     {
                         Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
                         Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
-                        TraitView.Add(new TraitView(FirstAllele.Symbol + SecondAllele.Symbol, phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot"));
+                        TraitView.Add(new TraitView(FirstAllele.Symbol + SecondAllele.Symbol, phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
                     }
                 }
             }
