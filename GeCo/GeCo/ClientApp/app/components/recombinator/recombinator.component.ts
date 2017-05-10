@@ -82,6 +82,7 @@ export class RecombinatorComponent implements OnInit {
     }
 
     onSelectCharacteristicChange(event) {
+        this.changeCharacteristic();
         this.inheritanceTypeSelected = this.changeInheritanceType(true);
         this.changeTraits(true);
     }
@@ -110,7 +111,10 @@ export class RecombinatorComponent implements OnInit {
 
     private changeCharacteristic() {
         if (this.numberOfCharact === 1) {
-            this.characteristic = { first: this.characteristicSelected, second: "" }
+            this.characteristic = {
+                first: this.characteristicSelected,
+                second: ""
+            }
         } else {
             this.characteristic = {
                 first: this.characteristicSelected.split("+")[0].trim(),
