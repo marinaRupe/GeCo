@@ -13,7 +13,7 @@ namespace GeCo.Model
             Phenotype = phenotype;
             Type = type;
             ImageUrl = imageUrl;
-        }
+        } 
 
         public string Genotype { get; set; }
         public string Phenotype { get; set; }
