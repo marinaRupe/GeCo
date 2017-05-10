@@ -259,6 +259,12 @@ export class InheritanceService {
     }
 
     private filterTraitsBySex(sex: string, traits: ITrait[]) {
-        return this.geneticDataService.filterTraitsBySex(sex, traits);
+        let traitsTemp: ITrait[] = [];
+        for (let i = 0; i < traits.length; i++) {
+            if ((sex === "male" && traits[i].genotype.allele2 === "Y") || (sex === "female" && traits[i].genotype.allele2 !== "Y")) {
+                traitsTemp.push(traits[i]);
+            }
+        }
+        return traitsTemp;
     }
 }

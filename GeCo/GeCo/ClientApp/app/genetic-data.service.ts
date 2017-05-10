@@ -60,7 +60,7 @@ export class GeneticDataService {
                     inheritanceType: 'dominantno/recesivno'
                 },
                 {
-                    characteristic: 'boja cvjeta',
+                    characteristic: 'boja cvijeta',
                     traits: [
                         { phenotype: "ljubičasta", genotype: { allele1: "B", allele2: "B" }, type: "homozigot", imageUrl: "gecko2.png" },
                         { phenotype: "ljubičasta", genotype: { allele1: "B", allele2: "b" }, type: "heterozigot", imageUrl: "gecko2.png" },
@@ -148,13 +148,22 @@ export class GeneticDataService {
         ];
     }
 
-    filterTraitsBySex(sex: string, traits: ITrait[]) {
-        let traitsTemp : ITrait[] = [];
-        for (let i = 0; i < traits.length; i++) {
-            if ((sex === "male" && traits[i].genotype.allele2 === "Y") || (sex === "female" && traits[i].genotype.allele2 !== "Y")) {
-                traitsTemp.push(traits[i]);
+    geDataWithoutInheritanceType(inheritanceTypes: string[]) {
+        let allData = this.getData();
+        let data = {};
+
+        for (let organism in allData) {
+            let organismData = [];
+            for (let i = 0; i < allData[organism].length; i++) {
+                let char = allData[organism][i];
+                if (inheritanceTypes.indexOf(char.inheritanceType) >= 0) {
+                    organismData.push(char);
+                }
+            }
+            if (organismData.length > 0) {
+                data[organism] = organismData;
             }
         }
-        return traitsTemp;
+        return data;
     }
 }
