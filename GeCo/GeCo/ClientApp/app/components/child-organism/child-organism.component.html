@@ -42,7 +42,7 @@
                 </div>
                 <div *ngIf="trait1.phenotype" class="row">
                     <div class="col-sm-12">
-                        <h4>Fenotip: {{ characteristic + "-" + trait1.phenotype }}</h4>
+                        <h4>Fenotip: {{ characteristic.first + "-" + trait1.phenotype }}</h4>
                     </div>
                 </div>
                 <div *ngIf="trait1.type" class="row">
@@ -60,7 +60,7 @@
                 </div>
                 <div *ngIf="trait1.phenotype && trait2.phenotype" class="row">
                     <div class="col-sm-12">
-                        <h4>Fenotip: {{ characteristic.split("+")[0].trim() + "-" + trait1.phenotype + " + " + characteristic.split("+")[1].trim() + "-" + trait2.phenotype }}</h4>
+                        <h4>Fenotip: {{ characteristic.first + "-" + trait1.phenotype + " + " + characteristic.second + "-" + trait2.phenotype }}</h4>
                     </div>
                 </div>
                 <div *ngIf="trait1.type && trait2.type" class="row">

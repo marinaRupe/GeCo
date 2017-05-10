@@ -1,6 +1,6 @@
 ﻿import { ChildOrganismComponent } from '../child-organism/child-organism.component';
 import { Component, Input } from '@angular/core';
-import { ITrait, IChild, IOrganism } from '../../shared/types';
+import { ITrait, IChild, IOrganism, IInheritance, ICharacteristic } from '../../shared/types';
 import { InheritanceService } from "../../inheritance.service";
 
 @Component({
@@ -13,8 +13,8 @@ export class OffspringComponent {
     @Input() parent2: IOrganism;
     @Input() traits1: ITrait[] = [];
     @Input() traits2: ITrait[] = [];
-    @Input() organism: string = '';
-    @Input() characteristic: string = '';
+    @Input() characteristic: ICharacteristic;
+    @Input() inheritanceType : IInheritance;
     private children : IChild[] = [];
     private stats: IStat[] = Array(2);
 
@@ -28,30 +28,22 @@ export class OffspringComponent {
     }
 
     generateChildren(): IChild[] {
-        const isDihybrid = this.traits2.length > 0;
-        let char1, char2;
-        if (isDihybrid) {
-            char1 = this.characteristic.split("+")[0].trim();
-            char2 = this.characteristic.split("+")[1].trim();
-        } else {
-            char1 = this.characteristic;
-            char2 = "";
-        }
-        return this.inheritanceService.generateChildren(char1, char2, this.traits1, this.traits2, this.parent1, this.parent2);
+        return this.inheritanceService.generateChildren(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.parent1, this.parent2);
     }
 
     setStatistics(): void {
         let genotypeStats = {};
         let phenotypeStats = {};
-        let childrenCount = this.children.length;
+        const areLinkedGenes = this.inheritanceType.type1 === "vezani geni" && this.inheritanceType.type2 === "vezani geni";
+        let childrenCount = areLinkedGenes ? this.children.length * 100 : this.children.length;
         let isDihybrid = this.traits2.length > 0;
 
-        for (let i = 0; i < childrenCount; i++) {
+        for (let i = 0; i < this.children.length; i++) {
             let c: IChild = this.children[i];
             let child: IOrganism = c.child;
             if (isDihybrid) {
-                let char1 : string = this.characteristic.split("+")[0].trim();
-                let char2 : string = this.characteristic.split("+")[1].trim();
+                let char1 : string = this.characteristic.first;
+                let char2 : string = this.characteristic.second;
                 let genotype : string = child.trait1.genotype.allele1 + child.trait1.genotype.allele2
                     + child.trait2.genotype.allele1 + child.trait2.genotype.allele2;
                 let phenotype : string = `${char1}-${child.trait1.phenotype} + ${char2}-${child.trait2.phenotype}`;
@@ -60,7 +52,7 @@ export class OffspringComponent {
                 phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + 1;
             } else {
                 let genotype : string = child.trait1.genotype.allele1 + child.trait1.genotype.allele2;
-                let phenotype : string = this.characteristic + "-" + child.trait1.phenotype;
+                let phenotype : string = this.characteristic.first + "-" + child.trait1.phenotype;
 
                 genotypeStats[genotype] = c.percentage * childrenCount;
                 phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + 1;
@@ -69,7 +61,7 @@ export class OffspringComponent {
         this.stats[0] = { proportions : "", values: "" };
         this.stats[1] = { proportions: "", values: "" };
         for (let key in genotypeStats) {
-            this.stats[0].proportions += genotypeStats[key] + ":";
+            this.stats[0].proportions += Math.round(genotypeStats[key]) + ":";
             this.stats[0].values += key + ":";
         }
         this.stats[0].proportions = this.stats[0].proportions.substring(0, this.stats[0].proportions.length - 1);

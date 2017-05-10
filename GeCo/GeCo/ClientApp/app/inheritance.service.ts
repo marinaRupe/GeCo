@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { ITrait, IParents, IOrganism, IChild, IGenotype } from "./shared/types";
+import { ITrait, IParents, IOrganism, IChild, IGenotype, IInheritance, ICharacteristic } from "./shared/types";
 import { GeneticDataService } from "./genetic-data.service"
 
 @Injectable()
@@ -37,7 +37,7 @@ export class InheritanceService {
         return "gecko2.png"; //TODO: get imageURL
     }
 
-    getParentsForChild(characteristic1: string, traits1: ITrait[], characteristic2: string, traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype) : IParents[] {
+    getParentsForChild(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype) : IParents[] {
         let possibleParents: IParents[] = [];
         const isDihybrid = traits2.length > 0;
 
@@ -58,7 +58,7 @@ export class InheritanceService {
                             parentData = {
                                 parent1,
                                 parent2,
-                                percentage: this.getChildPercentage(characteristic1, characteristic2, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
+                                percentage: this.getChildPercentage(characteristic, inheritanceType, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
                             };
                             possibleParents.push(parentData);
                         }
@@ -70,7 +70,7 @@ export class InheritanceService {
                     parentData = {
                         parent1,
                         parent2,
-                        percentage: this.getChildPercentage(characteristic1, characteristic2, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
+                        percentage: this.getChildPercentage(characteristic, inheritanceType, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
                     };
                     possibleParents.push(parentData);
                 }
@@ -79,8 +79,8 @@ export class InheritanceService {
         return possibleParents;
     }
 
-    getChildPercentage(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype, parent1:IOrganism, parent2:IOrganism) {
-        let children: IChild[] = this.generateChildren(characteristic1, characteristic2, traits1, traits2, parent1, parent2);
+    getChildPercentage(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype, parent1:IOrganism, parent2:IOrganism) {
+        let children: IChild[] = this.generateChildren(characteristic, inheritanceType, traits1, traits2, parent1, parent2);
         const isDihybrid = traits2.length > 0;
 
         for (let i = 0; i < children.length; i++) {
@@ -99,18 +99,18 @@ export class InheritanceService {
         return 0; //TODO: generirati djecu i vratiti udio childGenotype u genotipovima djece
     }
 
-    generateChildren(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism) : IChild[] {
+    generateChildren(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism) : IChild[] {
         let children: IChild[];
         const isDihybrid = traits2.length > 0;
         if (!isDihybrid) {
-            children = this.monohybridCross(characteristic1, traits1, parent1, parent2);
+            children = this.monohybridCross(characteristic.first, inheritanceType.type1, traits1, parent1, parent2);
         } else {
-            children = this.dihybridCross(characteristic1, characteristic2, traits1, traits2, parent1, parent2);
+            children = this.dihybridCross(characteristic, inheritanceType, traits1, traits2, parent1, parent2);
         }
         return children;
     }
 
-    monohybridCross(characteristic: string, traits: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
+    monohybridCross(characteristic: string, inheritanceType: string, traits: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
         let children: IChild[] = [];
         let childrenGenotypes = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
         let traitData: ITrait;
@@ -140,7 +140,7 @@ export class InheritanceService {
         return children;
     }
 
-    dihybridCross(characteristic1: string, characteristic2: string, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
+    dihybridCross(characteristic: ICharacteristic, inheritanceType : IInheritance, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
         let children: IChild[] = [];
         let childrenGenotypes1 = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
         let childrenGenotypes2 = this.generateGenotypes(parent1.trait2.genotype, parent2.trait2.genotype);
@@ -148,7 +148,7 @@ export class InheritanceService {
         let childData: IChild;
         let childrenCounter1 = {};
         let childrenCounter2 = {};
-        let vezani = true;
+        let vezani = inheritanceType.type1 === "vezani geni" && inheritanceType.type2 === "vezani geni";
 
         for (let genotype1 of childrenGenotypes1) {
             let genotype: string = genotype1.allele1 + genotype1.allele2;
@@ -176,8 +176,8 @@ export class InheritanceService {
 
                 childData = {
                     child: {
-                        trait1: { phenotype: phenotype1, genotype: gen1, type: this.getType(gen1), imageUrl: this.getImageUrl(characteristic1, phenotype1) },
-                        trait2: { phenotype: phenotype2, genotype: gen2, type: this.getType(gen2), imageUrl: this.getImageUrl(characteristic2, phenotype2) }
+                        trait1: { phenotype: phenotype1, genotype: gen1, type: this.getType(gen1), imageUrl: this.getImageUrl(characteristic.first, phenotype1) },
+                        trait2: { phenotype: phenotype2, genotype: gen2, type: this.getType(gen2), imageUrl: this.getImageUrl(characteristic.second, phenotype2) }
                     },
                     percentage: gen1Count * gen2Count / (childrenGenotypes1.length * childrenGenotypes2.length)
                 }

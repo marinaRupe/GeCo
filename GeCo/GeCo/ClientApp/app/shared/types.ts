@@ -38,3 +38,13 @@ export interface IGenotype {
     allele1: string;
     allele2: string;
 }
+
+export interface IInheritance {
+    type1: string;
+    type2: string;
+}
+
+export interface ICharacteristic {
+    first: string;
+    second: string;
+}

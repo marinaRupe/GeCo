@@ -1,14 +1,23 @@
 ﻿<div>
-    <div class="panel panel-danger" style="width: 40%; margin: auto; display: table; text-align: center;">
-        <div class="panel-heading">
-            <h4>OMJERI</h4>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h4>OMJERI</h4>
+            </div>
+            <h4 *ngFor="let stat of stats">
+                {{ stat.proportions }} {{ stat.values }}
+            </h4>
         </div>
-        <h4 *ngFor="let stat of stats">
-            {{ stat.proportions }} {{ stat.values }}
-        </h4>
     </div>
     <br/>
     <span *ngFor="let c of children">
-        <child-organism class="col-sm-6" characteristic={{characteristic}} [trait1]="c.child.trait1" [trait2]="c.child.trait2" [traits1]="traits1" [traits2]="traits2" [canChange]="false"></child-organism>
+        <child-organism class="col-sm-6"
+                        [characteristic]="characteristic"
+                        [trait1]="c.child.trait1"
+                        [trait2]="c.child.trait2"
+                        [traits1]="traits1"
+                        [traits2]="traits2"
+                        [canChange]="false">
+        </child-organism>
     </span>
 </div>
