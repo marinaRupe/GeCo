@@ -45,13 +45,24 @@ export class InheritanceService {
             for (let j = 0; j < traits1.length; j++) {
                 const parent1Trait1 = traits1[i];
                 const parent2Trait1 = traits1[j];
+                if (inheritanceType.type1 === "spolni kromosomi")
+                {
+                    if (parent1Trait1.genotype.allele2 === 'Y' || parent2Trait1.genotype.allele2 !== 'Y') {
+                        continue;
+                    }
+                }
                 let parentData: IParents;
 
                 if (isDihybrid) {
                     for (let k = 0; k < traits2.length; k++) {
                         for (let l = 0; l < traits2.length; l++) {
-                            const parent1Trait2 = traits2[i];
-                            const parent2Trait2 = traits2[j];
+                            const parent1Trait2 = traits2[k];
+                            const parent2Trait2 = traits2[l];
+                            if (inheritanceType.type2 === "spolni kromosomi") {
+                                if (parent1Trait2.genotype.allele2 === 'Y' || parent2Trait2.genotype.allele2 !== 'Y') {
+                                    continue;
+                                }
+                            }
                             const parent1 = { trait1: parent1Trait1, trait2: parent1Trait2 };
                             const parent2 = { trait1: parent2Trait1, trait2: parent2Trait2 };
 
@@ -67,6 +78,7 @@ export class InheritanceService {
                 else {
                     const parent1 = { trait1: parent1Trait1, trait2: {} as ITrait };
                     const parent2 = { trait1: parent2Trait1, trait2: {} as ITrait };
+
                     parentData = {
                         parent1,
                         parent2,
