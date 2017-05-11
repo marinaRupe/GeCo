@@ -1,53 +1,59 @@
 ﻿<h1>Test</h1>
 
-<div *ngIf="!testStarted && !showResults">
-    <h3>Testiraj svoje znanje!</h3>
-    <br />
-    <button (click)="start()" class="btn btn-primary">Počni</button>
+<div *ngIf="examGenerating">
+    <br/>
+    <h4><i class="fa fa-spinner fa-spin" style="font-size: 1em"></i> Učitavanje...</h4>
 </div>
-
-<div *ngIf="testStarted && !showResults">
-    <div *ngFor="let q of questions; let i=index" class="panel panel-warning">
-        <div class="panel-heading">
-            <h4>{{i + 1}}. {{ q.question }}</h4>
-        </div>
-        <div class="panel-body">
-            <div *ngFor="let a of q.answers; let j=index">
-                <input type="radio"
-                       [name]="i"
-                       [checked]="idx === 0"
-                       [value]="a"
-                       (change)="onAnswerSelect(i, a)" />
-                <span class="h4">{{a}}</span>
-            </div>
-        </div>
+<div *ngIf="!examGenerating">
+    <div *ngIf="!testStarted && !showResults">
+        <h3>Testiraj svoje znanje!</h3>
+        <br />
+        <button (click)="start()" class="btn btn-primary">Počni</button>
     </div>
-    <button (click)="stop()" class="btn btn-danger">Prekini ispit</button>
-    <button (click)="grade()" class="btn btn-success">Ocijeni</button>
-</div>
 
-<div *ngIf="showResults">
-<h2>Rezultati</h2>
-    <div *ngFor="let q of questions; let i=index">
-        <div class="panel" [ngClass]="{'panel-danger': q.studentAnswer !== q.correctAnswer, 'panel-success': q.studentAnswer === q.correctAnswer}">
+    <div *ngIf="testStarted && !showResults">
+        <div *ngFor="let q of questions; let i=index" class="panel panel-warning">
             <div class="panel-heading">
                 <h4>{{i + 1}}. {{ q.question }}</h4>
             </div>
             <div class="panel-body">
-                <h4>Tvoj odgovor: {{q.studentAnswer}}</h4>
-                <h4>Točan odgovor: {{q.correctAnswer}}</h4>
-                <h4>
-                    Rezultat:
-                    <span *ngIf="q.studentAnswer === q.correctAnswer" class='glyphicon glyphicon-ok'></span>
-                    <span *ngIf="q.studentAnswer !== q.correctAnswer" class='glyphicon glyphicon-remove'></span>
-                </h4>
+                <div *ngFor="let a of q.answers; let j=index">
+                    <input type="radio"
+                           [name]="i"
+                           [checked]="idx === 0"
+                           [value]="a"
+                           (change)="onAnswerSelect(i, a)" />
+                    <span class="h4">{{a}}</span>
+                </div>
             </div>
         </div>
+        <button (click)="stop()" class="btn btn-danger">Prekini ispit</button>
+        <button (click)="grade()" class="btn btn-success">Ocijeni</button>
     </div>
-   
-    <h2 class="alert alert-warning" role="alert">Ukupan rezultat: {{correctAnswers}}/{{numberOfQuestions}} ({{(correctAnswers/numberOfQuestions)*100}}%)</h2>
-    <br/>
-    <button (click)="stop()" class="btn btn-danger">Završi</button>
-    <button (click)="start()" class="btn btn-primary">Započni novi test</button>
-    <br/>
+
+    <div *ngIf="showResults">
+        <h2>Rezultati</h2>
+        <div *ngFor="let q of questions; let i=index">
+            <div class="panel" [ngClass]="{'panel-danger': q.studentAnswer !== q.correctAnswer, 'panel-success': q.studentAnswer === q.correctAnswer}">
+                <div class="panel-heading">
+                    <h4>{{i + 1}}. {{ q.question }}</h4>
+                </div>
+                <div class="panel-body">
+                    <h4>Tvoj odgovor: {{q.studentAnswer}}</h4>
+                    <h4>Točan odgovor: {{q.correctAnswer}}</h4>
+                    <h4>
+                        Rezultat:
+                        <span *ngIf="q.studentAnswer === q.correctAnswer" class='glyphicon glyphicon-ok'></span>
+                        <span *ngIf="q.studentAnswer !== q.correctAnswer" class='glyphicon glyphicon-remove'></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="alert alert-warning" role="alert">Ukupan rezultat: {{correctAnswers}}/{{numberOfQuestions}} ({{(correctAnswers/numberOfQuestions)*100}}%)</h2>
+        <br />
+        <button (click)="stop()" class="btn btn-danger">Završi</button>
+        <button (click)="start()" class="btn btn-primary">Započni novi test</button>
+        <br />
+    </div>
 </div>

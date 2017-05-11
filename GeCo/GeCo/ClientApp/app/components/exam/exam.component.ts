@@ -11,6 +11,7 @@ import { IExamQuestion } from "../../shared/types";
 export class ExamComponent {
     private testStarted: boolean;
     private showResults: boolean;
+    private examGenerating: boolean;
     private questions: IExamQuestion[];
     private correctAnswers: number;
     private numberOfQuestions: number;
@@ -21,16 +22,18 @@ export class ExamComponent {
     ngOnInit() {
         this.testStarted = false;
         this.showResults = false;
+        this.examGenerating = false;
         this.questions = [];
         this.correctAnswers = 0;
         this.numberOfQuestions = 10;
     }
 
     start() {
+        this.testStarted = false;
         this.showResults = false;
+        this.examGenerating = true;
         this.questions = [];
-        let examGenerated = this.generateExam();
-        examGenerated.then(() => {this.testStarted = true});
+        this.generateExam();
     }
 
     stop() {
@@ -53,14 +56,10 @@ export class ExamComponent {
     }
 
     generateExam() {
-        let _this = this;
-        return new Promise(function(resolve, reject) {
-            _this.questions = _this.examService.generateExam(_this.numberOfQuestions);
-            if (_this.questions.length > 0) {
-                resolve();
-            } else {
-                reject();
-            }
+        this.examService.generateExam(this.numberOfQuestions).then((result) => {
+            this.questions = <IExamQuestion[]>result;
+            this.examGenerating = false;
+            this.testStarted = true;
         });
     }
 }

@@ -5,114 +5,119 @@
     Potom podesite svojstva roditelja odnosno djeteta pri čemu će se generirati sve kombinacije djece, odnosno roditelja.
 </h4>
 <br />
-<div class="row">
-    <div class="col-sm-6">
-        <h4>Odaberi organizam:</h4>
-        <select [(ngModel)]="organism" (ngModelChange)="onSelectOrganismChange($event)" class="form-control">
-            <option *ngFor="let o of organisms" [ngValue]="o">{{o}}</option>
-        </select>
+<div *ngIf="isLoading">
+    <h4><i class="fa fa-spinner fa-spin" style="font-size: 1em"></i> Učitavanje...</h4>
+</div>
+<div *ngIf="!isLoading">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Odaberi organizam:</h4>
+            <select [(ngModel)]="organism" (ngModelChange)="onSelectOrganismChange($event)" class="form-control">
+                <option *ngFor="let o of organisms" [ngValue]="o">{{o}}</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <h4>Odaberi tip križanja:</h4>
+            <span *ngFor="let c of crossTypes; let idx = index">
+                <input style="width:2em; height:2em;"
+                       type="radio"
+                       name="radiogroup"
+                       [checked]="idx === 0"
+                       [value]="idx+1"
+                       (change)="onNumberOfCharacteristicsChange(c)">
+                <label style="font-size:150%;">{{c}}</label>
+            </span>
+        </div>
     </div>
-    <div class="col-sm-6">
-        <h4>Odaberi tip križanja:</h4>
-        <span *ngFor="let c of crossTypes; let idx = index">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Odaberi svojstvo:</h4>
+            <select [(ngModel)]="characteristicSelected" (ngModelChange)="onSelectCharacteristicChange($event)" class="form-control">
+                <option *ngFor="let c of characteristicsOptions" [ngValue]="c">{{ c }}</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <h4>Odaberi vrstu nasljeđivanja:</h4>
+            <select [(ngModel)]="inheritanceTypeSelected" (ngModelChange)="onSelectInheritanceTypeChange($event)" class="form-control">
+                <option *ngFor="let i of inheritanceTypesOptions" [ngValue]="i">{{ i }}</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <span class="h4"> Pronađi: </span>
+        <span>
             <input style="width:2em; height:2em;"
                    type="radio"
-                   name="radiogroup"
-                   [checked]="idx === 0"
-                   [value]="idx+1"
-                   (change)="onNumberOfCharacteristicsChange(c)">
-            <label style="font-size:150%;">{{c}}</label>
+                   name="startRadioGroup"
+                   [checked]="true"
+                   [value]="true"
+                   (change)="onStartingOrganismChange(true)" />
+            <label style="font-size:150%;">roditeljima djecu</label>
+        </span>
+        <span>
+            <input style="width:2em; height:2em;"
+                   type="radio"
+                   name="startRadioGroup"
+                   [value]="false"
+                   (change)="onStartingOrganismChange(false)" />
+            <label style="font-size:150%;">djetetu roditelje</label>
         </span>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <h4>Odaberi svojstvo:</h4>
-        <select [(ngModel)]="characteristicSelected" (ngModelChange)="onSelectCharacteristicChange($event)" class="form-control">
-            <option *ngFor="let c of characteristicsOptions" [ngValue]="c">{{ c }}</option>
-        </select>
-    </div>
-    <div class="col-sm-6">
-        <h4>Odaberi vrstu nasljeđivanja:</h4>
-        <select [(ngModel)]="inheritanceTypeSelected" (ngModelChange)="onSelectInheritanceTypeChange($event)" class="form-control">
-            <option *ngFor="let i of inheritanceTypesOptions" [ngValue]="i">{{ i }}</option>
-        </select>
-    </div>
-</div>
 
-<div>
-    <span class="h4"> Pronađi: </span>
-    <span>
-        <input style="width:2em; height:2em;"
-               type="radio"
-               name="startRadioGroup"
-               [checked]="true"
-               [value]="true"
-               (change)="onStartingOrganismChange(true)"/>
-        <label style="font-size:150%;">roditeljima djecu</label>
-    </span>
-    <span>
-        <input style="width:2em; height:2em;"
-               type="radio"
-               name="startRadioGroup"
-               [value]="false"
-               (change)="onStartingOrganismChange(false)" />
-        <label style="font-size:150%;">djetetu roditelje</label>
-    </span>
-</div>
+    <div *ngIf="startingFromParents">
+        <div class="row top-buffer">
+            <div class="col-sm-6">
+                <parent-organism #parent1
+                                 [characteristic]="characteristic"
+                                 [inheritanceType]="inheritanceType"
+                                 [traits1]="traits1" [traits2]="traits2"
+                                 [canChange]="true"
+                                 [sex]="'female'">
 
-<div *ngIf="startingFromParents">
-    <div class="row top-buffer">
-        <div class="col-sm-6">
-            <parent-organism #parent1
-                             [characteristic]="characteristic"
-                             [inheritanceType]="inheritanceType"
-                             [traits1]="traits1" [traits2]="traits2"
-                             [canChange]="true"
-                             [sex]="'female'">
-                
-            </parent-organism>
+                </parent-organism>
+            </div>
+            <div class="col-sm-6">
+                <parent-organism #parent2
+                                 [characteristic]="characteristic"
+                                 [inheritanceType]="inheritanceType"
+                                 [traits1]="traits1" [traits2]="traits2"
+                                 [canChange]="true"
+                                 [sex]="'male'">
+
+                </parent-organism>
+            </div>
         </div>
-        <div class="col-sm-6">
-            <parent-organism #parent2
-                             [characteristic]="characteristic"
-                             [inheritanceType]="inheritanceType"
-                             [traits1]="traits1" [traits2]="traits2"
-                             [canChange]="true"
-                             [sex]="'male'">
-                
-            </parent-organism>
-        </div>
-    </div>
 
-    <div class="row">
-        <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
+        <div class="row">
+            <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
                     || (numberOfCharact === 2 && parent1.trait1.genotype && parent2.trait1.genotype && parent1.trait2.genotype && parent2.trait2.genotype)"
-                   [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
-                   [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
-                   [characteristic]="characteristic"
-                   [inheritanceType]="inheritanceType"
-                   [traits1]="traits1" [traits2]="traits2">
-        </offspring>
-    </div>
-</div>
-
-<div *ngIf="!startingFromParents">
-    <div class="row top-buffer">
-        <div class="child col-sm-offset-3">
-            <child-organism #child
-                            [characteristic]="characteristic"
-                            [traits1]="traits1" [traits2]="traits2"
-                            [canChange]="true">
-                
-            </child-organism>
+                       [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
+                       [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
+                       [characteristic]="characteristic"
+                       [inheritanceType]="inheritanceType"
+                       [traits1]="traits1" [traits2]="traits2">
+            </offspring>
         </div>
     </div>
-    <div class="row">
-        <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
-                          [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
-                          [characteristic]="characteristic" [inheritanceType] ="inheritanceType"
-                          [traits1]="traits1" [traits2]="traits2">
-        </possible-parents>
+
+    <div *ngIf="!startingFromParents">
+        <div class="row top-buffer">
+            <div class="child col-sm-offset-3">
+                <child-organism #child
+                                [characteristic]="characteristic"
+                                [traits1]="traits1" [traits2]="traits2"
+                                [canChange]="true">
+
+                </child-organism>
+            </div>
+        </div>
+        <div class="row">
+            <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
+                              [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
+                              [characteristic]="characteristic" [inheritanceType]="inheritanceType"
+                              [traits1]="traits1" [traits2]="traits2">
+            </possible-parents>
+        </div>
     </div>
 </div>
