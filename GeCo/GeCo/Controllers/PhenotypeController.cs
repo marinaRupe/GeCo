@@ -16,11 +16,16 @@ public class PhenotypeController : Controller
     public IActionResult Get()
     {
 
-        IEnumerable<Phenotype> _phenotype = _phenotypeRepository.GetAll();
+        IEnumerable<Phenotype> _phenotypes = _phenotypeRepository.GetAll();
 
-        if (_phenotype != null)
+        List<string> phenotypes = new List<string>();
+        foreach (Phenotype phenotype in _phenotypes)
         {
-            return new OkObjectResult(_phenotype);
+            phenotypes.Add(phenotype.Name);
+        }
+        if (phenotypes != null)
+        {
+            return new OkObjectResult(phenotypes);
         }
         else
         {

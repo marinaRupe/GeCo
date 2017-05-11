@@ -17,6 +17,7 @@ public class OrganismController : Controller
     private IPhenotypeRepository _phenotypeRepository;
     private IInheritanceRepository _inheritanceRepository;
     private GeCoDbContext _context;
+
     public OrganismController(GeCoDbContext context, IOrganismRepository organismRepository, IInheritanceRepository inheritanceRepository, ITraitRepository traitRepository, IAlleleRepository alleleRepository, IGenotypeRepository genotypeRepository, IPhenotypeRepository phenotypeRepository)
     {
         _organismRepository = organismRepository;
@@ -26,7 +27,6 @@ public class OrganismController : Controller
         _phenotypeRepository = phenotypeRepository;
         _inheritanceRepository = inheritanceRepository;
         _context = context;
-
     }
 
     [HttpGet("GetAll")]
@@ -35,9 +35,15 @@ public class OrganismController : Controller
 
         IEnumerable<Organism> _organism = _organismRepository.GetAll();
 
-        if (_organism != null)
+        List<string> organisms = new List<string>();
+        foreach (Organism organism in _organism)
         {
-            return new OkObjectResult(_organism);
+            organisms.Add(organism.Name);
+        }
+
+        if (organisms != null)
+        {
+            return new OkObjectResult(organisms);
         }
         else
         {
@@ -45,10 +51,10 @@ public class OrganismController : Controller
         }
     }
 
-    [HttpGet("Get/{id}")]
-    public IActionResult Get(int id)
+    [HttpGet("Name={name}")]
+    public IActionResult Get(string name)
     {
-        Organism _organism = _context.Organisms.Where(o => o.Id == id).Include(g => g.Traits).SingleOrDefault();
+        Organism _organism = _context.Organisms.Where(o => o.Name.Equals(name)).Include(g => g.Traits).SingleOrDefault();
         IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).ToList();
 
         IEnumerable<Phenotype> _phenotypes;
@@ -82,22 +88,6 @@ public class OrganismController : Controller
         if (OrganismView != null)
         {
             return new OkObjectResult(OrganismView);
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
-
-    [HttpGet("Name={name}")]
-    public IActionResult Get(string name)
-    {
-        IEnumerable<Organism> _organism = _organismRepository
-            .FindBy(s => s.Name == name);
-
-        if (_organism != null)
-        {
-            return new OkObjectResult(_organism);
         }
         else
         {

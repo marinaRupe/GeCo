@@ -1,15 +1,20 @@
-﻿using GeCo.Data.Abstract;
+﻿using GeCo.Data;
+using GeCo.Data.Abstract;
 using GeCo.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 [Route("api/[controller]")]
 public class AlleleController : Controller
 {
     private IAlleleRepository _alleleRepository;
-    public AlleleController(IAlleleRepository alleleRepository)
+    private GeCoDbContext _context;
+    public AlleleController(GeCoDbContext context, IAlleleRepository alleleRepository)
     {
         _alleleRepository = alleleRepository;
+        _context = context;
     }
 
     [HttpGet("GetAll")]
@@ -17,6 +22,12 @@ public class AlleleController : Controller
     {
 
         IEnumerable<Allele> _allele = _alleleRepository.GetAll();
+
+        List<string> alleles = new List<string>();
+        foreach (Allele allele in _allele)
+        {
+            alleles.Add(allele.Symbol);
+        }
 
         if (_allele != null)
         {
@@ -52,16 +63,52 @@ public class AlleleController : Controller
             return NotFound();
         }
 
-        IEnumerable<Allele> _allele = _alleleRepository
+        IEnumerable<Allele> _alleles = _alleleRepository
             .FindBy(s => s.Symbol == symbol);
 
-        if (_allele != null)
+
+        List<string> alleles = new List<string>();
+        foreach (Allele allele in _alleles)
         {
-            return new OkObjectResult(_allele);
+            alleles.Add(allele.Symbol);
+        }
+
+        if (alleles != null)
+        {
+            return new OkObjectResult(alleles);
         }
         else
         {
             return NotFound();
         }
     }
+
+    [HttpGet("Trait={trait}")]
+    public IActionResult GetAllelesByTrait(string trait)
+    {
+        if (string.IsNullOrEmpty(trait))
+        {
+            return NotFound();
+        }
+
+        IEnumerable<Allele> _alleles = _context.Alleles.Include(a => a.Trait).Where(a => a.Trait.Name.Equals(trait));
+
+
+        List<string> alleles = new List<string>();
+        foreach (Allele allele in _alleles)
+        {
+            alleles.Add(allele.Symbol);
+        }
+
+        if (alleles != null)
+        {
+            return new OkObjectResult(alleles);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+
 }

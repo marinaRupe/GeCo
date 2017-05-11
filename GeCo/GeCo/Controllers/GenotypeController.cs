@@ -16,11 +16,17 @@ public class GenotypeController : Controller
     public IActionResult Get()
     {
 
-        IEnumerable<Genotype> _genotype = _genotypeRepository.GetAll();
+        IEnumerable<Genotype> _genotypes = _genotypeRepository.GetAll();
 
-        if (_genotype != null)
+        List<string> genotypes = new List<string>();
+        foreach (Genotype genotype in _genotypes)
         {
-            return new OkObjectResult(_genotype);
+            genotypes.Add(genotype.FirstAllele.Symbol + genotype.SecondAllele.Symbol);
+        }
+
+        if (genotypes != null)
+        {
+            return new OkObjectResult(genotypes);
         }
         else
         {
