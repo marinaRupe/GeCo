@@ -183,21 +183,20 @@ export class GeneticDataService {
     }
 
     getLinkedGenes(organism: string) {
-        let linkedGenes2: ILinkedGenes[] = [];
-        //TODO: get linkedGenes for given organism
+        let linkedGenesFake;
         if (organism === "noćurak") {
-            linkedGenes2 = [
+            linkedGenesFake = [
                 { gene1Name: "vg1", gene2Name: "vg2", cM: 0.36 },
                 { gene1Name: "vg3", gene2Name: "vg4", cM: 0.4 }
             ];
         } else {
-            linkedGenes2 = [];
+            linkedGenesFake = [];
         }
 
         return new Promise((resolve, reject) => {
             this.http.get('/api/Trait/' + organism).subscribe(result => {
                 //resolve(result.json());
-                resolve(linkedGenes2);
+                resolve(linkedGenesFake);
             });
         });
     }
@@ -224,10 +223,6 @@ export class GeneticDataService {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Organism/GetAll').subscribe(result => {
                 let organisms = result.json();
-                let index = organisms.indexOf("Probni");
-                if (index > -1) {
-                    organisms.splice(index, 1);
-                }
                 resolve(organisms);
             });
         });
