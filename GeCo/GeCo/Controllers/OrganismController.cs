@@ -81,13 +81,13 @@ public class OrganismController : Controller
 
         foreach (Trait trait in _trait)
         {
-            _genotypes = _context.Genotypes.Include(g => g.Phenotype).ToList();
+            _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).ToList();
             foreach (Genotype genotype in _genotypes)
             {
-                _phenotypes = _phenotypeRepository.FindBy(tr => trait.Id == tr.Trait.Id).ToList();
+                _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).ToList();
                 foreach (Phenotype phenotype in _phenotypes)
                 {
-                    if (genotype.Phenotype.Id == phenotype.Id)
+                    if (genotype.Phenotype.Id == phenotype.Id && phenotype.Trait.Id == trait.Id)
                     {
                         Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
                         Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
@@ -95,7 +95,8 @@ public class OrganismController : Controller
                     }
                 }
             }
-            CharacteristicsView.Add(new CharacteristicsView(trait.Name, TraitView, trait.Inheritance.Name));
+            CharacteristicsView.Add(new CharacteristicsView(trait.Name, new List<TraitView>(TraitView), trait.Inheritance.Name));
+            TraitView.Clear();
         }
 
         OrganismView OrganismView = new OrganismView(_organism.Name, CharacteristicsView);
@@ -127,13 +128,13 @@ public class OrganismController : Controller
 
             foreach (Trait trait in _trait)
             {
-                _genotypes = _context.Genotypes.Include(g => g.Phenotype).ToList();
+                _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).ToList();
                 foreach (Genotype genotype in _genotypes)
                 {
-                    _phenotypes = _phenotypeRepository.FindBy(tr => trait.Id == tr.Trait.Id).ToList();
+                    _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).ToList();
                     foreach (Phenotype phenotype in _phenotypes)
                     {
-                        if (genotype.Phenotype.Id == phenotype.Id)
+                        if (genotype.Phenotype.Id == phenotype.Id && phenotype.Trait.Id == trait.Id)
                         {
                             Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
                             Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
@@ -141,7 +142,8 @@ public class OrganismController : Controller
                         }
                     }
                 }
-                CharacteristicsView.Add(new CharacteristicsView(trait.Name, TraitView, trait.Inheritance.Name));
+                CharacteristicsView.Add(new CharacteristicsView(trait.Name, new List<TraitView>(TraitView), trait.Inheritance.Name));
+                TraitView.Clear();
             }
             OrganismView OrganismView = new OrganismView(_organism.Name, CharacteristicsView);
             AllDataView.Add(OrganismView);
