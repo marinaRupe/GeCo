@@ -176,68 +176,41 @@ export class GeneticDataService {
     getData() {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Organism/GetAllData').subscribe(result => {
+                console.log(result.json());
                 resolve(result.json());
-                //resolve(this.fakeData);
             });
         });
     }
 
-    getLinkedGenes(organism: string) {
-        let linkedGenesFake;
-        if (organism === "noćurak") {
-            linkedGenesFake = [
-                { gene1Name: "vg1", gene2Name: "vg2", cM: 0.36 },
-                { gene1Name: "vg3", gene2Name: "vg4", cM: 0.4 }
-            ];
-        } else {
-            linkedGenesFake = [];
-        }
-
+    getDataForOrganism(organismId: string) {
         return new Promise((resolve, reject) => {
-            this.http.get('/api/Trait/Organism=' + organism).subscribe(result => {
+            this.http.get('/api/Organism/' + organismId).subscribe(result => {
                 resolve(result.json());
-                //resolve(linkedGenesFake);
             });
         });
     }
 
     getLinkedGenesAll() {
         return new Promise((resolve, reject) => {
-            this.getOrganisms()
-                .then((result) => {
-                    let organisms = <string[]>result;
-                    this.linkedGenesAll = {};
+            this.http.get('/api/Trait/GetAllPairs').subscribe(result => {
+                console.log(result.json());
+                resolve(result.json());
+            });
+        });
+    }
 
-                    for (let i = 0; i < organisms.length; i++) {
-                        this.getLinkedGenes(organisms[i])
-                            .then((result) => {
-                                this.linkedGenesAll[organisms[i]] = result;
-                            });
-                    }
-                    resolve(this.linkedGenesAll);
-                });
+    getLinkedGenes(organismId: string) {
+        return new Promise((resolve, reject) => {
+            this.http.get('/api/Trait/Organism=' + organismId).subscribe(result => {
+                resolve(result.json());
+            });
         });
     }
 
     getOrganisms() {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Organism/GetAll').subscribe(result => {
-                let organisms = result.json();
-                resolve(organisms);
-            });
-        });
-    }
-
-    getDataForOrganism(organism: string) {
-        return new Promise((resolve, reject) => {
-            this.http.get('/api/Organism/' + organism).subscribe(result => {
-                resolve(result.json());
-                //if (organism in this.fakeData) {
-                //    resolve(this.fakeData[organism]);
-                //} else {
-                //    resolve([]);
-                //}
-
+                resolve(result.json().map(o => o.name));
             });
         });
     }
@@ -252,8 +225,7 @@ export class GeneticDataService {
         //];
         return new Promise((resolve, reject) => {
             this.http.get('/api/Inheritance/GetAll').subscribe(result => {
-                let inheritances = result.json();
-                resolve(inheritances);
+                resolve(result.json().map(i => i.name));
             });
         });
     }
