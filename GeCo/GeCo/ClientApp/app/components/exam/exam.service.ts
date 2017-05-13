@@ -6,7 +6,8 @@ import { InheritanceService } from '../../inheritance.service';
 @Injectable()
 export class ExamService {
     organisms = [];
-    data;
+    data = {};
+    linkedGenesAll = {};
 
     constructor(private geneticDataService: GeneticDataService, private inheritanceService: InheritanceService) {}
 
@@ -19,25 +20,28 @@ export class ExamService {
                     this.geneticDataService.getOrganisms().then((result) => {
                         this.organisms = <any>result;
 
-                        let questionTypes = [
-                            this.getQuestionType1.bind(this),
-                            this.getQuestionType2.bind(this),
-                            this.getQuestionType3.bind(this),
-                            this.getQuestionType4.bind(this),
-                            this.getQuestionType5.bind(this),
-                            this.getQuestionType6.bind(this),
-                            this.getQuestionType7.bind(this)
-                        ];
-                        let questions = [];
-                        for (let i = 0; i < numberOfQuestions; i++) {
-                            //TODO: choose randomly
-                            let question = questionTypes[Math.floor(Math.random() * questionTypes.length)]();
-                            this.shuffleAnswers(question.answers);
-                            questions.push(question);
-                        }
-                        resolve(questions);
-                    }
-                    );
+                            this.geneticDataService.getLinkedGenesAll()
+                                .then((result) => {
+                                    this.linkedGenesAll = result;
+
+                                    let questionTypes = [
+                                        this.getQuestionType1.bind(this),
+                                        this.getQuestionType2.bind(this),
+                                        this.getQuestionType3.bind(this),
+                                        this.getQuestionType4.bind(this),
+                                        this.getQuestionType5.bind(this),
+                                        this.getQuestionType6.bind(this),
+                                        this.getQuestionType7.bind(this)
+                                    ];
+                                    let questions = [];
+                                    for (let i = 0; i < numberOfQuestions; i++) {
+                                        let question = questionTypes[Math.floor(Math.random() * questionTypes.length)]();
+                                        this.shuffleAnswers(question.answers);
+                                        questions.push(question);
+                                    }
+                                    resolve(questions);
+                                });
+                        });
                 });
         });  
     }
@@ -50,7 +54,6 @@ export class ExamService {
 }
 
     getQuestionType1() : IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
@@ -104,7 +107,6 @@ export class ExamService {
     }
 
     getQuestionType2() : IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
@@ -155,7 +157,6 @@ export class ExamService {
     }
 
     getQuestionType3() : IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
@@ -211,7 +212,6 @@ export class ExamService {
     }
 
     getQuestionType4(): IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
@@ -267,7 +267,6 @@ export class ExamService {
     }
 
     getQuestionType5(): IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
@@ -314,7 +313,6 @@ export class ExamService {
     }
 
     getQuestionType6(): IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
 
         let ORGANISM = organisms[Math.floor(Math.random() * organisms.length)];
@@ -346,7 +344,6 @@ export class ExamService {
     }
 
     getQuestionType7(): IExamQuestion {
-        //TODO: data types will change when REST is done
         const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
@@ -372,6 +369,33 @@ export class ExamService {
 
         q.answers = ["DA", "NE"];
         q.correctAnswer = CHILD_TRAIT === RECESIVE_TRAIT ? "DA" : "NE";
+        return q;
+    }
+
+    getQuestionType8(): IExamQuestion {
+        const organisms = this.organisms;
+
+        let organism = organisms[Math.floor(Math.random() * organisms.length)];
+        let organismData = this.data[organism];
+        let char = organismData[Math.floor(Math.random() * organismData.length)];
+
+        while (char.inheritanceType !== 'spolni kromosomi') {
+            organism = organisms[Math.floor(Math.random() * organisms.length)];
+            organismData = this.data[organism];
+            char = organismData[Math.floor(Math.random() * organismData.length)];
+        }
+
+        const child = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const CHARACTERISTIC = char.characteristic;
+        const RECESIVE_TRAIT_FEMALE = char.traits[3];
+        const CHILD_TRAIT = child.phenotype;
+
+        let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
+        q.question = `Za organizam ${organism}: ako majka ima svojstvo ${CHARACTERISTIC} (genotip ${RECESIVE_TRAIT_FEMALE.genotype}),
+        koliki postotak muške djece će imati svojstvo ${CHARACTERISTIC}? Riječ je o nasljeđivanju putem spolnih kromosoma.`;
+
+        q.answers = ["0%", "25%", "50%", "75%", "100%"];
+        q.correctAnswer = "100%";
         return q;
     }
 }
