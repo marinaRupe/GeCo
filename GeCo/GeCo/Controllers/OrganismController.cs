@@ -57,9 +57,9 @@ public class OrganismController : Controller
             organisms.Add(organism.Name);
         }
 
-        if (organisms != null)
+        if (_organism != null)
         {
-            return new OkObjectResult(organisms);
+            return new OkObjectResult(_organism);
         }
         else
         {
@@ -70,8 +70,8 @@ public class OrganismController : Controller
     [HttpGet("Name={name}")]
     public IActionResult Get(string name)
     {
-        Organism _organism = _context.Organisms.Where(o => o.Name.Equals(name)).Include(g => g.Traits).SingleOrDefault();
-        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).ToList();
+        Organism _organism = _context.Organisms.Where(o => o.Name.Equals(name)).Include(g => g.Traits).AsNoTracking().SingleOrDefault();
+        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).AsNoTracking().ToList();
 
         IEnumerable<Phenotype> _phenotypes;
         IEnumerable<Genotype> _genotypes;
@@ -81,17 +81,17 @@ public class OrganismController : Controller
 
         foreach (Trait trait in _trait)
         {
-            _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).ToList();
+            _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).AsNoTracking().ToList();
             foreach (Genotype genotype in _genotypes)
             {
-                _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).ToList();
+                _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).AsNoTracking().ToList();
                 foreach (Phenotype phenotype in _phenotypes)
                 {
                     if (genotype.Phenotype.Id == phenotype.Id && phenotype.Trait.Id == trait.Id)
                     {
                         Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
                         Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
-                        TraitView.Add(new TraitView(FirstAllele.Symbol + SecondAllele.Symbol, phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
+                        TraitView.Add(new TraitView(new GenotypeView(FirstAllele.Symbol, SecondAllele.Symbol), phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
                     }
                 }
             }
@@ -114,11 +114,11 @@ public class OrganismController : Controller
     [HttpGet("GetAllData")]
     public IActionResult GetAll()
     {
-        IEnumerable<Organism> _organisms = _context.Organisms.Include(g => g.Traits).ToList();
+        IEnumerable<Organism> _organisms = _context.Organisms.Include(g => g.Traits).AsNoTracking().ToList();
         AllDataView AllDataView = new AllDataView();
         foreach (Organism _organism in _organisms)
         {
-            IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).ToList();
+            IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).AsNoTracking().ToList();
 
             IEnumerable<Phenotype> _phenotypes;
             IEnumerable<Genotype> _genotypes;
@@ -128,17 +128,17 @@ public class OrganismController : Controller
 
             foreach (Trait trait in _trait)
             {
-                _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).ToList();
+                _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).AsNoTracking().ToList();
                 foreach (Genotype genotype in _genotypes)
                 {
-                    _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).ToList();
+                    _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).AsNoTracking().ToList();
                     foreach (Phenotype phenotype in _phenotypes)
                     {
                         if (genotype.Phenotype.Id == phenotype.Id && phenotype.Trait.Id == trait.Id)
                         {
                             Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
                             Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
-                            TraitView.Add(new TraitView(FirstAllele.Symbol + SecondAllele.Symbol, phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
+                            TraitView.Add(new TraitView(new GenotypeView(FirstAllele.Symbol, SecondAllele.Symbol), phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
                         }
                     }
                 }
