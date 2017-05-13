@@ -5,10 +5,6 @@ import { ILinkedGenes, ITrait } from "./shared/types";
 @Injectable()
 export class GeneticDataService {
     http: Http;
-    organisms;
-    data = {};
-    linkedGenesAll = {};
-
     fakeData = {
         čovjek: [
             {
@@ -176,7 +172,7 @@ export class GeneticDataService {
     getData() {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Organism/GetAllData').subscribe(result => {
-                console.log(result.json());
+                //console.log(result.json());
                 resolve(result.json());
             });
         });
@@ -184,7 +180,7 @@ export class GeneticDataService {
 
     getDataForOrganism(organismId: string) {
         return new Promise((resolve, reject) => {
-            this.http.get('/api/Organism/' + organismId).subscribe(result => {
+            this.http.get('/api/Organism/GetData/' + organismId).subscribe(result => {
                 resolve(result.json());
             });
         });
@@ -193,7 +189,6 @@ export class GeneticDataService {
     getLinkedGenesAll() {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Trait/GetAllPairs').subscribe(result => {
-                console.log(result.json());
                 resolve(result.json());
             });
         });
@@ -210,19 +205,13 @@ export class GeneticDataService {
     getOrganisms() {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Organism/GetAll').subscribe(result => {
-                resolve(result.json().map(o => o.name));
+                //console.log(result.json());
+                resolve(result.json());
             });
         });
     }
 
     getInheritanceTypes() {
-        //let fakeData = [
-        //    'dominantno/recesivno',
-        //    'nepotpuno dominantno/recesivno',
-        //    'kodominantno',
-        //    'spolni kromosomi',
-        //    'vezani geni'
-        //];
         return new Promise((resolve, reject) => {
             this.http.get('/api/Inheritance/GetAll').subscribe(result => {
                 resolve(result.json().map(i => i.name));

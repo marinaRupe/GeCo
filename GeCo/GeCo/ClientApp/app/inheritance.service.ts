@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
-import { ITrait, IParents, IOrganism, IChild, IGenotype, IInheritance, ICharacteristic } from "./shared/types";
 import { GeneticDataService } from "./genetic-data.service"
+import { ITrait, IParents, IOrganism, IChild, IGenotype, IInheritance, ICharacteristic } from "./shared/types";
+import { LINKED_GENES_INHERITANCE, SEX_CHROMOSOMES_INHERITANCE, HOMOZYGOTE, HETEROZYGOTE, MALE_SEX_CHROMOSOME } from './shared/constants';
 
 @Injectable()
 export class InheritanceService {
@@ -26,15 +27,17 @@ export class InheritanceService {
     }
 
     getType(genotype: IGenotype) {
-        const HOMOZYGOTE = 'homozigot';
-        const HETEROZYGOTE = 'heterozigot';
-
         if (genotype.allele1 === genotype.allele2) return HOMOZYGOTE;
         else return HETEROZYGOTE;
     }
 
-    getImageUrl(characteristic: string, phenotype: string) {
-        return "gecko2.png"; //TODO: get imageURL
+    getImageUrl(traits: ITrait[], phenotype: string) {
+        for (let i = 0; i < traits.length; i++) {
+            if (traits[i].phenotype === phenotype) {
+                return traits[i].imageUrl;
+            }
+        }
+        return "gecko2.png";
     }
 
     getParentsForChild(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype) : IParents[] {
@@ -45,9 +48,9 @@ export class InheritanceService {
             for (let j = 0; j < traits1.length; j++) {
                 const parent1Trait1 = traits1[i];
                 const parent2Trait1 = traits1[j];
-                if (inheritanceType.type1 === "spolni kromosomi")
+                if (inheritanceType.type1 === SEX_CHROMOSOMES_INHERITANCE)
                 {
-                    if (parent1Trait1.genotype.allele2 === 'Y' || parent2Trait1.genotype.allele2 !== 'Y') {
+                    if (parent1Trait1.genotype.allele2 === MALE_SEX_CHROMOSOME || parent2Trait1.genotype.allele2 !== MALE_SEX_CHROMOSOME) {
                         continue;
                     }
                 }
@@ -58,8 +61,8 @@ export class InheritanceService {
                         for (let l = 0; l < traits2.length; l++) {
                             const parent1Trait2 = traits2[k];
                             const parent2Trait2 = traits2[l];
-                            if (inheritanceType.type2 === "spolni kromosomi") {
-                                if (parent1Trait2.genotype.allele2 === 'Y' || parent2Trait2.genotype.allele2 !== 'Y') {
+                            if (inheritanceType.type2 === SEX_CHROMOSOMES_INHERITANCE) {
+                                if (parent1Trait2.genotype.allele2 === MALE_SEX_CHROMOSOME || parent2Trait2.genotype.allele2 !== MALE_SEX_CHROMOSOME) {
                                     continue;
                                 }
                             }
@@ -141,7 +144,7 @@ export class InheritanceService {
             const phenotype = this.getPhenotype(traits, gen.genotype);
                 childData = {
                     child: {
-                        trait1: { phenotype, genotype: gen.genotype, type: this.getType(gen.genotype), imageUrl: this.getImageUrl(characteristic, phenotype) },
+                        trait1: { phenotype, genotype: gen.genotype, type: this.getType(gen.genotype), imageUrl: this.getImageUrl(traits, phenotype) },
                         trait2: {} as any
                         },
                     percentage : gen.count / childrenGenotypes.length
@@ -160,7 +163,7 @@ export class InheritanceService {
         let childData: IChild;
         let childrenCounter1 = {};
         let childrenCounter2 = {};
-        let vezani = inheritanceType.type1 === "vezani geni" && inheritanceType.type2 === "vezani geni";
+        let vezani = inheritanceType.type1 === LINKED_GENES_INHERITANCE && inheritanceType.type2 === LINKED_GENES_INHERITANCE;
 
         for (let genotype1 of childrenGenotypes1) {
             let genotype: string = genotype1.allele1 + genotype1.allele2;
@@ -188,14 +191,14 @@ export class InheritanceService {
 
                 childData = {
                     child: {
-                        trait1: { phenotype: phenotype1, genotype: gen1, type: this.getType(gen1), imageUrl: this.getImageUrl(characteristic.first, phenotype1) },
-                        trait2: { phenotype: phenotype2, genotype: gen2, type: this.getType(gen2), imageUrl: this.getImageUrl(characteristic.second, phenotype2) }
+                        trait1: { phenotype: phenotype1, genotype: gen1, type: this.getType(gen1), imageUrl: this.getImageUrl(traits1, phenotype1) },
+                        trait2: { phenotype: phenotype2, genotype: gen2, type: this.getType(gen2), imageUrl: this.getImageUrl(traits2, phenotype2) }
                     },
                     percentage: gen1Count * gen2Count / (childrenGenotypes1.length * childrenGenotypes2.length)
                 }
                 if (vezani) {
                     //bar jedan roditelj mora biti heterozigot u oba svojstva inace crossing over nema efekta
-                    if (parent1.trait1.type === 'heterozigot' && parent1.trait2.type === 'heterozigot' || parent2.trait1.type === 'heterozigot' && parent2.trait2.type === 'heterozigot') {
+                    if (parent1.trait1.type === HETEROZYGOTE && parent1.trait2.type === HETEROZYGOTE || parent2.trait1.type === HETEROZYGOTE && parent2.trait2.type === HETEROZYGOTE) {
 
                         //ovo isto treba getati alela a ne raditi substring
                         let parent1Alel1 = parent1.trait1.genotype.allele1;
@@ -216,7 +219,7 @@ export class InheritanceService {
                         let y = cm/4;
 
                         //oba heterozigoti u oba svojstva
-                        if (parent1.trait1.type === 'heterozigot' && parent1.trait2.type === 'heterozigot' && parent2.trait1.type === 'heterozigot' && parent2.trait2.type === 'heterozigot') {
+                        if (parent1.trait1.type === HETEROZYGOTE && parent1.trait2.type === HETEROZYGOTE && parent2.trait1.type === HETEROZYGOTE && parent2.trait2.type === HETEROZYGOTE) {
 
                             if (childAlel1 === parent1Alel1 && childAlel3 === parent1Alel3 || childAlel1 === parent1Alel2 && childAlel3 === parent1Alel4) {
                                 childData.percentage = childData.percentage * x;
@@ -233,7 +236,7 @@ export class InheritanceService {
                          }
                         //slucaj 2, drugi roditelj nije heterozigt u oba, znaci crossing over samo za parenta1
                         
-                        else if (parent1.trait1.type === 'heterozigot' && parent1.trait2.type === 'heterozigot' && !(parent2.trait1.type === 'heterozigot' && parent2.trait2.type === 'heterozigot')) {
+                        else if (parent1.trait1.type === HETEROZYGOTE && parent1.trait2.type === HETEROZYGOTE && !(parent2.trait1.type === HETEROZYGOTE && parent2.trait2.type === HETEROZYGOTE)) {
 
                             if (childAlel1 === parent1Alel1 && childAlel3 === parent1Alel3 || childAlel1 === parent1Alel2 && childAlel3 === parent1Alel4) {
                                 childData.percentage = childData.percentage * x;
@@ -241,12 +244,12 @@ export class InheritanceService {
                             else {
                                 childData.percentage = childData.percentage * y;
                             }
-                            if ((parent2.trait1.type === 'heterozigot' && parent2.trait2.type !== 'heterozigot') || (parent2.trait1.type !== 'heterozigot' && parent2.trait2.type === 'heterozigot')) {
+                            if ((parent2.trait1.type === HETEROZYGOTE && parent2.trait2.type !== HETEROZYGOTE) || (parent2.trait1.type !== HETEROZYGOTE && parent2.trait2.type === HETEROZYGOTE)) {
                                 childData.percentage = childData.percentage / 2;
                             }
                         }
                         //prvi parent nije heteorozigot u oba, xcrossing over smao za drugog
-                        else if (!(parent1.trait1.type === 'heterozigot' && parent1.trait2.type === 'heterozigot') && (parent2.trait1.type === 'heterozigot' && parent2.trait2.type === 'heterozigot')) {
+                        else if (!(parent1.trait1.type === HETEROZYGOTE && parent1.trait2.type === HETEROZYGOTE) && (parent2.trait1.type === HETEROZYGOTE && parent2.trait2.type === HETEROZYGOTE)) {
 
                             if (childAlel2 === parent2Alel1 && childAlel4 === parent2Alel3 || childAlel2 === parent2Alel2 && childAlel4 === parent2Alel4) {
                                 childData.percentage = childData.percentage * x;
@@ -254,7 +257,7 @@ export class InheritanceService {
                             else {
                                 childData.percentage = childData.percentage * y;
                             }
-                            if ((parent1.trait1.type === 'heterozigot' && parent1.trait2.type !== 'heterozigot') || (parent1.trait1.type !== 'heterozigot' && parent1.trait2.type === 'heterozigot')) {
+                            if ((parent1.trait1.type === HETEROZYGOTE && parent1.trait2.type !== HETEROZYGOTE) || (parent1.trait1.type !== HETEROZYGOTE && parent1.trait2.type === HETEROZYGOTE)) {
                                 childData.percentage = childData.percentage / 2;
                             }
                         }
@@ -273,7 +276,7 @@ export class InheritanceService {
     private filterTraitsBySex(sex: string, traits: ITrait[]) {
         let traitsTemp: ITrait[] = [];
         for (let i = 0; i < traits.length; i++) {
-            if ((sex === "male" && traits[i].genotype.allele2 === "Y") || (sex === "female" && traits[i].genotype.allele2 !== "Y")) {
+            if ((sex === "male" && traits[i].genotype.allele2 === MALE_SEX_CHROMOSOME) || (sex === "female" && traits[i].genotype.allele2 !== MALE_SEX_CHROMOSOME)) {
                 traitsTemp.push(traits[i]);
             }
         }

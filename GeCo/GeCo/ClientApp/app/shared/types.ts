@@ -29,9 +29,9 @@ export interface IExamQuestion {
 }
 
 export interface ILinkedGenes {
-    gene1Name: string;
-    gene2Name: string;
-    cM: number;
+    trait1: string;
+    trait2: string;
+    cm: number;
 }
 
 export interface IGenotype {

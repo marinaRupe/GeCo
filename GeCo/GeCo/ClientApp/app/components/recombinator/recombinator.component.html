@@ -12,8 +12,8 @@
     <div class="row">
         <div class="col-sm-6">
             <h4>Odaberi organizam:</h4>
-            <select [(ngModel)]="organism" (ngModelChange)="onSelectOrganismChange($event)" class="form-control">
-                <option *ngFor="let o of organisms" [ngValue]="o">{{o}}</option>
+            <select [(ngModel)]="organismSelected" (ngModelChange)="onSelectOrganismChange($event)" class="form-control">
+                <option *ngFor="let o of organismsList" [ngValue]="o">{{o}}</option>
             </select>
         </div>
         <div class="col-sm-6">

@@ -1,5 +1,6 @@
 ﻿import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { ITrait, IInheritance, ICharacteristic } from "../../shared/types";
+import { SEX_CHROMOSOMES_INHERITANCE, MALE_SEX_CHROMOSOME } from '../../shared/constants';
 
 @Component({
     selector: 'parent-organism',
@@ -36,11 +37,11 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
 
     private filterTraitsBySex(sex, traits, traitsNumber) {
         if (traits === undefined || this.inheritanceType === undefined) return [];
-        if (this.inheritanceType["type" + traitsNumber.toString()] === "spolni kromosomi") {
+        if (this.inheritanceType["type" + traitsNumber.toString()] === SEX_CHROMOSOMES_INHERITANCE) {
             let traitsTemp: ITrait[] = [];
             for (let i = 0; i < traits.length; i++) {
-                if ((sex === "male" && traits[i].genotype.allele2 === "Y") ||
-                    (sex === "female" && traits[i].genotype.allele2 !== "Y")) {
+                if ((sex === "male" && traits[i].genotype.allele2 === MALE_SEX_CHROMOSOME) ||
+                    (sex === "female" && traits[i].genotype.allele2 !== MALE_SEX_CHROMOSOME)) {
                     traitsTemp.push(traits[i]);
                 }
             }

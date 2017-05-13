@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using GeCo.Data;
+using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 public class OrganismController : Controller
@@ -70,47 +71,87 @@ public class OrganismController : Controller
     [HttpGet("GetData/{Id}")]
     public IActionResult Get(int id)
     {
-        Organism _organism = _context.Organisms.Where(o => o.Id == id).Include(g => g.Traits).AsNoTracking().SingleOrDefault();
-        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).AsNoTracking().ToList();
+        var organism = _context.Organisms.FirstOrDefault(o => o.Id == id);
+        var traits =
+            _context.Traits.Include(t => t.Organism)
+                .Where(t => t.Organism.Id == id)
+                .Include(t => t.Inheritance)
+                .Include(t => t.Alleles)
+                .Include(t => t.Phenotypes)
+                .ThenInclude(p => p.Genotypes)
+                .AsNoTracking();
 
-        IEnumerable<Phenotype> _phenotypes;
-        IEnumerable<Genotype> _genotypes;
+        var traitViews = new List<TraitView>();
+        var characteristicsViews = new List<CharacteristicsView>();
 
-        List<TraitView> TraitView = new List<TraitView>();
-        List<CharacteristicsView> CharacteristicsView = new List<CharacteristicsView>();
-
-        foreach (Trait trait in _trait)
+        foreach (var trait in traits)
         {
-            _genotypes = _context.Genotypes.Include(g => g.Phenotype).Where(g => g.Phenotype.Trait.Id == trait.Id).AsNoTracking().ToList();
-            foreach (Genotype genotype in _genotypes)
+            foreach (var phenotype in trait.Phenotypes)
             {
-                _phenotypes = _context.Phenotypes.Include(g => g.Trait).Where(tr => trait.Id == tr.Trait.Id && tr.Id == genotype.Phenotype.Id).AsNoTracking().ToList();
-                foreach (Phenotype phenotype in _phenotypes)
+                foreach (var genotype in phenotype.Genotypes)
                 {
-                    if (genotype.Phenotype.Id == phenotype.Id && phenotype.Trait.Id == trait.Id)
-                    {
-                        Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
-                        Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
-                        TraitView.Add(new TraitView(new GenotypeView(FirstAllele.Symbol, SecondAllele.Symbol), phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
-                    }
+                    var firstAllele = trait.Alleles.FirstOrDefault(a => a.Id == genotype.FirstAlleleId);
+                    var secondAllele = trait.Alleles.FirstOrDefault(a => a.Id == genotype.SecondAlleleId);
+                    traitViews.Add(new TraitView(new GenotypeView(firstAllele.Symbol, secondAllele.Symbol), phenotype.Name, firstAllele.Symbol.Equals(secondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
                 }
             }
-            CharacteristicsView.Add(new CharacteristicsView(trait.Name, new List<TraitView>(TraitView), trait.Inheritance.Name));
-            TraitView.Clear();
+            characteristicsViews.Add(new CharacteristicsView(trait.Name, new List<TraitView>(traitViews), trait.Inheritance.Name));
+            traitViews.Clear();
         }
 
-        OrganismView OrganismView = new OrganismView(_organism.Name, CharacteristicsView);
-
-        if (OrganismView != null)
-        {
-            return new OkObjectResult(OrganismView);
-        }
-        else
-        {
-            return NotFound();
-        }
+        var organismView = new OrganismView(organism.Name, characteristicsViews);
+        return new OkObjectResult(organismView);
     }
 
+    /*
+    [HttpGet("GetAllData")]
+    public IActionResult GetAll()
+    {
+        var organisms = _context.Organisms.AsNoTracking();
+        var traits =
+            _context.Traits.Include(t => t.Organism)
+                .Include(t => t.Inheritance)
+                .Include(t => t.Alleles)
+                .Include(t => t.Phenotypes)
+                .ThenInclude(p => p.Genotypes)
+                .AsNoTracking();
+
+        var traitViews = new List<TraitView>();
+        var characteristicsViews = new List<CharacteristicsView>();
+        var organismViews = new List<OrganismView>();
+
+        foreach (var organism in organisms)
+        {
+            foreach (var trait in traits)
+            {
+                if (trait.Organism.Id != organism.Id)
+                {
+                    continue;
+                }
+                foreach (var phenotype in trait.Phenotypes)
+                {
+                    foreach (var genotype in phenotype.Genotypes)
+                    {
+                        var firstAllele = trait.Alleles.FirstOrDefault(a => a.Id == genotype.FirstAlleleId);
+                        var secondAllele = trait.Alleles.FirstOrDefault(a => a.Id == genotype.SecondAlleleId);
+                        traitViews.Add(new TraitView(new GenotypeView(firstAllele.Symbol, secondAllele.Symbol),
+                            phenotype.Name, firstAllele.Symbol.Equals(secondAllele.Symbol) ? "homozigot" : "heterozigot",
+                            phenotype.ImageURL));
+                    }
+                }
+                characteristicsViews.Add(new CharacteristicsView(trait.Name, new List<TraitView>(traitViews),
+                    trait.Inheritance.Name));
+                traitViews.Clear();
+            }
+
+            organismViews.Add(new OrganismView(organism.Name, new List<CharacteristicsView>(characteristicsViews)));
+            characteristicsViews.Clear();
+        }
+        return new OkObjectResult(organismViews);
+    }
+    */
+    
+    
     [HttpGet("GetAllData")]
     public IActionResult GetAll()
     {
