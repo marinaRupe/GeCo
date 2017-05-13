@@ -4,6 +4,7 @@ using GeCo.Model;
 using GeCo.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,21 +71,20 @@ public class TraitController : Controller
     public IActionResult GetTraitPairs(string organism)
     {
         IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Name.Equals(organism)).ToList();
-        List<Trait> visited = new List<Trait>();
+
+        List<DoubleTrait> visited = new List<DoubleTrait>();
         List<TraitPairsView> TraitPairsView = new List<TraitPairsView>();
-        foreach (Trait trait in _trait)
+
+        foreach (Trait trait1 in _trait)
         {
-            if (trait.GeneticLinkId != null && !visited.Contains(trait))
+            foreach (Trait trait2 in _trait)
             {
-                Trait secondTrait = _traitRepository.GetSingle((int)trait.GeneticLinkId);
-
-                TraitPairsView.Add(new TraitPairsView(trait.Name, secondTrait.Name, (int)trait.CM));
-
-                visited.Add(secondTrait);
-                visited.Add(trait);
-
+                if (!visited.Contains(new DoubleTrait(trait1, trait2)) && !visited.Contains(new DoubleTrait(trait2, trait1)) && trait1.GeneticLinkId != null && trait2.GeneticLinkId != null && trait1.GeneticLinkId == trait2.GeneticLinkId && trait1 != trait2)
+                {
+                    TraitPairsView.Add(new TraitPairsView(trait1.Name, trait2.Name, Math.Abs((int)trait1.CM - (int)trait2.CM)));
+                    visited.Add(new DoubleTrait(trait1, trait2));
+                }
             }
-
         }
 
         if (TraitPairsView != null)

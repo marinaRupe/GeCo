@@ -29,6 +29,22 @@ public class OrganismController : Controller
         _context = context;
     }
 
+    [HttpGet("Id={id}")]
+    public IActionResult GeById(int id)
+    {
+        IEnumerable<Organism> _organism = _organismRepository
+            .FindBy(s => s.Id == id);
+
+        if (_organism != null)
+        {
+            return new OkObjectResult(_organism);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
     [HttpGet("GetAll")]
     public IActionResult Get()
     {
@@ -65,7 +81,6 @@ public class OrganismController : Controller
 
         foreach (Trait trait in _trait)
         {
-            // _genotypes = _genotypeRepository.GetAll().ToList();
             _genotypes = _context.Genotypes.Include(g => g.Phenotype).ToList();
             foreach (Genotype genotype in _genotypes)
             {
@@ -88,6 +103,52 @@ public class OrganismController : Controller
         if (OrganismView != null)
         {
             return new OkObjectResult(OrganismView);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpGet("GetAllData")]
+    public IActionResult GetAll()
+    {
+        IEnumerable<Organism> _organisms = _context.Organisms.Include(g => g.Traits).ToList();
+        AllDataView AllDataView = new AllDataView();
+        foreach (Organism _organism in _organisms)
+        {
+            IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).ToList();
+
+            IEnumerable<Phenotype> _phenotypes;
+            IEnumerable<Genotype> _genotypes;
+
+            List<TraitView> TraitView = new List<TraitView>();
+            List<CharacteristicsView> CharacteristicsView = new List<CharacteristicsView>();
+
+            foreach (Trait trait in _trait)
+            {
+                _genotypes = _context.Genotypes.Include(g => g.Phenotype).ToList();
+                foreach (Genotype genotype in _genotypes)
+                {
+                    _phenotypes = _phenotypeRepository.FindBy(tr => trait.Id == tr.Trait.Id).ToList();
+                    foreach (Phenotype phenotype in _phenotypes)
+                    {
+                        if (genotype.Phenotype.Id == phenotype.Id)
+                        {
+                            Allele FirstAllele = _alleleRepository.GetSingle(genotype.FirstAlleleId);
+                            Allele SecondAllele = _alleleRepository.GetSingle(genotype.SecondAlleleId);
+                            TraitView.Add(new TraitView(FirstAllele.Symbol + SecondAllele.Symbol, phenotype.Name, FirstAllele.Symbol.Equals(SecondAllele.Symbol) ? "homozigot" : "heterozigot", phenotype.ImageURL));
+                        }
+                    }
+                }
+                CharacteristicsView.Add(new CharacteristicsView(trait.Name, TraitView, trait.Inheritance.Name));
+            }
+            OrganismView OrganismView = new OrganismView(_organism.Name, CharacteristicsView);
+            AllDataView.Add(OrganismView);
+        }
+        if (AllDataView != null)
+        {
+            return new OkObjectResult(AllDataView);
         }
         else
         {
