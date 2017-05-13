@@ -96,4 +96,38 @@ public class TraitController : Controller
             return NotFound();
         }
     }
+
+    [HttpGet("GetAllPairs")]
+    public IActionResult GetTraitPairs()
+    {
+        List<AllTraitPairsView> AllTraitPairsView = new List<AllTraitPairsView>();
+        IEnumerable<Organism> _organism = _context.Organisms.Where(i => i.Id != 0).ToList();
+        foreach (Organism organism in _organism)
+        {
+            IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Name.Equals(organism.Name)).ToList();
+            List<TraitPairsView> TraitPairsView = new List<TraitPairsView>();
+            List<DoubleTrait> visited = new List<DoubleTrait>();
+
+            foreach (Trait trait1 in _trait)
+            {
+                foreach (Trait trait2 in _trait)
+                {
+                    if (!visited.Contains(new DoubleTrait(trait1, trait2)) && !visited.Contains(new DoubleTrait(trait2, trait1)) && trait1.GeneticLinkId != null && trait2.GeneticLinkId != null && trait1.GeneticLinkId == trait2.GeneticLinkId && trait1 != trait2)
+                    {
+                        TraitPairsView.Add(new TraitPairsView(trait1.Name, trait2.Name, Math.Abs((int)trait1.CM - (int)trait2.CM)));
+                        visited.Add(new DoubleTrait(trait1, trait2));
+                    }
+                }
+            }
+            AllTraitPairsView.Add(new AllTraitPairsView(TraitPairsView, organism.Name));
+        }
+        if (AllTraitPairsView != null)
+        {
+            return new OkObjectResult(AllTraitPairsView);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
 }
