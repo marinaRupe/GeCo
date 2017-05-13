@@ -54,7 +54,7 @@ public class TraitController : Controller
     [HttpGet("Organism={id}")]
     public IActionResult GetTraitPairs(int id)
     {
-        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Id == id).ToList();
+        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == id).ToList();
 
         List<DoubleTrait> visited = new List<DoubleTrait>();
         List<TraitPairsView> TraitPairsView = new List<TraitPairsView>();
