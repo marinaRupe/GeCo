@@ -18,12 +18,6 @@ public class GenotypeController : Controller
 
         IEnumerable<Genotype> _genotypes = _genotypeRepository.GetAll();
 
-        List<string> genotypes = new List<string>();
-        foreach (Genotype genotype in _genotypes)
-        {
-            genotypes.Add(genotype.FirstAllele.Symbol + genotype.SecondAllele.Symbol);
-        }
-
         if (_genotypes != null)
         {
             return new OkObjectResult(_genotypes);

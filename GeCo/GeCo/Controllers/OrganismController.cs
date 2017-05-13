@@ -67,7 +67,7 @@ public class OrganismController : Controller
         }
     }
 
-    [HttpGet("Name={name}")]
+    [HttpGet("GetData/{Id}")]
     public IActionResult Get(int id)
     {
         Organism _organism = _context.Organisms.Where(o => o.Id == id).Include(g => g.Traits).AsNoTracking().SingleOrDefault();
