@@ -32,7 +32,6 @@ export class ParentOrganismComponent implements OnInit, OnChanges {
             this.trait1 = {} as any;
             this.trait2 = {} as any;
         }
-        console.log(this.characteristic);
     }
 
     private filterTraitsBySex(sex, traits, traitsNumber) {

@@ -16,6 +16,7 @@ export class RecombinatorComponent implements OnInit {
     @ViewChild('parent1') private parent1: ParentOrganismComponent;
     @ViewChild('parent2') private parent2: ParentOrganismComponent;
     @ViewChild('child') private child: ChildOrganismComponent;
+    private isLoading: boolean;
     startingFromParents: boolean;
     organisms: string[];
     organism: string;
@@ -31,33 +32,57 @@ export class RecombinatorComponent implements OnInit {
     data: {};
     traits1: ITrait[];
     traits2: ITrait[];
+    linkedGenesAll: {};
 
     constructor(private geneticDataService: GeneticDataService) {}
 
     ngOnInit(): void {
+        this.isLoading = true;
         this.startingFromParents = true;
-        this.data = this.geneticDataService.getData();
-        this.organisms = this.geneticDataService.getOrganisms();
-        this.inheritanceTypesAll = this.geneticDataService.getInheritanceTypes();
-        this.inheritanceTypesOptions = this.changeInheritanceTypes(this.inheritanceTypesAll); 
 
-        this.organism = this.organisms[0] || '';
-        this.characteristicsOptions = this.getCharacteristics();
-    }
+        this.organisms = [];
+        this.organism = "";
 
-    ngAfterViewInit() : void {
-        let organismData = this.data[this.organism];
+        this.characteristicsOptions = [];
+        this.characteristicSelected = '';
 
-        this.characteristicSelected = this.characteristicsOptions[0] || '';
-        this.changeCharacteristic();
+        this.inheritanceTypesAll = [];
+        this.inheritanceTypesOptions = [];
+        this.inheritanceTypeSelected = '';
 
-        this.inheritanceTypeSelected = this.changeInheritanceType();
-        this.changeTraits();
+        this.linkedGenesAll = {};
+
+        // Load data
+        this.geneticDataService.getData().then((result) => {
+            this.data = result;
+
+            this.geneticDataService.getOrganisms().then((result) => {
+                this.organisms = <string[]>result;
+
+                this.organism = this.organisms[0] || '';
+                this.getCharacteristicsOptions();
+                this.characteristicSelected = this.characteristicsOptions[0] || '';
+                this.changeCharacteristic();
+
+                this.geneticDataService.getInheritanceTypes().then((result) => {
+                    this.inheritanceTypesAll = <string[]>result;
+
+                    this.inheritanceTypesOptions = this.changeInheritanceTypes(this.inheritanceTypesAll);
+                    this.inheritanceTypeSelected = this.changeInheritanceType();
+                    this.changeTraits();
+
+                    this.geneticDataService.getLinkedGenesAll().then((result) => {
+                        this.linkedGenesAll = result;
+                        this.isLoading = false;
+                    });
+                });
+            });
+        });
     }
 
     onNumberOfCharacteristicsChange(entry) {
         this.numberOfCharact = this.crossTypes.indexOf(entry) + 1;
-        this.characteristicsOptions = this.getCharacteristics();
+        this.getCharacteristicsOptions();
 
         this.characteristicSelected = this.characteristicsOptions[0];
         this.changeCharacteristic();
@@ -72,7 +97,7 @@ export class RecombinatorComponent implements OnInit {
     }
 
     onSelectOrganismChange(event) {
-        this.characteristicsOptions = this.getCharacteristics();
+        this.getCharacteristicsOptions();
 
         this.characteristicSelected = this.characteristicsOptions[0];
         this.changeCharacteristic();
@@ -222,7 +247,7 @@ export class RecombinatorComponent implements OnInit {
     }
 
     private getTraitsByCharacteristic(characteristic: string) {
-        let organismData = this.data[this.organism];
+        let organismData = this.data[this.organism] || [];
         for (let i = 0; i < organismData.length; i++) {
             if (organismData[i].characteristic === characteristic) {
                 return organismData[i].traits;
@@ -231,12 +256,12 @@ export class RecombinatorComponent implements OnInit {
         return [];
     }
 
-    private getCharacteristics() {
+    private getCharacteristicsOptions() {
         if (this.numberOfCharact === 1) {
-            return this.getMonohybridCharacteristics();
+            this.getMonohybridCharacteristics();
         }
         else if (this.numberOfCharact === 2) {
-            return this.getDihybridCharacteristics();
+            this.getDihybridCharacteristics();
         }
     }
 
@@ -244,22 +269,21 @@ export class RecombinatorComponent implements OnInit {
      * Get list of avaliable characteristics for monohybrid cross and selected organism.
      */
     private getMonohybridCharacteristics() {
-        const organismData = this.data[this.organism];
-        let characteristics = [];
+        const organismData = this.data[this.organism] || [];
+        this.characteristicsOptions = [];
         for (let i = 0; i < organismData.length; i++) {
             if (organismData[i].inheritanceType !== "vezani geni") {
-                characteristics.push(organismData[i].characteristic);
+                this.characteristicsOptions.push(organismData[i].characteristic);
             }
         }
-        return characteristics;
     }
 
     /**
      * Get list of avaliable characteristics for dihybrid cross and selected organism.
      */
     private getDihybridCharacteristics() {
-        const organismData = this.data[this.organism];
-        let characteristics = [];
+        const organismData = this.data[this.organism] || [];
+        this.characteristicsOptions = [];
         for (let i = 0; i < organismData.length; i++) {
             for (let j = i + 1; j < organismData.length; j++) {
                 const char1 = organismData[i].characteristic;
@@ -267,16 +291,15 @@ export class RecombinatorComponent implements OnInit {
                 const inh1 = organismData[i].inheritanceType;
                 const inh2 = organismData[j].inheritanceType;
                 if (inh1 !== "vezani geni" && inh2 !== "vezani geni") {
-                    characteristics.push(`${char1} + ${char2}`);
+                    this.characteristicsOptions.push(`${char1} + ${char2}`);
                 }
             }
         }
         //TODO: vezani geni
-        let linkedGenes: ILinkedGenes[] = this.geneticDataService.getLinkedGenes(this.organism);
+        let linkedGenes: ILinkedGenes[] = this.linkedGenesAll[this.organism];
         for (let i = 0; i < linkedGenes.length; i++) {
-            characteristics.push(`${linkedGenes[i].gene1Name} + ${linkedGenes[i].gene2Name}`);
+            this.characteristicsOptions.push(`${linkedGenes[i].gene1Name} + ${linkedGenes[i].gene2Name}`);
         }
-        return characteristics;
     }
 }
 

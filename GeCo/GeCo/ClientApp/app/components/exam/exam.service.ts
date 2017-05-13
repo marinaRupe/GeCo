@@ -5,26 +5,41 @@ import { InheritanceService } from '../../inheritance.service';
 
 @Injectable()
 export class ExamService {
-    constructor(private geneticDataService: GeneticDataService, private inheritanceService: InheritanceService) { }
+    organisms = [];
+    data;
 
-    generateExam(numberOfQuestions: number): IExamQuestion[] {
-        let questionTypes = [
-            this.getQuestionType1,
-            this.getQuestionType2,
-            this.getQuestionType3,
-            this.getQuestionType4,
-            this.getQuestionType5,
-            this.getQuestionType6,
-            this.getQuestionType7
-        ];
-        let questions = [];
-        for (let i = 0; i < numberOfQuestions; i++) {
-            //TODO: choose randomly
-            let question = questionTypes[Math.floor(Math.random() * questionTypes.length)](this.geneticDataService, this.inheritanceService);
-            this.shuffleAnswers(question.answers);
-            questions.push(question);
-        }
-        return questions;
+    constructor(private geneticDataService: GeneticDataService, private inheritanceService: InheritanceService) {}
+
+    generateExam(numberOfQuestions: number) {
+        return new Promise((resolve, reject) => {
+            this.geneticDataService.getData()
+                .then((result) => {
+                    this.data = result;
+
+                    this.geneticDataService.getOrganisms().then((result) => {
+                        this.organisms = <any>result;
+
+                        let questionTypes = [
+                            this.getQuestionType1.bind(this),
+                            this.getQuestionType2.bind(this),
+                            this.getQuestionType3.bind(this),
+                            this.getQuestionType4.bind(this),
+                            this.getQuestionType5.bind(this),
+                            this.getQuestionType6.bind(this),
+                            this.getQuestionType7.bind(this)
+                        ];
+                        let questions = [];
+                        for (let i = 0; i < numberOfQuestions; i++) {
+                            //TODO: choose randomly
+                            let question = questionTypes[Math.floor(Math.random() * questionTypes.length)]();
+                            this.shuffleAnswers(question.answers);
+                            questions.push(question);
+                        }
+                        resolve(questions);
+                    }
+                    );
+                });
+        });  
     }
 
     shuffleAnswers(answerList) {
@@ -34,17 +49,16 @@ export class ExamService {
     }
 }
 
-    getQuestionType1(geneticDataService: GeneticDataService, inheritanceService: InheritanceService) : IExamQuestion {
+    getQuestionType1() : IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
-
+        const organisms = this.organisms;
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[organism];
+        let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType === 'spolni kromosomi' || char.inheritanceType === 'vezani geni') {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[organism];
+            organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
@@ -66,7 +80,7 @@ export class ExamService {
                 koliko će djece (od njih 4) nastalo križanjem ova dva roditelja imati svojstvo ${CHARACTERISTIC}-${CHILD_TRAIT}?
                 Tip nasljeđivanja za svojstvo ${CHARACTERISTIC} kod organizma ${organism} je: ${INHERITANCE_TYPE}.`;
 
-        let children: IChild[] = inheritanceService.generateChildren(CHARACTERISTIC,
+        let children: IChild[] = this.inheritanceService.generateChildren(CHARACTERISTIC,
             { type1: INHERITANCE_TYPE, type2: "" },
             char.traits,
             [],
@@ -89,17 +103,17 @@ export class ExamService {
         return q;
     }
 
-    getQuestionType2(geneticDataService: GeneticDataService, inheritanceService: InheritanceService) : IExamQuestion {
+    getQuestionType2() : IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
+        const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[organism];
+        let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType === 'spolni kromosomi' || char.inheritanceType === 'vezani geni') {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[organism];
+            organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
@@ -121,7 +135,7 @@ export class ExamService {
                 koliki će postotak djece nastalih križanjem ova dva roditelja imati svojstvo ${CHARACTERISTIC}-${CHILD_TRAIT}?
                 Tip nasljeđivanja za svojstvo ${CHARACTERISTIC} kod organizma ${organism} je: ${INHERITANCE_TYPE}.`;
 
-        let children: IChild[] = inheritanceService.generateChildren(CHARACTERISTIC,
+        let children: IChild[] = this.inheritanceService.generateChildren(CHARACTERISTIC,
             { type1: INHERITANCE_TYPE, type2: "" },
             char.traits,
             [],
@@ -140,17 +154,17 @@ export class ExamService {
         return q;
     }
 
-    getQuestionType3(geneticDataService: GeneticDataService, inheritanceService: InheritanceService) : IExamQuestion {
+    getQuestionType3() : IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
+        const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[organism];
+        let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType === 'spolni kromosomi' || char.inheritanceType === 'vezani geni') {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[organism];
+            organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
@@ -172,7 +186,7 @@ export class ExamService {
         koliko će djece (od njih 4) nastalo križanjem ova dva roditelja biti ${CHILD_TYPE}?
         Tip nasljeđivanja za svojstvo ${CHARACTERISTIC} kod organizma ${organism} je: ${INHERITANCE_TYPE}.`;
 
-        let children: IChild[] = inheritanceService.generateChildren(CHARACTERISTIC,
+        let children: IChild[] = this.inheritanceService.generateChildren(CHARACTERISTIC,
             { type1: INHERITANCE_TYPE, type2: "" },
             char.traits,
             [],
@@ -196,17 +210,17 @@ export class ExamService {
         return q;
     }
 
-    getQuestionType4(geneticDataService: GeneticDataService, inheritanceService: InheritanceService): IExamQuestion {
+    getQuestionType4(): IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
+        const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[organism];
+        let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType === 'spolni kromosomi' || char.inheritanceType === 'vezani geni') {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[organism];
+            organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
         const parent1 = char.traits[Math.floor(Math.random() * char.traits.length)];
@@ -225,7 +239,7 @@ export class ExamService {
         koliki je omjer broja homozigotne djece naspram broja heterozigotne djece nastalih križanjem ova dva roditelja? Pretpostavljamo da je ukupan broj djece 4.
         Tip nasljeđivanja za svojstvo ${CHARACTERISTIC} kod organizma ${organism} je: ${INHERITANCE_TYPE}.`;
 
-        let children: IChild[] = inheritanceService.generateChildren(CHARACTERISTIC,
+        let children: IChild[] = this.inheritanceService.generateChildren(CHARACTERISTIC,
             { type1: INHERITANCE_TYPE, type2: "" },
             char.traits,
             [],
@@ -252,17 +266,17 @@ export class ExamService {
         return q;
     }
 
-    getQuestionType5(geneticDataService: GeneticDataService, inheritanceService: InheritanceService): IExamQuestion {
+    getQuestionType5(): IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
+        const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[organism];
+        let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType === 'spolni kromosomi' || char.inheritanceType === 'vezani geni') {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[organism];
+            organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
@@ -287,7 +301,7 @@ export class ExamService {
         koliko će djece (od njih 4) nastalo križanjem ova dva roditelja biti ${CHILD_GENOTYPE}?
         Tip nasljeđivanja za svojstvo ${CHARACTERISTIC} kod organizma ${organism} je: ${INHERITANCE_TYPE}.`;
 
-        let parents: IParents[] = inheritanceService.getParentsForChild(CHARACTERISTIC, { type1: char.inheritanceType, type2: "" }, char.traits, [], child.genotype, {} as IGenotype);
+        let parents: IParents[] = this.inheritanceService.getParentsForChild(CHARACTERISTIC, { type1: char.inheritanceType, type2: "" }, char.traits, [], child.genotype, {} as IGenotype);
         for (let i = 0; i < parents.length; i++) {
             let parentPair: IParents = parents[i];
             if (parent1.genotype === parentPair.parent1.trait1.genotype && parent2.genotype === parentPair.parent2.trait1.genotype) {
@@ -299,17 +313,17 @@ export class ExamService {
         return q;
     }
 
-    getQuestionType6(geneticDataService: GeneticDataService, inheritanceService: InheritanceService): IExamQuestion {
+    getQuestionType6(): IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
+        const organisms = this.organisms;
 
         let ORGANISM = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[ORGANISM];
+        let organismData = this.data[ORGANISM];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType !== 'dominantno/recesivno' && char.inheritanceType !== 'nepotpuno dominantno/recesivno') {
             ORGANISM = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[ORGANISM];
+            organismData = this.data[ORGANISM];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
@@ -331,17 +345,17 @@ export class ExamService {
         return q;
     }
 
-    getQuestionType7(geneticDataService: GeneticDataService, inheritanceService: InheritanceService): IExamQuestion {
+    getQuestionType7(): IExamQuestion {
         //TODO: data types will change when REST is done
-        const organisms = geneticDataService.getOrganisms();
+        const organisms = this.organisms;
 
         let organism = organisms[Math.floor(Math.random() * organisms.length)];
-        let organismData = geneticDataService.getData()[organism];
+        let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
 
         while (char.inheritanceType === 'spolni kromosomi' || char.inheritanceType === 'vezani geni') {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
-            organismData = geneticDataService.getData()[organism];
+            organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
