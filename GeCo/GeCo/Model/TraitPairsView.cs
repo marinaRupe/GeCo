@@ -9,14 +9,14 @@ namespace GeCo.Model
     {
         public TraitPairsView(string traitOne, string traitTwo, int cM)
         {
-            Trait1 = traitOne;
-            Trait2 = traitTwo;
-            CM = cM;
+            trait1 = traitOne;
+            trait2 = traitTwo;
+            cm = cM;
         }
 
-        public string Trait1 { get; set; }
-        public string Trait2 { get; set; }
+        public string trait1 { get; set; }
+        public string trait2 { get; set; }
 
-        public int CM { get; set; }
+        public int cm { get; set; }
     }
 }
