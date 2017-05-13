@@ -13,7 +13,7 @@ namespace GeCo.Model.Entities
 
         public bool Dominant { get; set; }
 
-        public char? Allosome { get; set; }
+        public int? Allosome { get; set; }
 
         public Trait Trait { get; set; }
     }

@@ -28,6 +28,26 @@ public class InheritanceController : Controller
         }
     }
 
+    [HttpGet("GetAllNames")]
+    public IActionResult GetNames()
+    {
+
+        IEnumerable<Inheritance> _inheritance = _inheritanceRepository.GetAll();
+        List<string> names = new List<string>();
+        foreach (Inheritance inheritance in _inheritance)
+        {
+            names.Add(inheritance.Name);
+        }
+        if (names != null)
+        {
+            return new OkObjectResult(names);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
     [HttpGet("Get/{id}")]
     public IActionResult Get(int id)
     {
