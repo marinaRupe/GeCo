@@ -24,9 +24,9 @@ public class GenotypeController : Controller
             genotypes.Add(genotype.FirstAllele.Symbol + genotype.SecondAllele.Symbol);
         }
 
-        if (genotypes != null)
+        if (_genotypes != null)
         {
-            return new OkObjectResult(genotypes);
+            return new OkObjectResult(_genotypes);
         }
         else
         {

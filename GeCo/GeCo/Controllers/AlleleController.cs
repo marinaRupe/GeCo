@@ -73,9 +73,9 @@ public class AlleleController : Controller
             alleles.Add(allele.Symbol);
         }
 
-        if (alleles != null)
+        if (_alleles != null)
         {
-            return new OkObjectResult(alleles);
+            return new OkObjectResult(_alleles);
         }
         else
         {
@@ -100,9 +100,9 @@ public class AlleleController : Controller
             alleles.Add(allele.Symbol);
         }
 
-        if (alleles != null)
+        if (_alleles != null)
         {
-            return new OkObjectResult(alleles);
+            return new OkObjectResult(_alleles);
         }
         else
         {

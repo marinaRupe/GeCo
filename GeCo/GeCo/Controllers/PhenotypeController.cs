@@ -23,9 +23,9 @@ public class PhenotypeController : Controller
         {
             phenotypes.Add(phenotype.Name);
         }
-        if (phenotypes != null)
+        if (_phenotypes != null)
         {
-            return new OkObjectResult(phenotypes);
+            return new OkObjectResult(_phenotypes);
         }
         else
         {

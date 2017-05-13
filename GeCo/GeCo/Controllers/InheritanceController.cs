@@ -38,9 +38,9 @@ public class InheritanceController : Controller
         {
             names.Add(inheritance.Name);
         }
-        if (names != null)
+        if (_inheritance != null)
         {
-            return new OkObjectResult(names);
+            return new OkObjectResult(_inheritance);
         }
         else
         {
