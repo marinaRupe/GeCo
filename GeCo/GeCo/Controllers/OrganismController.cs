@@ -29,7 +29,7 @@ public class OrganismController : Controller
         _context = context;
     }
 
-    [HttpGet("Id={id}")]
+    [HttpGet("Get/{id}")]
     public IActionResult GeById(int id)
     {
         IEnumerable<Organism> _organism = _organismRepository
@@ -68,9 +68,9 @@ public class OrganismController : Controller
     }
 
     [HttpGet("Name={name}")]
-    public IActionResult Get(string name)
+    public IActionResult Get(int id)
     {
-        Organism _organism = _context.Organisms.Where(o => o.Name.Equals(name)).Include(g => g.Traits).AsNoTracking().SingleOrDefault();
+        Organism _organism = _context.Organisms.Where(o => o.Id == id).Include(g => g.Traits).AsNoTracking().SingleOrDefault();
         IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Id == _organism.Id).Include(t => t.Inheritance).AsNoTracking().ToList();
 
         IEnumerable<Phenotype> _phenotypes;

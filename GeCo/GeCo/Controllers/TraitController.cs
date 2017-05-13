@@ -51,26 +51,10 @@ public class TraitController : Controller
         }
     }
 
-    [HttpGet("Name={name}")]
-    public IActionResult Get(string name)
+    [HttpGet("Organism={id}")]
+    public IActionResult GetTraitPairs(int id)
     {
-        IEnumerable<Trait> _trait = _traitRepository
-            .FindBy(s => s.Name == name);
-
-        if (_trait != null)
-        {
-            return new OkObjectResult(_trait);
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
-
-    [HttpGet("Organism={organism}")]
-    public IActionResult GetTraitPairs(string organism)
-    {
-        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Organism.Name.Equals(organism)).ToList();
+        IEnumerable<Trait> _trait = _context.Traits.Include(t => t.Organism).Where(t => t.Id == id).ToList();
 
         List<DoubleTrait> visited = new List<DoubleTrait>();
         List<TraitPairsView> TraitPairsView = new List<TraitPairsView>();
