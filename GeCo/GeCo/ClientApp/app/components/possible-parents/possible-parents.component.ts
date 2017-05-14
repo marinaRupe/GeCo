@@ -15,7 +15,9 @@ export class PossibleParentsComponent {
     @Input() traits1: ITrait[] = [];
     @Input() traits2: ITrait[] = [];
     @Input() characteristic: ICharacteristic;
-    @Input() inheritanceType : IInheritance;
+    @Input() inheritanceType: IInheritance;
+    @Input() cM: number;
+    private math : any = Math;
     private possibleParentsData: IParents[] = [];
 
     constructor(private inheritanceService: InheritanceService) { }
@@ -27,7 +29,7 @@ export class PossibleParentsComponent {
     }
 
     generatePossibleParentsData(): void {
-        let possibleParentsData = this.inheritanceService.getParentsForChild(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.childGenotype, this.childGenotype2);
+        let possibleParentsData = this.inheritanceService.getParentsForChild(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.childGenotype, this.childGenotype2, this.cM);
         possibleParentsData.sort((a, b) => (b.percentage - a.percentage));
         this.possibleParentsData = possibleParentsData;
     }

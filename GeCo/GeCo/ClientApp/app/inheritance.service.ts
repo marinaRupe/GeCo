@@ -40,7 +40,7 @@ export class InheritanceService {
         return "gecko2.png";
     }
 
-    getParentsForChild(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype) : IParents[] {
+    getParentsForChild(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype, cM:number = undefined) : IParents[] {
         let possibleParents: IParents[] = [];
         const isDihybrid = traits2.length > 0;
 
@@ -72,7 +72,7 @@ export class InheritanceService {
                             parentData = {
                                 parent1,
                                 parent2,
-                                percentage: this.getChildPercentage(characteristic, inheritanceType, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
+                                percentage: this.getChildPercentage(characteristic, inheritanceType, traits1, traits2, childGenotype, childGenotype2, parent1, parent2, cM)
                             };
                             possibleParents.push(parentData);
                         }
@@ -85,7 +85,7 @@ export class InheritanceService {
                     parentData = {
                         parent1,
                         parent2,
-                        percentage: this.getChildPercentage(characteristic, inheritanceType, traits1, traits2, childGenotype, childGenotype2, parent1, parent2)
+                        percentage: this.getChildPercentage(characteristic, inheritanceType, traits1, traits2, childGenotype, childGenotype2, parent1, parent2, cM)
                     };
                     possibleParents.push(parentData);
                 }
@@ -94,8 +94,8 @@ export class InheritanceService {
         return possibleParents;
     }
 
-    getChildPercentage(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype, parent1:IOrganism, parent2:IOrganism) {
-        let children: IChild[] = this.generateChildren(characteristic, inheritanceType, traits1, traits2, parent1, parent2);
+    getChildPercentage(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], childGenotype: IGenotype, childGenotype2: IGenotype, parent1: IOrganism, parent2: IOrganism, cM: number) {
+        let children: IChild[] = this.generateChildren(characteristic, inheritanceType, traits1, traits2, parent1, parent2, cM);
         const isDihybrid = traits2.length > 0;
 
         for (let i = 0; i < children.length; i++) {
@@ -114,13 +114,13 @@ export class InheritanceService {
         return 0; //TODO: generirati djecu i vratiti udio childGenotype u genotipovima djece
     }
 
-    generateChildren(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism) : IChild[] {
+    generateChildren(characteristic: ICharacteristic, inheritanceType: IInheritance, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism, cM: number=undefined) : IChild[] {
         let children: IChild[];
         const isDihybrid = traits2.length > 0;
         if (!isDihybrid) {
             children = this.monohybridCross(characteristic.first, inheritanceType.type1, traits1, parent1, parent2);
         } else {
-            children = this.dihybridCross(characteristic, inheritanceType, traits1, traits2, parent1, parent2);
+            children = this.dihybridCross(characteristic, inheritanceType, traits1, traits2, parent1, parent2, cM);
         }
         return children;
     }
@@ -155,7 +155,7 @@ export class InheritanceService {
         return children;
     }
 
-    dihybridCross(characteristic: ICharacteristic, inheritanceType : IInheritance, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism): IChild[] {
+    dihybridCross(characteristic: ICharacteristic, inheritanceType : IInheritance, traits1: ITrait[], traits2: ITrait[], parent1: IOrganism, parent2: IOrganism, cM: number): IChild[] {
         let children: IChild[] = [];
         let childrenGenotypes1 = this.generateGenotypes(parent1.trait1.genotype, parent2.trait1.genotype);
         let childrenGenotypes2 = this.generateGenotypes(parent1.trait2.genotype, parent2.trait2.genotype);
@@ -214,7 +214,7 @@ export class InheritanceService {
                         let childAlel3 = genotype2.substring(0, genotype2.length / 2);
                         let childAlel4 = genotype2.substring(genotype2.length / 2, genotype2.length);
                         //izvuc iz svojstva
-                        let cm = 0.36;
+                        let cm = (cM * 2) / 100;
                         let x = 0.5 - cm/4;
                         let y = cm/4;
 

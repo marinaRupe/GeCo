@@ -22,9 +22,9 @@
                 <input style="width:2em; height:2em;"
                        type="radio"
                        name="radiogroup"
-                       [checked]="idx === 0"
+                       [(ngModel)]="numberOfCharact"
                        [value]="idx+1"
-                       (change)="onNumberOfCharacteristicsChange(c)">
+                       (ngModelChange)="onNumberOfCharacteristicsChange(c)">
                 <label style="font-size:150%;">{{c}}</label>
             </span>
         </div>
@@ -50,17 +50,16 @@
             <input style="width:2em; height:2em;"
                    type="radio"
                    name="startRadioGroup"
-                   [checked]="true"
-                   [value]="true"
-                   (change)="onStartingOrganismChange(true)" />
+                   [(ngModel)]="startingFromParents"
+                   [value]="true"/>
             <label style="font-size:150%;">roditeljima djecu</label>
         </span>
         <span>
             <input style="width:2em; height:2em;"
                    type="radio"
                    name="startRadioGroup"
-                   [value]="false"
-                   (change)="onStartingOrganismChange(false)" />
+                   [(ngModel)]="startingFromParents"
+                   [value]="false"/>
             <label style="font-size:150%;">djetetu roditelje</label>
         </span>
     </div>
@@ -95,7 +94,7 @@
                        [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
                        [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
                        [characteristic]="characteristic"
-                       [inheritanceType]="inheritanceType"
+                       [inheritanceType]="inheritanceType" [cM] ="cM"
                        [traits1]="traits1" [traits2]="traits2">
             </offspring>
         </div>
@@ -115,7 +114,7 @@
         <div class="row">
             <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
                               [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
-                              [characteristic]="characteristic" [inheritanceType]="inheritanceType"
+                              [characteristic]="characteristic" [inheritanceType]="inheritanceType" [cM] ="cM"
                               [traits1]="traits1" [traits2]="traits2">
             </possible-parents>
         </div>
