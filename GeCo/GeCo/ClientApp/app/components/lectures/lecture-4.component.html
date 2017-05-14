@@ -1,0 +1,39 @@
+﻿<div class="col-md-11">
+    <h2>Vezani geni</h2>
+
+    <h4 style="text-align: justify;
+    text-justify: inter-word;">
+        <br />
+        <p>&nbsp;</p>
+        <p>Kromosomska teorija nasljeđivanja je svojevrsna nadogradnja na klasičnu Mendelovu teoriju. Njen ključni detalj je da su geni dijelovi kromosoma, a ponašanje kromosoma tijekom mejoze objašnjava ponašanje nasljeđivanja određenih svojstava.</p>
+        <p>Vezani geni su geni koji se nalaze na istom kromosomu, stoga su svojstva na koje ti geni utječu u većoj ili manjoj mjeri povezana.</p>
+        <p>&nbsp;</p>
+        <p>Zbog jednostavnosti ćemo u svakom trenutku pratiti vezu između samo dva specifična gena. Budući da pratimo paralelno nasljeđivanje dva gena, odnosno svojstva, nasljeđivanje vezanih gena je u aplikaciji dostupno samo pod dihibridno križanje. Ako niste upoznati s detaljima dihibridnog križanja, svakako ih obradite prije primjera.</p>
+        <p>Tipičan početni primjer za objašnjavanje vezanih gena u nastavi je onaj koji je ujedno i prvi otkriven &ndash; organizam vinske mušice. Vinska mušica je genetičarima pogodna jer ima malo kromosoma (točnije 3+1) i daje puno potomaka u kratkom vremenu.</p>
+        <p>Promotrit ćemo povezanost gena za oblik krila i boju tijela vinske mušice. Mutirali aleli koji uzrokuju <em>crno</em> tijelo (<strong>b-</strong>) i <em>zakržljala</em> krila (<strong>vg-</strong>) su recesivni, dok su dominantni <em>smeđe</em> tijelo (<strong>b+</strong>) i <em>normalna</em> krila (<strong>vg+</strong>). Pokrenite <a [routerLink]="['/recombinator']"><em>rekombinator</em></a> s ovim primjerom gdje postavljate jednog roditelja kao heterozigota, a drugog kao recesivnog homozigota (za oba svojstva). &Scaron;to ste dobili?</p>
+        <p>&nbsp;</p>
+        <p>Roditelji bi vam trebali biti postavljeni kao <strong><em>b+b-vg+vg-</em></strong> i <strong><em>b-b-vg-vg-</em></strong>. Pogledajte malo omjere fenotipova djece koje ste dobili. U standardnom dominantno-recesivnom nasljeđivanju očekivali bismo jednake omjere, no to ovdje nije slučaju. Da to shvatimo promotrimo prvo od kakvih se kromosoma sastoje stanice roditelja:</p>
+        <ul>
+            <li><strong><em>b+b-vg+vg-</em></strong> ima jedan kromosom s <strong><em>b+v+ </em></strong>i jedan s <strong><em>b-vg-</em></strong></li>
+            <li><strong><em>b-b-vg-vg- </em></strong>ima dva kromosoma s <strong><em>b-vg-</em></strong></li>
+        </ul>
+        <p>Bacite još jednom oko na rezultate koje ste dobili u <a [routerLink]="['/recombinator']"><em>rekombinatoru</em></a>. Primijetit ćete da su većina djece proizašle kao kombinacije kromosoma roditelja, odnosno da su većina djece <strong><em>b+b-vg+vg-</em></strong> i <strong><em>b-b-vg-vg-</em></strong>. Kad malo bolje razmislimo o tom što znači da su geni na istom kromosomu, taj rezultat je ustvari jako logičan.</p>
+        <p>Ako se dva gena, odnosno dva alela nalaze na istom kromosomu, ne možemo sparivati alele na načine koji želimo, nego moramo poštovati kako su oni već međusobno spareni. Drugim riječima, mi ne radimo kombinacije alela, već kombinacije kromosoma. To smo radili i prije, samo su geni bili na drugim kromosomima pa je bilo svejedno gledamo li na to kao kombiniranje alela ili kromosoma.</p>
+        <p>&nbsp;</p>
+        <p>&bdquo;Ok, ali zašto smo onda ipak dobili neku djecu koja ne spadaju pod to pravilo?&ldquo; E to uzrokuje jedan fantastičan mehanizam izmjene genetičkog materijala koji se zove opća (homologna) rekombinacija, odnosno <em>crossing over</em>. U mejozi dva kromosoma (istog roditelja) mogu međusobno izmijeniti male dijelove svog genetskog materijala. Time stvaraju potpuno nove kromosome i osiguravaju genetičku raznolikost roditelja.</p>
+        <p>U našem primjeru se to događa kod roditelja <strong><em>b+b-vg+vg-</em></strong>, budući da drugi ima jednake kromosome tako da je bilo kakva izmjena gena nebitna. Od tog roditelja nastaju kromosomi <strong><em>b+v- </em></strong>i <strong><em>b-vg+</em></strong>. U kolikoj mjeri se to događa ovisi o tome koliko su međusobno udaljeni ovi vezani geni. &Scaron;to su geni bliže to je manja šansa da će se pri izmjeni materijala odvojiti jedan od drugoga, tj. ako jedan gen prijeđe na drugi kromosom, veća je šansa da će i drugi.</p>
+        <p>&nbsp;</p>
+        <p>Geni koji su jedan pored drugog ili na zanemarivoj udaljenosti zovu se POTPUNO VEZANI GENI. Kod njih je izmjena materijala za te gene nemoguća. Oni drugi (koje promatramo u ovom primjeru) zovu se DJELOMIČNO VEZANI GENI i njihova udaljenost se mjeri u cM [centimorgan].</p>
+        <p>Centimorgan nije samo neka slučajna mjerna jedinica koja nam samo kaže koliko su udaljeni geni na kromosomu. Ona nam izravno kaže koliki je udio rekombiniranih potomaka. Vratite se nazad u <a [routerLink]="['/recombinator']"><em>rekombinator</em></a> na početni primjer, izračunajte udio rekombiniranih potomaka u postotku. Rekombinirani potomci su oni sa <em>sivim</em> tijelom i <em>zakržljalim</em> krilima (<strong><em>b+b-vg-vg-</em></strong>) i oni s <em>crnim</em> tijelom i <em>normalnim</em> krilima (<strong><em>b-b-vg+vg-</em></strong>). Možda će vam trebati kalkulator.</p>
+        <p>Jeste? Trebali biste dobiti 18% (9% <strong><em>b+b-vg-vg-</em></strong> + 9% <strong><em>b-b-vg+vg-</em></strong>), jer je udaljenost gena za oblik krila i boju tijela 18 cM. Odnosno pravilnije bi bilo reći da je ta udaljenost toliko upravo jer je 18% rekombiniranih potomaka. Udaljenost gena na kromosomu se mjeri eksperimentalno križanjem roditelja s postavkom genotipova kao u ovom primjeru.</p>
+        <p>&nbsp;</p>
+        <p>Uzmite za drugi primjer kombinaciju boje tijela i boje očiju (isto na vinskoj mušici) u sličnoj postavci roditelja kao ovdje. Pokušajte razjasniti što se dogodilo u tom primjeru i sami izračunati cM.<br /> (Hint: cM je 9)</p>
+        <p>&nbsp;</p>
+
+        <a [routerLink]="['/lectures']">
+            <button class="btn btn-default">
+                <span class='glyphicon glyphicon-menu-left'></span> Natrag na uvodnu lekciju
+            </button>
+        </a>
+    </h4>
+</div>

@@ -1,6 +1,7 @@
 ﻿import { ChildOrganismComponent } from '../child-organism/child-organism.component';
 import { Component, Input } from '@angular/core';
 import { ITrait, IChild, IOrganism, IInheritance, ICharacteristic } from '../../shared/types';
+import { LINKED_GENES_INHERITANCE } from '../../shared/constants';
 import { InheritanceService } from "../../inheritance.service";
 
 @Component({
@@ -14,7 +15,8 @@ export class OffspringComponent {
     @Input() traits1: ITrait[] = [];
     @Input() traits2: ITrait[] = [];
     @Input() characteristic: ICharacteristic;
-    @Input() inheritanceType : IInheritance;
+    @Input() inheritanceType: IInheritance;
+    @Input() cM: number;
     private children : IChild[] = [];
     private stats: IStat[] = Array(2);
 
@@ -28,13 +30,13 @@ export class OffspringComponent {
     }
 
     generateChildren(): IChild[] {
-        return this.inheritanceService.generateChildren(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.parent1, this.parent2);
+        return this.inheritanceService.generateChildren(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.parent1, this.parent2, this.cM);
     }
 
     setStatistics(): void {
         let genotypeStats = {};
         let phenotypeStats = {};
-        const areLinkedGenes = this.inheritanceType.type1 === "vezani geni" && this.inheritanceType.type2 === "vezani geni";
+        const areLinkedGenes = this.inheritanceType.type1 === LINKED_GENES_INHERITANCE && this.inheritanceType.type2 === LINKED_GENES_INHERITANCE;
         let childrenCount = areLinkedGenes ? this.children.length * 100 : this.children.length;
         let isDihybrid = this.traits2.length > 0;
 

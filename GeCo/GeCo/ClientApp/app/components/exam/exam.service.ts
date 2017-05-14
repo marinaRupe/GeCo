@@ -94,7 +94,7 @@ export class ExamService {
             char.traits,
             [],
             { trait1: parent1, trait2: {} as any },
-            { trait1: parent2, trait2: {} as any }
+            { trait1: parent2, trait2: {} as any },
         );
 
         let counter = 0;

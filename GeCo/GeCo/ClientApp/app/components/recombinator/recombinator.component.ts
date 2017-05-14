@@ -35,6 +35,7 @@ export class RecombinatorComponent implements OnInit {
     traits1: ITrait[];
     traits2: ITrait[];
     linkedGenes;
+    cM: number;
 
     constructor(private geneticDataService: GeneticDataService) {}
 
@@ -65,13 +66,7 @@ export class RecombinatorComponent implements OnInit {
             this.organisms = <any>result;
             this.organismSelected = this.organismsList[0] || '';
 
-            let id: string;
-            for (let i = 0; i < this.organisms.length; i++) {
-                if (this.organisms[i].name === this.organismSelected) {
-                    id = this.organisms[i].id;
-                    break;
-                }
-            }
+            let id = this.getOrganismId(this.organismSelected);
 
             this.geneticDataService.getDataForOrganism(id).then((result) => {
                 this.organismData = (<any>result).characteristics;
@@ -89,6 +84,7 @@ export class RecombinatorComponent implements OnInit {
                         this.inheritanceTypesOptions = this.changeInheritanceTypes(this.inheritanceTypesAll);
                         this.inheritanceTypeSelected = this.changeInheritanceType(true);
                         this.changeTraits(true);
+                        this.changeCm();
 
                         this.isLoading = false;
                     });
@@ -107,6 +103,7 @@ export class RecombinatorComponent implements OnInit {
         this.inheritanceTypesOptions = this.changeInheritanceTypes(this.inheritanceTypesAll);
         this.inheritanceTypeSelected = this.changeInheritanceType();
         this.changeTraits();
+        this.changeCm();
     }
 
     onStartingOrganismChange(startingFromParents: boolean) : void {
@@ -114,15 +111,10 @@ export class RecombinatorComponent implements OnInit {
     }
 
     onSelectOrganismChange(event) {
-        let id: string;
-        for (let i = 0; i < this.organisms.length; i++) {
-            if (this.organisms[i].name === this.organismSelected) {
-                id = this.organisms[i].id;
-                break;
-            }
-        }
+        let id = this.getOrganismId(this.organismSelected);
         this.isLoading = true;
         this.numberOfCharact = 1;
+        this.startingFromParents = true;
         this.geneticDataService.getDataForOrganism(id)
             .then((result) => {
                 this.organismData = (<any>result).characteristics;
@@ -137,6 +129,7 @@ export class RecombinatorComponent implements OnInit {
                     this.inheritanceTypesOptions = this.changeInheritanceTypes(this.inheritanceTypesAll);
                     this.inheritanceTypeSelected = this.changeInheritanceType(true);
                     this.changeTraits(true);
+                    this.changeCm();
 
                     this.isLoading = false;
                 });
@@ -148,6 +141,7 @@ export class RecombinatorComponent implements OnInit {
         this.changeCharacteristic();
         this.inheritanceTypeSelected = this.changeInheritanceType(true);
         this.changeTraits(true);
+        this.changeCm();
     }
 
     // TODO: change this
@@ -170,6 +164,7 @@ export class RecombinatorComponent implements OnInit {
 
             this.traits1 = [];
         }
+        this.changeCm();
     }
 
     private changeCharacteristic() {
@@ -351,6 +346,30 @@ export class RecombinatorComponent implements OnInit {
             }
         }
         return [];
+    }
+
+    private getOrganismId(name: string) {
+        let id: string = '';
+        for (let i = 0; i < this.organisms.length; i++) {
+            if (this.organisms[i].name === this.organismSelected) {
+                id = this.organisms[i].id;
+                break;
+            }
+        }
+        return id;
+    }
+
+    private changeCm() {
+        this.cM = 0;
+        if (this.inheritanceType.type1 === LINKED_GENES_INHERITANCE && this.inheritanceType.type2 === LINKED_GENES_INHERITANCE) {
+            for (let i = 0; i < this.linkedGenes.length; i++) {
+                if (this.characteristic.first === this.linkedGenes[i].trait1 &&
+                    this.characteristic.second === this.linkedGenes[i].trait2) {
+                    this.cM = this.linkedGenes[i].cm;
+                    break;
+                }
+            }
+        }
     }
 }
 

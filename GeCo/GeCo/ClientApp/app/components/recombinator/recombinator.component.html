@@ -95,7 +95,7 @@
                        [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
                        [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
                        [characteristic]="characteristic"
-                       [inheritanceType]="inheritanceType"
+                       [inheritanceType]="inheritanceType" [cM] ="cM"
                        [traits1]="traits1" [traits2]="traits2">
             </offspring>
         </div>
@@ -115,7 +115,7 @@
         <div class="row">
             <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
                               [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
-                              [characteristic]="characteristic" [inheritanceType]="inheritanceType"
+                              [characteristic]="characteristic" [inheritanceType]="inheritanceType" [cM] ="cM"
                               [traits1]="traits1" [traits2]="traits2">
             </possible-parents>
         </div>

@@ -9,6 +9,8 @@ import { RecombinatorComponent } from './components/recombinator/recombinator.co
 import { LecturesComponent } from './components/lectures/lectures.component';
 import { Lecture1Component } from './components/lectures/lecture-1.component';
 import { Lecture2Component } from './components/lectures/lecture-2.component';
+import { Lecture3Component } from './components/lectures/lecture-3.component';
+import { Lecture4Component } from './components/lectures/lecture-4.component';
 import { ExamComponent } from './components/exam/exam.component';
 import { HelpComponent } from './components/help/help.component';
 import { ParentOrganismComponent } from './components/parent-organism/parent-organism.component';
@@ -29,6 +31,8 @@ import { InheritanceService } from './inheritance.service'
         LecturesComponent,
         Lecture1Component,
         Lecture2Component,
+        Lecture3Component,
+        Lecture4Component,
         ExamComponent,
         HelpComponent,
         ParentOrganismComponent,
@@ -45,6 +49,8 @@ import { InheritanceService } from './inheritance.service'
             { path: 'recombinator', component: RecombinatorComponent },
             { path: 'lectures/dominantno-recesivno', component: Lecture1Component },
             { path: 'lectures/nepotpuno-kodominantno', component: Lecture2Component },
+            { path: 'lectures/spolni-kromosomi', component: Lecture3Component },
+            { path: 'lectures/vezani-geni', component: Lecture4Component },
             { path: 'lectures', component: LecturesComponent },
             { path: 'exam', component: ExamComponent },
             { path: 'help', component: HelpComponent },
