@@ -5,6 +5,7 @@ import { ILinkedGenes, ITrait } from "./shared/types";
 @Injectable()
 export class GeneticDataService {
     http: Http;
+    data: {};
 
     constructor(http: Http) {
         this.http = http;
@@ -18,11 +19,47 @@ export class GeneticDataService {
         });
     }
 
-    getDataForOrganism(organismId: string) {
+    getAllData() {
+        return new Promise((resolve, reject) => {
+            this.getOrganisms().then((result) => {
+                let organisms = <any>result;
+                let thisObj = this;
+                this.data = {};
+
+                var promises = [];
+                for (var i = 0; i < organisms.length; i++) {
+                    var promise = this.getDataOrganismId(organisms[i].id);
+                    promises.push(promise);
+                }
+
+                Promise.all(promises).then((values) => {
+                    values.forEach(v => {
+                        for (let i = 0; i < organisms.length; i++) {
+                            if (organisms[i].id === v[0]) {
+                                this.data[organisms[i].name] = v[1].characteristics;
+                            }
+                        }  
+                    });
+                    resolve(this.data);
+                });
+            });
+        });
+    }
+
+    private getDataOrganismId(organismId: string) {
         return new Promise((resolve, reject) => {
             this.http.get('/api/Organism/GetData/' + organismId).subscribe(result => {
-                resolve(result.json());
+                resolve([organismId, result.json()]);
             });
+        });
+    }
+
+    getDataForOrganism(organismId: string) {
+        return new Promise((resolve, reject) => {
+            this.http.get('/api/Organism/GetData/' + organismId)
+                .subscribe(result => {
+                    resolve(result.json());
+                });
         });
     }
 

@@ -69,6 +69,7 @@ export class RecombinatorComponent implements OnInit {
             for (let i = 0; i < this.organisms.length; i++) {
                 if (this.organisms[i].name === this.organismSelected) {
                     id = this.organisms[i].id;
+                    break;
                 }
             }
 
@@ -117,6 +118,7 @@ export class RecombinatorComponent implements OnInit {
         for (let i = 0; i < this.organisms.length; i++) {
             if (this.organisms[i].name === this.organismSelected) {
                 id = this.organisms[i].id;
+                break;
             }
         }
         this.isLoading = true;

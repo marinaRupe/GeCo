@@ -21,7 +21,7 @@ export class ExamService {
                 .then((result) => {
                     this.organisms = (<any>result).map(o => o.name);
                     
-                    this.geneticDataService.getData().then((result) => {
+                    this.geneticDataService.getAllData().then((result) => {
                         this.data = result;
 
                             this.geneticDataService.getLinkedGenesAll()
@@ -35,7 +35,8 @@ export class ExamService {
                                         this.getQuestionType4.bind(this),
                                         this.getQuestionType5.bind(this),
                                         this.getQuestionType6.bind(this),
-                                        this.getQuestionType7.bind(this)
+                                        this.getQuestionType7.bind(this),
+                                        this.getQuestionType8.bind(this)
                                     ];
                                     let questions = [];
                                     for (let i = 0; i < numberOfQuestions; i++) {
