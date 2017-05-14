@@ -94,7 +94,7 @@ export class RecombinatorComponent implements OnInit {
     }
 
     onNumberOfCharacteristicsChange(entry) {
-        this.numberOfCharact = this.crossTypes.indexOf(entry) + 1;
+        //this.numberOfCharact = this.crossTypes.indexOf(entry) + 1;
         this.getCharacteristicsOptions();
 
         this.characteristicSelected = this.characteristicsOptions[0] || '';
@@ -106,15 +106,10 @@ export class RecombinatorComponent implements OnInit {
         this.changeCm();
     }
 
-    onStartingOrganismChange(startingFromParents: boolean) : void {
-        this.startingFromParents = startingFromParents;
-    }
-
     onSelectOrganismChange(event) {
         let id = this.getOrganismId(this.organismSelected);
         this.isLoading = true;
-        this.numberOfCharact = 1;
-        this.startingFromParents = true;
+        //this.numberOfCharact = 1;
         this.geneticDataService.getDataForOrganism(id)
             .then((result) => {
                 this.organismData = (<any>result).characteristics;

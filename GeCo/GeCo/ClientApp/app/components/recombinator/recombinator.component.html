@@ -22,9 +22,9 @@
                 <input style="width:2em; height:2em;"
                        type="radio"
                        name="radiogroup"
-                       [checked]="idx === 0"
+                       [(ngModel)]="numberOfCharact"
                        [value]="idx+1"
-                       (change)="onNumberOfCharacteristicsChange(c)">
+                       (ngModelChange)="onNumberOfCharacteristicsChange(c)">
                 <label style="font-size:150%;">{{c}}</label>
             </span>
         </div>
@@ -50,17 +50,16 @@
             <input style="width:2em; height:2em;"
                    type="radio"
                    name="startRadioGroup"
-                   [checked]="true"
-                   [value]="true"
-                   (change)="onStartingOrganismChange(true)" />
+                   [(ngModel)]="startingFromParents"
+                   [value]="true"/>
             <label style="font-size:150%;">roditeljima djecu</label>
         </span>
         <span>
             <input style="width:2em; height:2em;"
                    type="radio"
                    name="startRadioGroup"
-                   [value]="false"
-                   (change)="onStartingOrganismChange(false)" />
+                   [(ngModel)]="startingFromParents"
+                   [value]="false"/>
             <label style="font-size:150%;">djetetu roditelje</label>
         </span>
     </div>
