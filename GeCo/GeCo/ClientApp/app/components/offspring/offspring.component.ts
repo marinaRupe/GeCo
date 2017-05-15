@@ -19,6 +19,7 @@ export class OffspringComponent {
     @Input() cM: number;
     private children : IChild[] = [];
     private stats: IStat[] = Array(2);
+    private linkedGenes = LINKED_GENES_INHERITANCE;
 
     constructor(private inheritanceService: InheritanceService) {}
     
