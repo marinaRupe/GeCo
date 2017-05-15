@@ -1,46 +1,33 @@
 ﻿using GeCo.Data.Abstract;
-using GeCo.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-[Route("api/[controller]")]
-public class TagController : Controller
+namespace GeCo.Controllers
 {
-    private ITagRepository _tagRepository;
-    public TagController(ITagRepository tagRepository)
+    [Route("api/[controller]")]
+    public class TagController : Controller
     {
-        _tagRepository = tagRepository;
-    }
+        private readonly ITagRepository _tagRepository;
 
-    [HttpGet("GetAll")]
-    public IActionResult Get()
-    {
-
-        IEnumerable<Tag> _tag = _tagRepository.GetAll();
-
-        if (_tag != null)
+        public TagController(ITagRepository tagRepository)
         {
-            return new OkObjectResult(_tag);
+            _tagRepository = tagRepository;
         }
-        else
-        {
-            return NotFound();
-        }
-    }
 
-    [HttpGet("Get/{id}")]
-    public IActionResult Get(int id)
-    {
-        IEnumerable<Tag> _tag = _tagRepository
-            .FindBy(s => s.Id == id);
-
-        if (_tag != null)
+        [HttpGet("GetAll")]
+        public IActionResult Get()
         {
-            return new OkObjectResult(_tag);
+            return new OkObjectResult(_tagRepository.GetAll());
         }
-        else
+
+        [HttpGet("Get/{id}")]
+        public IActionResult Get(int id)
         {
-            return NotFound();
+            var tag = _tagRepository .FindBy(s => s.Id == id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+            return new OkObjectResult(tag);
         }
     }
 }

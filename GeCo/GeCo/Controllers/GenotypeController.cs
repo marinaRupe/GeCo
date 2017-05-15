@@ -1,46 +1,33 @@
 ﻿using GeCo.Data.Abstract;
-using GeCo.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-[Route("api/[controller]")]
-public class GenotypeController : Controller
+namespace GeCo.Controllers
 {
-    private IGenotypeRepository _genotypeRepository;
-    public GenotypeController(IGenotypeRepository genotypeRepository)
+    [Route("api/[controller]")]
+    public class GenotypeController : Controller
     {
-        _genotypeRepository = genotypeRepository;
-    }
+        private readonly IGenotypeRepository _genotypeRepository;
 
-    [HttpGet("GetAll")]
-    public IActionResult Get()
-    {
-
-        IEnumerable<Genotype> _genotypes = _genotypeRepository.GetAll();
-
-        if (_genotypes != null)
+        public GenotypeController(IGenotypeRepository genotypeRepository)
         {
-            return new OkObjectResult(_genotypes);
+            _genotypeRepository = genotypeRepository;
         }
-        else
-        {
-            return NotFound();
-        }
-    }
 
-    [HttpGet("Get/{id}")]
-    public IActionResult Get(int id)
-    {
-        IEnumerable<Genotype> _genotype = _genotypeRepository
-            .FindBy(s => s.Id == id);
-
-        if (_genotype != null)
+        [HttpGet("GetAll")]
+        public IActionResult Get()
         {
-            return new OkObjectResult(_genotype);
+            return new OkObjectResult(_genotypeRepository.GetAll());
         }
-        else
+
+        [HttpGet("Get/{id}")]
+        public IActionResult Get(int id)
         {
-            return NotFound();
+            var genotype = _genotypeRepository.FindBy(s => s.Id == id);
+            if (genotype == null)
+            {
+                return NotFound();
+            }
+            return new OkObjectResult(genotype);
         }
     }
 }

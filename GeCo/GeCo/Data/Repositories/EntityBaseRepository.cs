@@ -13,7 +13,7 @@ namespace GeCo.Data.Repositories
         where T : class, IEntityBase, new()
     {
 
-        private GeCoDbContext _context;
+        private readonly GeCoDbContext _context;
 
         #region Properties
         public EntityBaseRepository(GeCoDbContext context)
@@ -23,7 +23,7 @@ namespace GeCo.Data.Repositories
         #endregion
         public virtual IEnumerable<T> GetAll()
         {
-            return _context.Set<T>().AsEnumerable();
+            return _context.Set<T>().AsNoTracking();
         }
 
         public virtual int Count()
@@ -63,7 +63,7 @@ namespace GeCo.Data.Repositories
 
         public virtual IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate);
+            return _context.Set<T>().Where(predicate).AsNoTracking();
         }
 
         public virtual void Add(T entity)

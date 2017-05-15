@@ -16,7 +16,8 @@ namespace GeCo.Model
 
         public bool Equals(DoubleTrait other)
         {
-            return TraitOne.Id == other.TraitOne.Id && TraitTwo.Id == other.TraitTwo.Id;
+            return (TraitOne.Id == other.TraitOne.Id && TraitTwo.Id == other.TraitTwo.Id)
+                   || (TraitOne.Id == other.TraitTwo.Id && TraitTwo.Id == other.TraitOne.Id);
         }
 
         public Trait TraitOne { get; set; }
