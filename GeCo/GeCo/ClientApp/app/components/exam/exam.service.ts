@@ -405,10 +405,11 @@ export class ExamService {
         const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
         const characteristic: string = char.characteristic;
         const recessiveTraitFemale: ITrait = char.traits[3];
+        const recessiveTraitFemaleGenotype: string = recessiveTraitFemale.genotype.allele1 + recessiveTraitFemale.genotype.allele2;
         const childTrait: string = child.phenotype;
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako majka ima svojstvo ${characteristic} (genotip ${recessiveTraitFemale.genotype}),
+        q.question = `Za organizam ${organism}: ako majka ima svojstvo ${characteristic} (genotip ${recessiveTraitFemaleGenotype}),
         koliki postotak muške djece će imati svojstvo ${characteristic}? Riječ je o nasljeđivanju putem spolnih kromosoma.`;
 
         q.answers = ["0%", "25%", "50%", "75%", "100%"];

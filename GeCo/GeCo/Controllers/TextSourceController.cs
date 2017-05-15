@@ -1,85 +1,68 @@
-﻿using GeCo.Data.Abstract;
+﻿using System.Collections.Generic;
+using GeCo.Data.Abstract;
 using GeCo.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-[Route("api/[controller]")]
-public class TextSourceController : Controller
+namespace GeCo.Controllers
 {
-    private ITextSourceRepository _textSourceRepository;
-    public TextSourceController(ITextSourceRepository textSourceRepository)
+    [Route("api/[controller]")]
+    public class TextSourceController : Controller
     {
-        _textSourceRepository = textSourceRepository;
+        private readonly ITextSourceRepository _textSourceRepository;
+
+        public TextSourceController(ITextSourceRepository textSourceRepository)
+        {
+            _textSourceRepository = textSourceRepository;
+        }
+
+        [HttpGet("GetAll")]
+        public IActionResult Get()
+        {
+            return new OkObjectResult(_textSourceRepository.GetAll());
+        }
+
+        [HttpGet("Get/{id}")]
+        public IActionResult Get(int id)
+        {
+            var textSource = _textSourceRepository.FindBy(s => s.Id == id);
+            if (textSource == null)
+            {
+                return NotFound();
+            }
+            return new OkObjectResult(textSource);
+        }
+
+        [HttpGet("Name={name}")]
+        public IActionResult Get(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return NotFound();
+            }
+            var textSource = _textSourceRepository.FindBy(s => s.Name == name);
+            if (textSource == null)
+            {
+                return NotFound();
+            }
+            return new OkObjectResult(textSource);
+        }
+        //[HttpDelete("Remove/{Id}")]
+        //public IActionResult Delete(int id)
+        //{
+        //    TextSource _textSource = _textSourceRepository.GetSingle(id);
+
+        //    if (_textSource == null)
+        //    {
+        //        return new NotFoundResult();
+        //    }
+        //    else
+        //    {
+        //        _textSourceRepository.Delete(_textSource);
+
+        //        _textSourceRepository.Commit();
+
+        //        return new NoContentResult();
+        //    }
+        //}
     }
-
-    [HttpGet("GetAll")]
-    public IActionResult Get()
-    {
-
-        IEnumerable<TextSource> _textSource = _textSourceRepository.GetAll();
-
-        if (_textSource != null)
-        {
-            return new OkObjectResult(_textSource);
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
-
-    [HttpGet("Get/{id}")]
-    public IActionResult Get(int id)
-    {
-        IEnumerable<TextSource> _textSource = _textSourceRepository
-            .FindBy(s => s.Id == id);
-
-        if (_textSource != null)
-        {
-            return new OkObjectResult(_textSource);
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
-
-    [HttpGet("Name={name}")]
-    public IActionResult Get(string name)
-    {
-        if (string.IsNullOrEmpty(name))
-        {
-            return NotFound();
-        }
-
-        IEnumerable<TextSource> _textSource = _textSourceRepository
-            .FindBy(s => s.Name == name);
-
-        if (_textSource != null)
-        {
-            return new OkObjectResult(_textSource);
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
-    //[HttpDelete("Remove/{Id}")]
-    //public IActionResult Delete(int id)
-    //{
-    //    TextSource _textSource = _textSourceRepository.GetSingle(id);
-
-    //    if (_textSource == null)
-    //    {
-    //        return new NotFoundResult();
-    //    }
-    //    else
-    //    {
-    //        _textSourceRepository.Delete(_textSource);
-
-    //        _textSourceRepository.Commit();
-
-    //        return new NoContentResult();
-    //    }
-    //}
 }

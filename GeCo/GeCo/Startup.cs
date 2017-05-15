@@ -39,7 +39,7 @@ namespace GeCo
         {
             // Add framework services.
             services.AddDbContext<GeCoDbContext>(options =>
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IAlleleRepository, AlleleRepository>();
             services.AddScoped<IGenotypeRepository, GenotypeRepository>();
@@ -49,6 +49,9 @@ namespace GeCo
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ITextSourceRepository, TextSourceRepository>();
             services.AddScoped<ITraitRepository, TraitRepository>();
+
+            // Add in-memory caching
+            services.AddMemoryCache();
 
             services.AddMvc();
 

@@ -1,46 +1,33 @@
 ﻿using GeCo.Data.Abstract;
-using GeCo.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-[Route("api/[controller]")]
-public class InheritanceController : Controller
+namespace GeCo.Controllers
 {
-    private IInheritanceRepository _inheritanceRepository;
-    public InheritanceController(IInheritanceRepository inheritanceRepository)
+    [Route("api/[controller]")]
+    public class InheritanceController : Controller
     {
-        _inheritanceRepository = inheritanceRepository;
-    }
+        private readonly IInheritanceRepository _inheritanceRepository;
 
-    [HttpGet("GetAll")]
-    public IActionResult Get()
-    {
-
-        IEnumerable<Inheritance> _inheritance = _inheritanceRepository.GetAll();
-
-        if (_inheritance != null)
+        public InheritanceController(IInheritanceRepository inheritanceRepository)
         {
-            return new OkObjectResult(_inheritance);
+            _inheritanceRepository = inheritanceRepository;
         }
-        else
-        {
-            return NotFound();
-        }
-    }
 
-    [HttpGet("Get/{id}")]
-    public IActionResult Get(int id)
-    {
-        IEnumerable<Inheritance> _inheritance = _inheritanceRepository
-            .FindBy(s => s.Id == id);
-
-        if (_inheritance != null)
+        [HttpGet("GetAll")]
+        public IActionResult Get()
         {
-            return new OkObjectResult(_inheritance);
+            return new OkObjectResult(_inheritanceRepository.GetAll());
         }
-        else
+
+        [HttpGet("Get/{id}")]
+        public IActionResult Get(int id)
         {
-            return NotFound();
+            var inheritance = _inheritanceRepository.FindBy(s => s.Id == id);
+            if (inheritance == null)
+            {
+                return NotFound();
+            }
+            return new OkObjectResult(inheritance);
         }
     }
 }
