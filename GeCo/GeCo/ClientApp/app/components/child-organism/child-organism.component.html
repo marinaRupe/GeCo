@@ -1,80 +1,81 @@
-﻿<div class="panel" [ngClass]="{'panel-primary': canChange, 'panel-info': !canChange}">
-    <div class="panel-heading">
-        <h3>DIJETE</h3>
-    </div>
-        
-    <div class="panel-body">
-        <div class="col-md-6">
-            <div *ngIf="canChange">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Podesi svojstvo: </h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <select [(ngModel)]="trait1" class="form-control char-select">
-                            <option *ngFor="let t of traits1" [ngValue]="t">{{ t.phenotype + ' (' + t.type + ')' }}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+﻿<div>
+    <div class="panel" [ngClass]="{'panel-primary': canChange, 'panel-info': !canChange}">
+        <div class="panel-heading">
+            <h3>DIJETE</h3>
+        </div>
 
-            <div *ngIf="canChange && traits2.length > 0">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h4>Podesi svojstvo 2: </h4>
+        <div class="panel-body">
+            <div class="col-md-6">
+                <div *ngIf="canChange">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Podesi svojstvo: </h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <select [(ngModel)]="trait1" class="form-control char-select">
+                                <option *ngFor="let t of traits1" [ngValue]="t">{{ t.phenotype + ' (' + t.type + ')' }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <select [(ngModel)]="trait2" class="form-control char-select">
-                            <option *ngFor="let t of traits2" [ngValue]="t">{{ t.phenotype + ' (' + t.type + ')' }}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="traits2.length === 0">
-                <div *ngIf="trait1.genotype" class="row">
-                    <div class="col-sm-12">
-                        <h4>Genotip: {{ trait1.genotype.allele1 + trait1.genotype.allele2 }}</h4>
-                    </div>
-                </div>
-                <div *ngIf="trait1.phenotype" class="row">
-                    <div class="col-sm-12">
-                        <h4>Fenotip: {{ characteristic.first + "-" + trait1.phenotype }}</h4>
-                    </div>
-                </div>
-                <div *ngIf="trait1.type" class="row">
-                    <div class="col-sm-12">
-                        <h4>Tip: {{ trait1.type }}</h4>
-                    </div>
-                </div>
-            </div>
 
-            <div *ngIf="traits2.length > 0">
-                <div *ngIf="trait1.genotype && trait2.genotype" class="row">
-                    <div class="col-sm-12">
-                        <h4>Genotip: {{ trait1.genotype.allele1 + trait1.genotype.allele2 + trait2.genotype.allele1 + trait2.genotype.allele2 }}</h4>
+                <div *ngIf="canChange && traits2.length > 0">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Podesi svojstvo 2: </h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <select [(ngModel)]="trait2" class="form-control char-select">
+                                <option *ngFor="let t of traits2" [ngValue]="t">{{ t.phenotype + ' (' + t.type + ')' }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div *ngIf="trait1.phenotype && trait2.phenotype" class="row">
-                    <div class="col-sm-12">
-                        <h4>Fenotip: {{ characteristic.first + "-" + trait1.phenotype + " + " + characteristic.second + "-" + trait2.phenotype }}</h4>
+                <div *ngIf="traits2.length === 0">
+                    <div *ngIf="trait1.genotype" class="row">
+                        <div class="col-sm-12">
+                            <h4>Genotip: {{ trait1.genotype.allele1 + trait1.genotype.allele2 }}</h4>
+                        </div>
+                    </div>
+                    <div *ngIf="trait1.phenotype" class="row">
+                        <div class="col-sm-12">
+                            <h4>Fenotip: {{ characteristic.first + "-" + trait1.phenotype }}</h4>
+                        </div>
+                    </div>
+                    <div *ngIf="trait1.type" class="row">
+                        <div class="col-sm-12">
+                            <h4>Tip: {{ trait1.type }}</h4>
+                        </div>
                     </div>
                 </div>
-                <div *ngIf="trait1.type && trait2.type" class="row">
-                    <div class="col-sm-12">
-                        <h4>Tip: {{ trait2.type + " + " + trait2.type }}</h4>
+
+                <div *ngIf="traits2.length > 0">
+                    <div *ngIf="trait1.genotype && trait2.genotype" class="row">
+                        <div class="col-sm-12">
+                            <h4>Genotip: {{ trait1.genotype.allele1 + trait1.genotype.allele2 + trait2.genotype.allele1 + trait2.genotype.allele2 }}</h4>
+                        </div>
+                    </div>
+                    <div *ngIf="trait1.phenotype && trait2.phenotype" class="row">
+                        <div class="col-sm-12">
+                            <h4>Fenotip: {{ characteristic.first + "-" + trait1.phenotype + " + " + characteristic.second + "-" + trait2.phenotype }}</h4>
+                        </div>
+                    </div>
+                    <div *ngIf="trait1.type && trait2.type" class="row">
+                        <div class="col-sm-12">
+                            <h4>Tip: {{ trait2.type + " + " + trait2.type }}</h4>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-6">
+                <img class="col-md-12 img-responsive" *ngIf="trait1.imageUrl" src={{trait1.imageUrl}} alt="gecko.png">
+                <img class="col-md-12 img-responsive" *ngIf="traits2.length > 0 && trait2.imageUrl" src={{trait2.imageUrl}} alt="gecko.png">
             </div>
         </div>
-        <div class="col-md-6">
-            <img class="col-md-12" *ngIf="trait1.imageUrl" src={{trait1.imageUrl}} alt="gecko.png">
-            <img class="col-md-12" *ngIf="traits2.length > 0 && trait2.imageUrl" src={{trait2.imageUrl}} alt="gecko.png">
-        </div>
     </div>
+
 </div>
-    
-    

@@ -51,7 +51,7 @@
                    type="radio"
                    name="startRadioGroup"
                    [(ngModel)]="startingFromParents"
-                   [value]="true"/>
+                   [value]="true" />
             <label style="font-size:150%;">roditeljima djecu</label>
         </span>
         <span>
@@ -59,7 +59,7 @@
                    type="radio"
                    name="startRadioGroup"
                    [(ngModel)]="startingFromParents"
-                   [value]="false"/>
+                   [value]="false" />
             <label style="font-size:150%;">djetetu roditelje</label>
         </span>
     </div>
@@ -89,20 +89,22 @@
         </div>
 
         <div class="row">
-            <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
+            <div class="col-sm-12">
+                <offspring *ngIf="(numberOfCharact === 1 && parent1.trait1.genotype && parent2.trait1.genotype)
                     || (numberOfCharact === 2 && parent1.trait1.genotype && parent2.trait1.genotype && parent1.trait2.genotype && parent2.trait2.genotype)"
-                       [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
-                       [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
-                       [characteristic]="characteristic"
-                       [inheritanceType]="inheritanceType" [cM] ="cM"
-                       [traits1]="traits1" [traits2]="traits2">
-            </offspring>
+                           [parent1]="{trait1: parent1.trait1, trait2: parent1.trait2}"
+                           [parent2]="{trait1: parent2.trait1, trait2: parent2.trait2}"
+                           [characteristic]="characteristic"
+                           [inheritanceType]="inheritanceType" [cM]="cM"
+                           [traits1]="traits1" [traits2]="traits2">
+                </offspring>
+            </div>
         </div>
     </div>
 
     <div *ngIf="!startingFromParents">
         <div class="row top-buffer">
-            <div class="child col-sm-offset-3">
+            <div class="col-sm-6 col-sm-offset-3">
                 <child-organism #child
                                 [characteristic]="characteristic"
                                 [traits1]="traits1" [traits2]="traits2"
@@ -112,11 +114,13 @@
             </div>
         </div>
         <div class="row">
-            <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
-                              [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
-                              [characteristic]="characteristic" [inheritanceType]="inheritanceType" [cM] ="cM"
-                              [traits1]="traits1" [traits2]="traits2">
-            </possible-parents>
+            <div class="col-sm-12">
+                <possible-parents *ngIf="(numberOfCharact === 1 && child.trait1.genotype) || (numberOfCharact === 2 && child.trait1.genotype && child.trait2.genotype)"
+                                  [childGenotype]="child.trait1.genotype" [childGenotype2]="child.trait2.genotype"
+                                  [characteristic]="characteristic" [inheritanceType]="inheritanceType" [cM]="cM"
+                                  [traits1]="traits1" [traits2]="traits2">
+                </possible-parents>
+            </div>
         </div>
     </div>
 </div>
