@@ -38,6 +38,7 @@
     #footer {
         padding-left: 1em;
         padding-right: 1em;
+        padding-top: 1em;
     }
 }
 
@@ -51,10 +52,18 @@
     position: relative;
     overflow: hidden;
     margin-top: 20px;
-    padding: 0 0 4em 0;
-    background: #78ce95;
+    padding: 0 0 2em 0;
+    background: rgba(70, 153, 81, 0.4);
     color: #fff;
+    -webkit-transition: background-color 1s ease-out;
+    -moz-transition: background-color 1s ease-out;
+    -o-transition: background-color 1s ease-out;
+    transition: background-color 1s ease-out;
 }
+
+    #footer:hover {
+        background: rgba(70, 153, 81, 1);
+    }
 
     #footer .icon.circled {
         background: #fff;
@@ -62,7 +71,7 @@
     }
 
     #footer header {
-        text-align: center;
+        text-align: right;
         cursor: default;
     }
 
