@@ -278,6 +278,7 @@ export class ExamService {
         koliko će djece (od njih 4) nastalo križanjem ova dva roditelja biti ${childGenotype}?
         Tip nasljeđivanja za svojstvo ${characteristic} kod organizma ${organism} je: ${inheritanceType}.`;
 
+        /*
         let parents: IParents[] = this.inheritanceService.getParentsForChild(
             { first: characteristic, second: "" },
             { type1: char.inheritanceType, type2: "" },
@@ -291,6 +292,27 @@ export class ExamService {
                 break;
             }
         }
+        */
+        let children: IChild[] = this.inheritanceService.generateChildren(
+            { first: characteristic, second: "" },
+            { type1: char.inheritanceType, type2: "" },
+            char.traits, [],
+            { trait1: parent1Trait, trait2: {} as any },
+            { trait1: parent2Trait, trait2: {} as any }
+        );
+
+        q.correctAnswer = "0";
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i].child;
+            let count = children[i].percentage * 4;
+
+            if ((child.trait1.genotype.allele1 + child.trait1.genotype.allele2) === childGenotype
+                || (child.trait1.genotype.allele2 + child.trait1.genotype.allele1) === childGenotype) {
+                q.correctAnswer = count.toString();
+                break;
+            }
+        }
+
         q.answers = ["0", "1", "2", "3", "4"];
         return q;
     }
