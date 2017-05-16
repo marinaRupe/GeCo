@@ -93,3 +93,7 @@
             #footer .copyright a:hover {
                 color: rgba(212, 212, 212, 0.85);
             }
+
+a {
+    color: #33b760;
+}
