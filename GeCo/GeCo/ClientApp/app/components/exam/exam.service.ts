@@ -3,7 +3,7 @@ import { GeneticDataService } from '../../genetic-data.service';
 import { InheritanceService } from '../../inheritance.service';
 import { ITrait, IExamQuestion, IParents, IChild, IGenotype } from "../../shared/types";
 import {
-    DOMINANT_RECESSIVE_INHERITANCE, INCOMPLETE_DOMINANCE_INHERITANCE, CODOMINANT_INHERITANCE,
+    DOMINANT_RECESSIVE_INHERITANCE, INCOMPLETE_DOMINANCE_INHERITANCE, CODOMINANT_INHERITANCE, MALE_SEX_CHROMOSOME,
     SEX_CHROMOSOMES_INHERITANCE, LINKED_GENES_INHERITANCE, HETEROZYGOTE, RECESSIVE_HOMOZYGOTE, DOMINANT_HOMOZYGOTE
 } from '../../shared/constants';
 
@@ -63,29 +63,22 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
-        const parent1: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const parent2: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const parent1Type: string = parent1.type;
-        const parent2Type: string = parent2.type;
-        const parent1Trait: string = parent1.phenotype;
-        const parent2Trait: string = parent2.phenotype;
-        const childTrait: string = child.phenotype;
+        const parent1Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const parent2Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const childTrait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Type} i čije je svojstvo ${characteristic}-${parent1Trait}
-                i roditelja koji je ${parent2Type} i čije je svojstvo ${characteristic}-${parent2Trait},
-                koliko će djece (od njih 4) nastalo križanjem ova dva roditelja imati svojstvo ${characteristic}-${childTrait}?
+        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Trait.type} i čije je svojstvo ${characteristic}-${parent1Trait.phenotype}
+                i roditelja koji je ${parent2Trait.type} i čije je svojstvo ${characteristic}-${parent2Trait.phenotype},
+                koliko će djece (od njih 4) nastalo križanjem ova dva roditelja imati svojstvo ${characteristic}-${childTrait.phenotype}?
                 Tip nasljeđivanja za svojstvo ${characteristic} kod organizma ${organism} je: ${inheritanceType}.`;
 
         let children: IChild[] = this.inheritanceService.generateChildren(
@@ -93,17 +86,16 @@ export class ExamService {
             { type1: inheritanceType, type2: "" },
             char.traits,
             [],
-            { trait1: parent1, trait2: {} as any },
-            { trait1: parent2, trait2: {} as any },
+            { trait1: parent1Trait, trait2: {} as any },
+            { trait1: parent2Trait, trait2: {} as any },
         );
 
         let counter = 0;
         for (let i = 0; i < children.length; i++) {
-            if (children[i].child.trait1.phenotype === childTrait) {
+            if (children[i].child.trait1.phenotype === childTrait.phenotype) {
                 counter++;
             }
         }
-
         if (children.length < 4) {
             counter *= 4 / children.length;
         }
@@ -119,29 +111,22 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
-        const parent1: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const parent2: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const parent1Type: string = parent1.type;
-        const parent2Type: string = parent2.type;
-        const parent1Trait: string = parent1.phenotype;
-        const parent2Trait: string = parent2.phenotype;
-        const childTrait: string = child.phenotype;
+        const parent1Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const parent2Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const childTrait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
 
         let q : IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Type} i čije je svojstvo ${characteristic}-${parent1Trait}
-                i roditelja koji je ${parent2Type} i čije je svojstvo ${characteristic}-${parent2Trait},
-                koliki će postotak djece nastalih križanjem ova dva roditelja imati svojstvo ${characteristic}-${childTrait}?
+        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Trait.type} i čije je svojstvo ${characteristic}-${parent1Trait.phenotype}
+                i roditelja koji je ${parent2Trait.type} i čije je svojstvo ${characteristic}-${parent2Trait.phenotype},
+                koliki će postotak djece nastalih križanjem ova dva roditelja imati svojstvo ${characteristic}-${childTrait.phenotype}?
                 Tip nasljeđivanja za svojstvo ${characteristic} kod organizma ${organism} je: ${inheritanceType}.`;
 
         let children: IChild[] = this.inheritanceService.generateChildren(
@@ -149,13 +134,13 @@ export class ExamService {
             { type1: inheritanceType, type2: "" },
             char.traits,
             [],
-            { trait1: parent1, trait2: {} as any },
-            { trait1: parent2, trait2: {} as any }
+            { trait1: parent1Trait, trait2: {} as any },
+            { trait1: parent2Trait, trait2: {} as any }
         );
 
         let counter = 0;
         for (let i = 0; i < children.length; i++) {
-            if (children[i].child.trait1.phenotype === childTrait) {
+            if (children[i].child.trait1.phenotype === childTrait.phenotype) {
                 counter++;
             }
         }
@@ -171,29 +156,22 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
-        const parent1: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const parent2: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const parent1Type: string = parent1.type;
-        const parent2Type: string = parent2.type;
-        const parent1Trait: string = parent1.phenotype;
-        const parent2Trait: string = parent2.phenotype;
-        const childType: string = child.type;
+        const parent1Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const parent2Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const childTrait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Type} i čije je svojstvo ${characteristic}-${parent1Trait}
-        i roditelja koji je ${parent2Type} i čije je svojstvo ${characteristic}-${parent2Trait},
-        koliko će djece (od njih 4) nastalo križanjem ova dva roditelja biti ${childType}?
+        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Trait.type} i čije je svojstvo ${characteristic}-${parent1Trait.phenotype}
+        i roditelja koji je ${parent2Trait.type} i čije je svojstvo ${characteristic}-${parent2Trait.phenotype},
+        koliko će djece (od njih 4) nastalo križanjem ova dva roditelja biti ${childTrait.type}?
         Tip nasljeđivanja za svojstvo ${characteristic} kod organizma ${organism} je: ${inheritanceType}.`;
 
         let children: IChild[] = this.inheritanceService.generateChildren(
@@ -201,18 +179,16 @@ export class ExamService {
             { type1: inheritanceType, type2: "" },
             char.traits,
             [],
-            { trait1: parent1, trait2: {} as any },
-            { trait1: parent2, trait2: {} as any }
+            { trait1: parent1Trait, trait2: {} as any },
+            { trait1: parent2Trait, trait2: {} as any }
         );
 
         let typeCount: number = 0;
-
         for (let i = 0; i < children.length; i++) {
-            if (children[i].child.trait1.type === childType) {
+            if (children[i].child.trait1.type === childTrait.type) {
                 typeCount++;
             }
         }
-
         if (children.length < 4) {
             typeCount *= 4 / children.length;
         }
@@ -228,25 +204,20 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
-        const parent1: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const parent2: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
 
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const parent1Type: string = parent1.type;
-        const parent2Type: string = parent2.type;
-        const parent1Trait: string = parent1.phenotype;
-        const parent2Trait: string = parent2.phenotype;
+        const parent1Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const parent2Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Type} i čije je svojstvo ${characteristic}-${parent1Trait}
-        i roditelja koji je ${parent2Type} i čije je svojstvo ${characteristic}-${parent2Trait},
+        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Trait.type} i čije je svojstvo ${characteristic}-${parent1Trait.phenotype}
+        i roditelja koji je ${parent2Trait.type} i čije je svojstvo ${characteristic}-${parent2Trait.phenotype},
         koliki je omjer broja homozigotne djece naspram broja heterozigotne djece nastalih križanjem ova dva roditelja? Pretpostavljamo da je ukupan broj djece 4.
         Tip nasljeđivanja za svojstvo ${characteristic} kod organizma ${organism} je: ${inheritanceType}.`;
 
@@ -255,17 +226,17 @@ export class ExamService {
             { type1: inheritanceType, type2: "" },
             char.traits,
             [],
-            { trait1: parent1, trait2: {} as any },
-            { trait1: parent2, trait2: {} as any }
+            { trait1: parent1Trait, trait2: {} as any },
+            { trait1: parent2Trait, trait2: {} as any }
         );
 
         let homozygoteCount: number = 0;
         let heterozygoteCount: number = 0;
-
         for (let i = 0; i < children.length; i++) {
             if (children[i].child.trait1.type === HETEROZYGOTE) {
                 heterozygoteCount++;
-            } else {
+            }
+            else {
                 homozygoteCount++;
             }
         }
@@ -285,43 +256,37 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
-
-        const parent1: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const parent2: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-        const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
-
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const parent1Type: string = parent1.type;
-        const parent2Type: string = parent2.type;
-        const parent1Genotype: string = parent1.genotype.allele1 + parent1.genotype.allele2;
-        const parent2Genotype: string = parent2.genotype.allele1 + parent2.genotype.allele2;
-        const parent1Trait: string = parent1.phenotype;
-        const parent2Trait: string = parent2.phenotype;
-        const childGenotype: string = child.genotype.allele1 + child.genotype.allele2;
+        const parent1Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const parent2Trait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+        const childTrait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
+
+        const parent1Genotype: string = parent1Trait.genotype.allele1 + parent1Trait.genotype.allele2;
+        const parent2Genotype: string = parent2Trait.genotype.allele1 + parent2Trait.genotype.allele2;
+        const childGenotype: string = childTrait.genotype.allele1 + childTrait.genotype.allele2;
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Type} i čije je svojstvo ${
-            characteristic}-${parent1Trait} (${parent1Genotype})
-        i roditelja koji je ${parent2Type} i čije je svojstvo ${characteristic}-${parent2Trait} (${parent2Genotype}),
+        q.question = `Za organizam ${organism}: ako imamo roditelja koji je ${parent1Trait.type} i čije je svojstvo ${
+            characteristic}-${parent1Trait.phenotype} (${parent1Genotype})
+        i roditelja koji je ${parent2Trait.type} i čije je svojstvo ${characteristic}-${parent2Trait.phenotype} (${parent2Genotype}),
         koliko će djece (od njih 4) nastalo križanjem ova dva roditelja biti ${childGenotype}?
         Tip nasljeđivanja za svojstvo ${characteristic} kod organizma ${organism} je: ${inheritanceType}.`;
 
         let parents: IParents[] = this.inheritanceService.getParentsForChild(
             { first: characteristic, second: "" },
             { type1: char.inheritanceType, type2: "" },
-            char.traits, [], child.genotype, {} as IGenotype
+            char.traits, [], childTrait.genotype, {} as IGenotype
         );
         for (let i = 0; i < parents.length; i++) {
             let parentPair: IParents = parents[i];
-            if (parent1.genotype.allele1 === parentPair.parent1.trait1.genotype.allele1 && parent2.genotype.allele1 === parentPair.parent2.trait1.genotype.allele1
-                && parent1.genotype.allele2 === parentPair.parent1.trait1.genotype.allele2 && parent2.genotype.allele2 === parentPair.parent2.trait1.genotype.allele2) {
+            if (parent1Trait.genotype.allele1 === parentPair.parent1.trait1.genotype.allele1 && parent2Trait.genotype.allele1 === parentPair.parent2.trait1.genotype.allele1
+                && parent1Trait.genotype.allele2 === parentPair.parent1.trait1.genotype.allele2 && parent2Trait.genotype.allele2 === parentPair.parent2.trait1.genotype.allele2) {
                 q.correctAnswer = (parentPair.percentage * 4).toString();
                 break;
             }
@@ -336,7 +301,6 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType !== DOMINANT_RECESSIVE_INHERITANCE && char.inheritanceType !== INCOMPLETE_DOMINANCE_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
@@ -346,31 +310,25 @@ export class ExamService {
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
 
+        let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
+        q.answers = [];
+
         let recessiveTrait: ITrait;
+        let dominantTrait: ITrait;
         for (let i = 0; i < char.traits.length; i++){
+            q.answers.push(`${char.traits[i].phenotype} (${char.traits[i].type})`);
+
             if (char.traits[i].type === RECESSIVE_HOMOZYGOTE) {
                 recessiveTrait = char.traits[i];
-                break;
+            }
+            else if (char.traits[i].type === DOMINANT_HOMOZYGOTE) {
+                dominantTrait = char.traits[i];
             }
         }
 
-        let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
         q.question = `Za organizam ${organism} i svojstvo ${characteristic} obilježje ${recessiveTrait.phenotype} je recesivno.
         Za jedinku sa svojstom ${characteristic}-${recessiveTrait.phenotype} znamo da je jedan roditelj također svojstva ${characteristic}-${recessiveTrait.phenotype}.
         Koje od sljedećih svojstava NE može imati drugi roditelj prema ${inheritanceType} tipu nasljeđivanja?`;
-
-        q.answers = [];
-        for (let i = 0; i < char.traits.length; i++) {
-            q.answers.push(`${char.traits[i].phenotype} (${char.traits[i].type})`);
-        }
-
-        let dominantTrait: ITrait;
-        for (let i = 0; i < char.traits.length; i++) {
-            if (char.traits[i].type === DOMINANT_HOMOZYGOTE) {
-                dominantTrait = char.traits[i];
-                break;
-            }
-        }
 
         q.correctAnswer = `${dominantTrait.phenotype} (${dominantTrait.type})`;
         return q;
@@ -382,17 +340,15 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
-        while (char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
+        while (char.inheritanceType === CODOMINANT_INHERITANCE || char.inheritanceType === SEX_CHROMOSOMES_INHERITANCE || char.inheritanceType === LINKED_GENES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
-        const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const childTrait: string = child.phenotype;
+        const childTrait: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
 
         let recessiveTrait: ITrait;
         for (let i = 0; i < char.traits.length; i++) {
@@ -405,10 +361,10 @@ export class ExamService {
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
         q.question = `Za organizam ${organism} i svojstvo ${characteristic} obilježje ${recessiveTrait.phenotype} je recesivno.
         Ako imamo roditelja čije je svojstvo ${characteristic}-${recessiveTrait.phenotype} i roditelja čije je svojstvo ${characteristic}-${recessiveTrait.phenotype},
-        može li njihovo dijete imati svojstvo ${characteristic}-${childTrait} prema ${inheritanceType} tipu nasljeđivanja?`;
+        može li njihovo dijete imati svojstvo ${characteristic}-${childTrait.phenotype} prema ${inheritanceType} tipu nasljeđivanja?`;
 
         q.answers = ["DA", "NE"];
-        q.correctAnswer = childTrait === recessiveTrait.phenotype ? "DA" : "NE";
+        q.correctAnswer = childTrait.phenotype === recessiveTrait.phenotype ? "DA" : "NE";
         return q;
     }
 
@@ -418,21 +374,24 @@ export class ExamService {
         let organism: string = organisms[Math.floor(Math.random() * organisms.length)];
         let organismData = this.data[organism];
         let char = organismData[Math.floor(Math.random() * organismData.length)];
-
         while (char.inheritanceType !== SEX_CHROMOSOMES_INHERITANCE) {
             organism = organisms[Math.floor(Math.random() * organisms.length)];
             organismData = this.data[organism];
             char = organismData[Math.floor(Math.random() * organismData.length)];
         }
 
-        const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
         const characteristic: string = char.characteristic;
-        const recessiveTraitFemale: ITrait = char.traits[3];
-        const recessiveTraitFemaleGenotype: string = recessiveTraitFemale.genotype.allele1 + recessiveTraitFemale.genotype.allele2;
-        const childTrait: string = child.phenotype;
+        let femaleRecessiveTrait: ITrait;
+        for (let i = 0; i < char.traits.length; i++) {
+            if (char.traits[i].type === RECESSIVE_HOMOZYGOTE && char.traits[i].genotype.allele2 !== MALE_SEX_CHROMOSOME) {
+                femaleRecessiveTrait = char.traits[i];
+                break;
+            }
+        }
+        const femaleRecessiveGenotype: string = femaleRecessiveTrait.genotype.allele1 + femaleRecessiveTrait.genotype.allele2;
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism}: ako majka ima svojstvo ${characteristic} (genotip ${recessiveTraitFemaleGenotype}),
+        q.question = `Za organizam ${organism}: ako majka ima svojstvo ${characteristic} (genotip ${femaleRecessiveGenotype}),
         koliki postotak muške djece će imati svojstvo ${characteristic}? Riječ je o nasljeđivanju putem spolnih kromosoma.`;
 
         q.answers = ["0%", "25%", "50%", "75%", "100%"];
