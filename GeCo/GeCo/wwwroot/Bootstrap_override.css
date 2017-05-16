@@ -6,8 +6,8 @@
 
 .panel-info > .panel-heading {
     color: #ffffff;
-    background-color: #50d471;
-    border-color: #50d471;
+    background-color: #8beaa3;
+    border-color: #8beaa3;
 }
 
 .panel-primary {
@@ -15,7 +15,7 @@
 }
 
 .panel-info {
-    border-color: #50d471;
+    border-color: #8beaa3;
 }
 
 .btn-primary {

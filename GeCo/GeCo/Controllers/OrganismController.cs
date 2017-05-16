@@ -115,15 +115,63 @@ namespace GeCo.Controllers
 
             return new OrganismView(organism.Name, characteristicsViews);
         }
-    
+
+        [ResponseCache(Duration = RESPONSE_CACHE_DURATION)]
+        [HttpGet("GetData2/{Id}")]
+        public IActionResult Get2(int id)
+        {
+            OkObjectResult result;
+            if (!_cache.TryGetValue(id, out result))
+            {
+                var organism = _context.Organisms.FirstOrDefault(o => o.Id == id);
+                result = new OkObjectResult(GenerateOrganismViewWithDominance(organism));
+                _cache.Set(id, result, _defaultOptions);
+            }
+            return result;
+        }
+
         [ResponseCache(Duration = RESPONSE_CACHE_DURATION)]
         [HttpGet("GetAllData")]
         public IActionResult GetAll()
         {
             var organisms = _organismRepository.GetAll().ToList();
             var allDataView = new AllDataView();
-            organisms.ForEach(o => allDataView.Add(GenerateOrganismView(o)));
+            organisms.ForEach(o => allDataView.Add(GenerateOrganismViewWithDominance(o)));
             return new OkObjectResult(allDataView);
+        }
+
+        private OrganismView GenerateOrganismViewWithDominance(Organism organism)
+        {
+            var traits =
+                _context.Traits.Include(t => t.Organism)
+                    .Where(t => t.Organism.Id == organism.Id)
+                    .Include(t => t.Inheritance)
+                    .Include(t => t.Alleles)
+                    .Include(t => t.Phenotypes)
+                    .ThenInclude(p => p.Genotypes)
+                    .AsNoTracking();
+
+            var traitViews = new List<TraitView>();
+            var characteristicsViews = new List<CharacteristicsView>();
+
+            foreach (var trait in traits)
+            {
+                foreach (var phenotype in trait.Phenotypes)
+                {
+                    foreach (var genotype in phenotype.Genotypes)
+                    {
+                        var firstAllele = trait.Alleles.FirstOrDefault(a => a.Id == genotype.FirstAlleleId);
+                        var secondAllele = trait.Alleles.FirstOrDefault(a => a.Id == genotype.SecondAlleleId);
+                        var dominance = (firstAllele.Dominant || secondAllele.Dominant) ? "dominantan " : "recesivan ";
+                        traitViews.Add(new TraitView(new GenotypeView(firstAllele.Symbol, secondAllele.Symbol), phenotype.Name,
+                            firstAllele.Symbol.Equals(secondAllele.Symbol) ? (dominance + "homozigot") : "heterozigot", phenotype.ImageURL));
+                    }
+                }
+                characteristicsViews.Add(new CharacteristicsView(trait.Name, new List<TraitView>(traitViews), trait.Inheritance.Name));
+                traitViews.Clear();
+            }
+
+            return new OrganismView(organism.Name, characteristicsViews);
         }
     }
 }
