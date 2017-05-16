@@ -1,43 +1,45 @@
 <div class='main-nav'>
     <div class='navbar navbar-inverse'>
-        <div class='navbar-header'>
-            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-                <span class='sr-only'>Toggle navigation</span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-            </button>
-            <a class='navbar-brand' [routerLink]="['/home']">GeCo</a>
-        </div>
-        <div class='clearfix'></div>
-        <div class='navbar-collapse collapse'>
-            <ul class='nav navbar-nav'>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/home']">
-                        <span class='glyphicon glyphicon-home'></span> Početna stranica
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/recombinator']">
-                        <span class='glyphicon glyphicon-sort'></span> Rekombinator
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/lectures']">
-                        <span class='glyphicon glyphicon-education'></span> Teorija
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/exam']">
-                        <span class='glyphicon glyphicon-pencil'></span> Test
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/help']">
-                        <span class='glyphicon glyphicon-info-sign'></span> Upute
-                    </a>
-                </li>
-            </ul>
+        <div class="container-fluid">
+            <div class='navbar-header'>
+                <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                    <span class='sr-only'>Toggle navigation</span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' [routerLink]="['/home']">GeCo</a>
+            </div>
+            <div class='clearfix'></div>
+            <div class='collapse navbar-collapse'>
+                <ul class='nav navbar-nav'>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/home']" data-toggle="collapse" data-target=".navbar-collapse.in">
+                            <span class='glyphicon glyphicon-home'></span> Početna stranica
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/recombinator']" data-toggle="collapse" data-target=".navbar-collapse.in">
+                            <span class='glyphicon glyphicon-sort'></span> Rekombinator
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/lectures']" data-toggle="collapse" data-target=".navbar-collapse.in">
+                            <span class='glyphicon glyphicon-education'></span> Teorija
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/exam']" data-toggle="collapse" data-target=".navbar-collapse.in">
+                            <span class='glyphicon glyphicon-pencil'></span> Test
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/help']" data-toggle="collapse" data-target=".navbar-collapse.in">
+                            <span class='glyphicon glyphicon-info-sign'></span> Upute
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
