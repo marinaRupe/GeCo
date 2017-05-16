@@ -9,5 +9,7 @@ export let DIHYBRID_CROSS_TYPE = "dihibridno";
 
 export let HETEROZYGOTE = "heterozigot";
 export let HOMOZYGOTE = "homozigot";
+export let DOMINANT_HOMOZYGOTE = "dominantan homozigot";
+export let RECESSIVE_HOMOZYGOTE = "recesivan homozigot";
 
 export let MALE_SEX_CHROMOSOME = "Y";

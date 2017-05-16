@@ -5,7 +5,43 @@
     text-justify: inter-word;">
         <br />
         <p>&nbsp;</p>
-        <p> TODO... </p>
+        <p>Znamo da su geni dijelovi kromosoma i da je gen za specifično svojstvo uvijek na istom mjestu istog kromosoma. Kromosomi označavaju nekim redom &ndash; prvi, drugi, treći&hellip; (od najvećeg prema najmanjem) i na kraju navodimo spolne kromosome. Spolni kromosomi se zovu tako jer određuju spol organizma. Oznake i karakteristike spolnih kromosoma ovise o vrsti organizma:</p>
+
+        <ul>
+
+            <li>kod skakavaca i nekih kukaca kromosomski par ženske označavamo s <strong>XX</strong>, dok mužjak ima samo jedan X kromosom (oznaka<strong> XO</strong>) &ndash; odnosno mužjak skakavca ima kromosom manje od ženke (<em>XX/XO sistem</em>)</li>
+
+            <li>kod sisavaca i nekih kukaca (npr. vinska mušica), ženka također ima <strong>XX</strong>, ali mužjak ima <strong>XY</strong>, odnosno mužjak ima par različitih kromosoma (<em>XX/XY sistem</em>)</li>
+
+            <li>kod ptica, riba, leptira i nekih gmazova je ženka ona s različitim parom spolnih kromosoma, koje označavamo <strong>ZW</strong>, dok mužjak ima <strong>ZZ </strong>(<em>ZW/ZZ sistem</em>)</li>
+
+        </ul>
+
+        <p>Zbog jednostavnosti, u okviru ovog teksta i aplikacije ćemo se zadržati na oznakama XX/XY, no ponašanje Y kromosoma je analogno W odnosno 0.</p>
+
+        <p>&nbsp;</p>
+
+        <p>Uđite u <a [routerLink]="['/recombinator']"><em>rekombinator</em></a>, odaberite čovjeka i svojstvo daltonizam. Primijetite razliku koju imate pri podešavanju svojstava roditelja u usporedbi sa svojstvima koji ne spadaju pod tip nasljeđivanja <em>spolni kromosomi</em>. Oznake spola roditelja nisu slučajno stavljene u aplikaciju, postoji ograničenje kakvi genotipovi mogu biti muški, a kakvi ženski.</p>
+
+        <p>Kromosom Y je kraći od X kromosoma, stoga ne sadrži neke gene koje X kromosom sadrži. Upravo zato se kod primjera daltonizma na muškom roditelju kao drugi alel nalazi oznaka Y. Njom označavamo da je riječ o Y kromosomu i da tog alela, odnosno gena, nema na njemu.</p>
+
+        <p>Što se događa s fenotipom u tom slučaju? Muški organizam poprimi svojstvo koje mu određuje gen na X kromosomu. Drugim riječima, samo jedan alel mu određuje svojstvo, a taj alel prima od majke.</p>
+
+        <p>&nbsp;</p>
+
+        <p>Da krenemo s primjerom. Postavite zdravu heterozigotnu majku i zdravog oca. Što primjećujete?</p>
+
+        <p>Pola muške djece su daltonisti, ovisno koji su gen primili od majke. S druge strane, sva su ženska djeca zdrava, samo su pola od njih nosioci (zdravi heterozigoti, tj. nose alel za daltonizam).</p>
+
+        <p>Za drugi primjer postavite zdravu homozigotnu majku i bolesnog oca. Primijetite da su svi organizmi zdravi, samo su neki od ženskih nosioci (ovaj put zbog bolesnog gena oca).</p>
+
+        <p>Za kraj postavite još dva slučaja: bolesnu majku i zdravog oca, te zdravu heterozigotnu majku i bolesnog oca. U prvom primjeru su sva muška djeca daltonisti, a ženska su sva nosioci. U drugom su pola ženske i pola muške djece daltonisti.</p>
+
+        <p>Vjerojatno ste već zaključili da ženska djeca imaju manju šansu da budu daltonisti. Alel koji određuje daltonizam je recesivan, stoga ako je na drugom X kromosomu zdravi alel, organizam je zdrav. Muški organizmi ovise u potpunosti o tom jednom majčinom alelu. To je razlog zašto ima više muškaraca sa spolno nasljeđivanim bolestima poput daltonizma ili hemofilije.</p>
+
+        <p>Također ste mogli primijetiti kako, osim što muško dijete ovisi isključivo o majci, žensko dijete ovisi o tome da li je otac bolestan ili ne. Zbog te poveznice majka-sin, odnosno otac-kćer, spolno nasljeđivanje se također zove i KRIŽNO NASLJEĐIVANJE.</p>
+
+        <p>&nbsp;</p>
 
         <a [routerLink]="['/lectures']">
             <button class="btn btn-default">
