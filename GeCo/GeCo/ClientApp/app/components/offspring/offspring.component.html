@@ -8,6 +8,7 @@
                 <h4 *ngFor="let stat of stats">
                     {{ stat.proportions }} {{ stat.values }}
                 </h4>
+                <h4 *ngIf="inheritanceType.type1 === linkedGenes && inheritanceType.type2 === linkedGenes">cM: {{cM}} </h4>
             </div>
         </div>
     </div>
