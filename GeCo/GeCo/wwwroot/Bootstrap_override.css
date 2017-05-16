@@ -1,0 +1,25 @@
+﻿.panel-primary > .panel-heading {
+    color: #ffffff;
+    background-color: #33b760;
+    border-color: #33b760;
+}
+
+.panel-info > .panel-heading {
+    color: #ffffff;
+    background-color: #50d471;
+    border-color: #50d471;
+}
+
+.panel-primary {
+    border-color: #33b760;
+}
+
+.panel-info {
+    border-color: #50d471;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #50d471;
+    border-color: #50d471;
+}
