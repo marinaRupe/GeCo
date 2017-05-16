@@ -48,7 +48,7 @@ export class GeneticDataService {
 
     private getDataOrganismId(organismId: string) {
         return new Promise((resolve, reject) => {
-            this.http.get('/api/Organism/GetData/' + organismId).subscribe(result => {
+            this.http.get('/api/Organism/GetData2/' + organismId).subscribe(result => {
                 resolve([organismId, result.json()]);
             });
         });
@@ -56,7 +56,7 @@ export class GeneticDataService {
 
     getDataForOrganism(organismId: string) {
         return new Promise((resolve, reject) => {
-            this.http.get('/api/Organism/GetData/' + organismId)
+            this.http.get('/api/Organism/GetData2/' + organismId)
                 .subscribe(result => {
                     resolve(result.json());
                 });

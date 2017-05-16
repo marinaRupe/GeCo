@@ -4,7 +4,7 @@ import { InheritanceService } from '../../inheritance.service';
 import { ITrait, IExamQuestion, IParents, IChild, IGenotype } from "../../shared/types";
 import {
     DOMINANT_RECESSIVE_INHERITANCE, INCOMPLETE_DOMINANCE_INHERITANCE, CODOMINANT_INHERITANCE,
-    SEX_CHROMOSOMES_INHERITANCE, LINKED_GENES_INHERITANCE, HOMOZYGOTE
+    SEX_CHROMOSOMES_INHERITANCE, LINKED_GENES_INHERITANCE, HETEROZYGOTE, RECESSIVE_HOMOZYGOTE, DOMINANT_HOMOZYGOTE
 } from '../../shared/constants';
 
 @Injectable()
@@ -263,10 +263,10 @@ export class ExamService {
         let heterozygoteCount: number = 0;
 
         for (let i = 0; i < children.length; i++) {
-            if (children[i].child.trait1.type === HOMOZYGOTE) {
-                homozygoteCount++;
-            } else {
+            if (children[i].child.trait1.type === HETEROZYGOTE) {
                 heterozygoteCount++;
+            } else {
+                homozygoteCount++;
             }
         }
         if (children.length < 4) {
@@ -320,7 +320,8 @@ export class ExamService {
         );
         for (let i = 0; i < parents.length; i++) {
             let parentPair: IParents = parents[i];
-            if (parent1.genotype === parentPair.parent1.trait1.genotype && parent2.genotype === parentPair.parent2.trait1.genotype) {
+            if (parent1.genotype.allele1 === parentPair.parent1.trait1.genotype.allele1 && parent2.genotype.allele1 === parentPair.parent2.trait1.genotype.allele1
+                && parent1.genotype.allele2 === parentPair.parent1.trait1.genotype.allele2 && parent2.genotype.allele2 === parentPair.parent2.trait1.genotype.allele2) {
                 q.correctAnswer = (parentPair.percentage * 4).toString();
                 break;
             }
@@ -344,19 +345,34 @@ export class ExamService {
 
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const recessiveTrait: string = char.traits[2].phenotype;
+
+        let recessiveTrait: ITrait;
+        for (let i = 0; i < char.traits.length; i++){
+            if (char.traits[i].type === RECESSIVE_HOMOZYGOTE) {
+                recessiveTrait = char.traits[i];
+                break;
+            }
+        }
 
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism} i svojstvo ${characteristic} obilježje ${recessiveTrait} je recesivno.
-        Za jedinku sa svojstom ${characteristic}-${recessiveTrait} znamo da je jedan roditelj također svojstva ${characteristic}-${recessiveTrait}.
+        q.question = `Za organizam ${organism} i svojstvo ${characteristic} obilježje ${recessiveTrait.phenotype} je recesivno.
+        Za jedinku sa svojstom ${characteristic}-${recessiveTrait.phenotype} znamo da je jedan roditelj također svojstva ${characteristic}-${recessiveTrait.phenotype}.
         Koje od sljedećih svojstava NE može imati drugi roditelj prema ${inheritanceType} tipu nasljeđivanja?`;
 
-        q.answers = [
-            `${char.traits[0].phenotype} (${char.traits[0].type})`,
-            `${char.traits[1].phenotype} (${char.traits[1].type})`,
-            `${char.traits[2].phenotype} (${char.traits[2].type})`
-        ];
-        q.correctAnswer = `${char.traits[0].phenotype} (${char.traits[0].type})`;
+        q.answers = [];
+        for (let i = 0; i < char.traits.length; i++) {
+            q.answers.push(`${char.traits[i].phenotype} (${char.traits[i].type})`);
+        }
+
+        let dominantTrait: ITrait;
+        for (let i = 0; i < char.traits.length; i++) {
+            if (char.traits[i].type === DOMINANT_HOMOZYGOTE) {
+                dominantTrait = char.traits[i];
+                break;
+            }
+        }
+
+        q.correctAnswer = `${dominantTrait.phenotype} (${dominantTrait.type})`;
         return q;
     }
 
@@ -376,16 +392,23 @@ export class ExamService {
         const child: ITrait = char.traits[Math.floor(Math.random() * char.traits.length)];
         const characteristic: string = char.characteristic;
         const inheritanceType: string = char.inheritanceType;
-        const recessiveTrait: string = char.traits[2].phenotype;
         const childTrait: string = child.phenotype;
 
+        let recessiveTrait: ITrait;
+        for (let i = 0; i < char.traits.length; i++) {
+            if (char.traits[i].type === RECESSIVE_HOMOZYGOTE) {
+                recessiveTrait = char.traits[i];
+                break;
+            }
+        }
+
         let q: IExamQuestion = { question: "", answers: [], correctAnswer: "", studentAnswer: "" };
-        q.question = `Za organizam ${organism} i svojstvo ${characteristic} obilježje ${recessiveTrait} je recesivno.
-        Ako imamo roditelja čije je svojstvo ${characteristic}-${recessiveTrait} i roditelja čije je svojstvo ${characteristic}-${recessiveTrait},
+        q.question = `Za organizam ${organism} i svojstvo ${characteristic} obilježje ${recessiveTrait.phenotype} je recesivno.
+        Ako imamo roditelja čije je svojstvo ${characteristic}-${recessiveTrait.phenotype} i roditelja čije je svojstvo ${characteristic}-${recessiveTrait.phenotype},
         može li njihovo dijete imati svojstvo ${characteristic}-${childTrait} prema ${inheritanceType} tipu nasljeđivanja?`;
 
         q.answers = ["DA", "NE"];
-        q.correctAnswer = childTrait === recessiveTrait ? "DA" : "NE";
+        q.correctAnswer = childTrait === recessiveTrait.phenotype ? "DA" : "NE";
         return q;
     }
 

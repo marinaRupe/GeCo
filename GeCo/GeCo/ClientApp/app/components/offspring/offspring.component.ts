@@ -31,7 +31,8 @@ export class OffspringComponent {
     }
 
     generateChildren(): IChild[] {
-        return this.inheritanceService.generateChildren(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.parent1, this.parent2, this.cM);
+        let children = this.inheritanceService.generateChildren(this.characteristic, this.inheritanceType, this.traits1, this.traits2, this.parent1, this.parent2, this.cM);
+        return children;
     }
 
     setStatistics(): void {
