@@ -51,9 +51,9 @@ export class OffspringComponent {
                 let genotype : string = child.trait1.genotype.allele1 + child.trait1.genotype.allele2
                     + child.trait2.genotype.allele1 + child.trait2.genotype.allele2;
                 let phenotype : string = `${char1}-${child.trait1.phenotype} + ${char2}-${child.trait2.phenotype}`;
-
+                let N = areLinkedGenes ? c.percentage * childrenCount : 1;
                 genotypeStats[genotype] = c.percentage * childrenCount;
-                phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + 1;
+                phenotypeStats[phenotype] = (phenotypeStats[phenotype] || 0) + N;
             } else {
                 let genotype : string = child.trait1.genotype.allele1 + child.trait1.genotype.allele2;
                 let phenotype : string = this.characteristic.first + "-" + child.trait1.phenotype;
